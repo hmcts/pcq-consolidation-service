@@ -34,17 +34,16 @@ public class ConsolidationComponent {
     @Autowired
     private ServiceConfigProvider serviceConfigProvider;
 
-    @SuppressWarnings({"unchecked", "PMD.CyclomaticComplexity", "PMD.UnusedLocalVariable", "PMD.ConfusingTernary",
-            "PMD.DataflowAnomalyAnalysis"})
+    @SuppressWarnings({"unchecked", "PMD.UnusedLocalVariable", "PMD.ConfusingTernary", "PMD.DataflowAnomalyAnalysis"})
     public void execute() {
         try {
             log.info("ConsolidationComponent started");
 
             // Step 1. Get the list of PCQs without Case Id.
             ResponseEntity<PcqRecordWithoutCaseResponse> responseEntity = pcqBackendService.getPcqWithoutCase();
-            PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = responseEntity.getBody();
             if (responseEntity.getStatusCode().is2xxSuccessful()) {
-                if (pcqWithoutCaseResponse != null && pcqWithoutCaseResponse.getPcqRecord() != null) {
+                PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = responseEntity.getBody();
+                if (pcqWithoutCaseResponse.getPcqRecord() != null) {
                     pcqIdsMap.put("PCQ_ID_FOUND", pcqWithoutCaseResponse.getPcqRecord());
                     for (PcqAnswerResponse pcqAnswerResponse : pcqWithoutCaseResponse.getPcqRecord()) {
                         //Step 2, Invoke the Elastic Search API to get the case Ids for each Pcq.
@@ -62,28 +61,21 @@ public class ConsolidationComponent {
                 } else {
                     log.info("Pcq Ids, without case information, are not found");
                 }
-
             } else {
                 if (responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST || responseEntity.getStatusCode()
                         == HttpStatus.INTERNAL_SERVER_ERROR) {
-                    if (pcqWithoutCaseResponse != null && pcqWithoutCaseResponse.getResponseStatus() != null) {
-                        log.error("PcqWithoutCase API generated error message {} ",
-                                pcqWithoutCaseResponse.getResponseStatus());
-
-                    } else {
-                        log.error("Response from backend service invalid, missing body");
-                    }
+                    log.error("PcqWithoutCase API generated error message {} ",
+                            responseEntity.getBody().getResponseStatus());
                 } else {
                     log.error("PcqWithoutCase API generated unknown error message");
                 }
             }
 
-
         } catch (ExternalApiException externalApiException) {
             log.error("API could not be invoked due to error message - {}", externalApiException.getErrorMessage());
             throw externalApiException;
         }
-        
+
         log.info("ConsolidationComponent finished");
     }
 
@@ -111,20 +103,17 @@ public class ConsolidationComponent {
         return caseReferenceForPcq;
     }
 
-    @SuppressWarnings({"PMD.ConfusingTernary", "unchecked"})
+
+    @SuppressWarnings("unchecked")
     private void invokeAddCaseForPcq(String pcqId, String caseId) {
-        ResponseEntity<SubmitResponse> responseEntity = pcqBackendService.addCaseForPcq(pcqId, caseId);
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+        ResponseEntity<SubmitResponse> submitResponse = pcqBackendService.addCaseForPcq(pcqId, caseId);
+        if (submitResponse.getStatusCode().is2xxSuccessful()) {
             log.info("Successfully added case information for PCQ ID {} .", pcqId);
         } else {
-            if (responseEntity.getStatusCode() == HttpStatus.BAD_REQUEST || responseEntity.getStatusCode()
+            if (submitResponse.getStatusCode() == HttpStatus.BAD_REQUEST || submitResponse.getStatusCode()
                     == HttpStatus.INTERNAL_SERVER_ERROR) {
-                SubmitResponse submitResponse = responseEntity.getBody();
-                if (submitResponse != null && submitResponse.getResponseStatus() != null) {
-                    log.error("AddCaseForPcq API generated error message {}", submitResponse.getResponseStatus());
-                } else {
-                    log.error("Response from backend service invalid, missing body");
-                }
+                log.error("AddCaseForPcq API generated error message {} ", ((SubmitResponse)
+                        submitResponse.getBody()).getResponseStatus());
             } else {
                 log.error("AddCaseForPcq API generated unknown error message");
             }

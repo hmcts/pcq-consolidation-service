@@ -80,7 +80,7 @@ Restart the dm-store container
    ./bin/idam-client-setup.sh
 ```
 
-To check the IDAM data, you can log into IDAM-web `http://localhost:8082/login` with `idamOwner@hmcts.net/Ref0rmIsFun`.
+To check the IDAM data, you can log into IDAM-web `http://localhost:8082/login` with `idamOwner@hmcts.net` and the password used for `IDAM_ADMIN_PASSWORD`.
 
 ##### 9) Generate roles, import xls
 

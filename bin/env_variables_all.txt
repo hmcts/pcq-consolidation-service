@@ -30,6 +30,7 @@ IDAM_OAUTH2_CLIENT_SECRET=ccd_gateway_secret
 IDAM_S2S_URL=http://localhost:4502
 IDAM_URL=http://localhost:5000
 IDAM_KEY_CCD_GATEWAY=AAAAAAAAAAAAAAAC
+IDAM_ADMIN_USER=idamOwner@hmcts.net
 OAUTH2_CLIENT_ID=ccd_gateway
 OAUTH2_CLIENT_CCD_GATEWAY=ccd_gateway_secret
 USER=someuser

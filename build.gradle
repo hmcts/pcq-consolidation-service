@@ -230,7 +230,7 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url "https://dl.bintray.com/hmcts/hmcts-maven"
+        url 'https://jitpack.io'
     }
 }
 
@@ -315,7 +315,7 @@ dependencies {
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    implementation group: 'uk.gov.hmcts.reform.pcq', name: 'pcq-commons', version: '1.1.2'
+    implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.1.4'
     implementation(group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.serviceAuthVersion) {
         force = true
     }

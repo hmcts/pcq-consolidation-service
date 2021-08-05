@@ -108,6 +108,7 @@ public class ConsolidationServiceTestBase {
                     .build();
             return caseCreator.createCase(pcqQuestions);
         } else {
+            log.info("Found Paper Case ID: " + caseDetails.get().getId());
             return caseDetails.get();
         }
     }
@@ -124,6 +125,7 @@ public class ConsolidationServiceTestBase {
                     .build();
             return caseCreator.createCase(pcqQuestions);
         } else {
+            log.info("Found Digital Case ID: " + caseDetails.get().getId());
             return caseDetails.get();
         }
     }

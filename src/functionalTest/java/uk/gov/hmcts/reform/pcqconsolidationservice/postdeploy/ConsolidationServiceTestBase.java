@@ -33,7 +33,6 @@ import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonStringFr
 public class ConsolidationServiceTestBase {
 
     private static final String COMPLETED_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    private static final String OPT_OUT_YES = "Y";
 
     @Autowired
     private CaseCreator caseCreator;

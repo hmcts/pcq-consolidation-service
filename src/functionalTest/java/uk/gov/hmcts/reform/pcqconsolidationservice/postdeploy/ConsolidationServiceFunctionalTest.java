@@ -124,7 +124,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
     }
 
     private void removeTestAnswerRecord(String pcqId) throws IOException {
-        removeTestAnswerRecord("JsonTestFiles/FirstSubmitAnswer.json", pcqBackendUrl, pcqId, jwtSecretKey);
+        removeTestAnswerRecord(pcqBackendUrl, pcqId, jwtSecretKey);
     }
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")

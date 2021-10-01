@@ -49,16 +49,9 @@ public class ConsolidationServiceTestBase {
         postRequestPcqBackend(apiUrl, pcqAnswerRequest, jwtSecretKey);
     }
 
-    protected void removeTestAnswerRecord(String fileName, String apiUrl, String pcqId, String jwtSecretKey)
+    protected void removeTestAnswerRecord(String apiUrl, String pcqId, String jwtSecretKey)
             throws IOException {
-        String jsonString = jsonStringFromFile(fileName);
-        PcqAnswerRequest pcqAnswerRequest = jsonObjectFromString(jsonString);
-
-        pcqAnswerRequest.setPcqId(pcqId);
-        pcqAnswerRequest.setOptOut(OPT_OUT_YES);
-        pcqAnswerRequest.setCompletedDate(updateCompletedDate(pcqAnswerRequest.getCompletedDate()));
-
-        postRequestPcqBackend(apiUrl, pcqAnswerRequest, jwtSecretKey);
+        deleteTestRecordFromBackend(apiUrl, pcqId, jwtSecretKey);
     }
 
     protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) throws IOException {
@@ -69,6 +62,14 @@ public class ConsolidationServiceTestBase {
         WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
         WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.post().uri(URI.create(
                 apiUrl + "/pcq/backend/submitAnswers")).body(BodyInserters.fromValue(requestObject));
+        Map response3 = requestBodySpec.retrieve().bodyToMono(Map.class).block();
+        log.info("Returned response " + response3.toString());
+    }
+
+    private void deleteTestRecordFromBackend(String apiUrl, String pcqId, String secretKey) {
+        WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
+        WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.delete().uri(URI.create(
+                apiUrl + "/pcq/backend/deletePcqRecord/" + pcqId));
         Map response3 = requestBodySpec.retrieve().bodyToMono(Map.class).block();
         log.info("Returned response " + response3.toString());
     }

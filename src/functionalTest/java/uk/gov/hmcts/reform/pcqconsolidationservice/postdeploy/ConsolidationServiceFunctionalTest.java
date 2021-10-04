@@ -135,8 +135,8 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
             pcqIds.add(answerResponse.getPcqId());
         }
 
-       // assertTrue("The pcqRecord 1 is not found.", pcqIds.contains(pcqRecord1));
-       // assertTrue("The pcqRecord 2 is not found.", pcqIds.contains(pcqRecord2));
+        //assertTrue("The pcqRecord 1 is not found.", pcqIds.contains(pcqRecord1));
+        //assertTrue("The pcqRecord 2 is not found.", pcqIds.contains(pcqRecord2));
         assertFalse("The pcqRecord 3 is found.", pcqIds.contains(pcqRecord3));
     }
 

@@ -53,7 +53,7 @@ withPipeline(type, product, component) {
   syncBranchesWithMaster(branchesToSync)
 
   env.TEST_URL = "http://pcq-consolidation-service-aat.service.core-compute-aat.internal"
-  env.PCQ_BACKEND_URL = "http://pcq-backend-aat.service.core-compute-aat.internal"
+  env.PCQ_BACKEND_URL = "http://pcq-backend-pr-383.service.core-compute-preview.internal"
 
   after('test') {
 

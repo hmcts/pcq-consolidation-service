@@ -73,7 +73,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         // Remove the PCQ answer records.
         removeTestAnswerRecord(TEST_PCQ_ID_1);
         removeTestAnswerRecord(TEST_PCQ_ID_2);
-        //removeTestAnswerRecord(TEST_PCQ_ID_3);
+        removeTestAnswerRecord(TEST_PCQ_ID_3);
     }
 
 

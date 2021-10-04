@@ -70,10 +70,10 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
     @After
     public void removePcqData() throws IOException {
 
-        // Create the PCQ answer records.
-        //removeTestAnswerRecord(TEST_PCQ_ID_1);
-        //removeTestAnswerRecord(TEST_PCQ_ID_2);
-        removeTestAnswerRecord(TEST_PCQ_ID_3);
+        // Remove the PCQ answer records.
+        removeTestAnswerRecord(TEST_PCQ_ID_1);
+        removeTestAnswerRecord(TEST_PCQ_ID_2);
+        //removeTestAnswerRecord(TEST_PCQ_ID_3);
     }
 
 

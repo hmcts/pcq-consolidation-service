@@ -16,6 +16,7 @@ import org.springframework.util.ReflectionUtils;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.pcq.commons.model.PcqAnswerResponse;
 import uk.gov.hmcts.reform.pcqconsolidationservice.ConsolidationComponent;
+import uk.gov.hmcts.reform.pcqconsolidationservice.ccd.model.PcqQuestions;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.TestApplicationConfiguration;
 
 import java.io.IOException;
@@ -35,13 +36,11 @@ import static org.junit.Assert.assertNotNull;
 @Slf4j
 public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTestBase {
 
-    public static final String TEST_DIGITAL_CASE_TITLE = "Func-Test-Digital-Case-5";
-    public static final String TEST_PAPER_CASE_TITLE = "Func-Test-Paper-Case-5";
-    public static final String TEST_PCQ_ID_1 = "2ab8767c-f3e9-293b-afd4-128e1e57fc34";
+    public static final String TEST_DIGITAL_CASE_TITLE = "Func-Test-Digital-Case-6";
+    public static final String TEST_PAPER_CASE_TITLE = "Func-Test-Paper-Case-6";
+
     public static final String TEST_PCQ_ID_2 = "73c5a4de-932a-2093-851a-da3b99a70bba";
     public static final String TEST_PCQ_ID_3 = "b0ab25a9-a04d-2ba1-b9f5-3108b7b7884c";
-
-    public static final String TEST_PAPER_CASE_DCN = "2020032244230034";
 
     @Value("${pcqBackendUrl}")
     private String pcqBackendUrl;
@@ -54,25 +53,29 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
 
     private CaseDetails pcqCase1;
     private CaseDetails pcqCase2;
+    private String testPcqId1;
 
     @Before
     public void createPcqData() throws IOException {
+        // Create the Sample service core case data.
+
+        pcqCase1 = createCcdPcqQuestionsDigitalCase(TEST_DIGITAL_CASE_TITLE);
+        pcqCase2 = createCcdPcqQuestionsPaperCase(TEST_PAPER_CASE_TITLE);
 
         // Create the PCQ answer records.
-        createTestAnswerRecordWithoutCase(TEST_PCQ_ID_1);
+        testPcqId1  = ((PcqQuestions)pcqCase1.getData()).getPcqId();
+        createTestAnswerRecordWithoutCase(testPcqId1);
         createTestAnswerRecordDcnWithoutCase(TEST_PCQ_ID_2);
         createTestAnswerRecordWithCase(TEST_PCQ_ID_3);
 
-        // Create the Sample service core case data.
-        pcqCase1 = createCcdPcqQuestionsDigitalCase(TEST_DIGITAL_CASE_TITLE, TEST_PCQ_ID_1);
-        pcqCase2 = createCcdPcqQuestionsPaperCase(TEST_PAPER_CASE_TITLE, TEST_PAPER_CASE_DCN);
+
     }
 
     @After
     public void removePcqData() throws IOException {
 
         // Remove the PCQ answer records.
-        removeTestAnswerRecord(TEST_PCQ_ID_1);
+        removeTestAnswerRecord(testPcqId1);
         removeTestAnswerRecord(TEST_PCQ_ID_2);
         removeTestAnswerRecord(TEST_PCQ_ID_3);
     }
@@ -95,14 +98,14 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
                 consolidationComponent);
         assertNotNull("Status Map is null", statusMap);
         PcqAnswerResponse[] pcqAnswerRecords = statusMap.get("PCQ_ID_FOUND");
-        assertPcqIdsRetrieved(pcqAnswerRecords, TEST_PCQ_ID_1, TEST_PCQ_ID_2, TEST_PCQ_ID_3);
+        assertPcqIdsRetrieved(pcqAnswerRecords, testPcqId1, TEST_PCQ_ID_2, TEST_PCQ_ID_3);
 
         //Check that the API - addCaseForPcq has been called and that the test records are updated.
         PcqAnswerResponse[] pcqRecordsProcessed = statusMap.get("PCQ_ID_PROCESSED");
-        assertPcqIdsProcessed(pcqRecordsProcessed, TEST_PCQ_ID_1, TEST_PCQ_ID_2);
+        assertPcqIdsProcessed(pcqRecordsProcessed, testPcqId1, TEST_PCQ_ID_2);
 
         //Make a call to the getAnswer from pcq backend to verify that case Id has been updated search by pcqId.
-        PcqAnswerResponse answerResponse = getTestAnswerRecord(TEST_PCQ_ID_1, pcqBackendUrl, jwtSecretKey);
+        PcqAnswerResponse answerResponse = getTestAnswerRecord(testPcqId1, pcqBackendUrl, jwtSecretKey);
         assertNotNull("The get response is not null", answerResponse);
         assertEquals("The get response matches ccd case id", pcqCase1.getId().toString(), answerResponse.getCaseId());
 

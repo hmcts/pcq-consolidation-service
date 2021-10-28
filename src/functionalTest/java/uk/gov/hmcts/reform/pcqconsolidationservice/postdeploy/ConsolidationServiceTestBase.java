@@ -19,12 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonObjectFromString;
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonStringFromFile;
@@ -95,11 +90,11 @@ public class ConsolidationServiceTestBase {
     }
 
     @SuppressWarnings("unchecked")
-    protected CaseDetails createCcdPcqQuestionsPaperCase(String title, String dcn) {
+    protected CaseDetails createCcdPcqQuestionsPaperCase(String title) {
         Optional<CaseDetails> caseDetails = caseCreator.findCase(title);
         if (caseDetails.isEmpty()) {
             CcdCollectionElement<ScannedDocument> scannedDoc =
-                    new CcdCollectionElement(caseCreator.createScannedDocument(dcn));
+                    new CcdCollectionElement(caseCreator.createScannedDocument(generateDCN()));
             List<CcdCollectionElement<ScannedDocument>> scannedDocumentList = Collections.singletonList(scannedDoc);
             PcqQuestions pcqQuestions = PcqQuestions.builder()
                     .text(title)
@@ -114,13 +109,13 @@ public class ConsolidationServiceTestBase {
     }
 
     @SuppressWarnings("unchecked")
-    protected CaseDetails createCcdPcqQuestionsDigitalCase(String title, String pcqId) {
+    protected CaseDetails createCcdPcqQuestionsDigitalCase(String title) {
         Optional<CaseDetails> caseDetails = caseCreator.findCase(title);
         if (caseDetails.isEmpty()) {
             List<CcdCollectionElement<ScannedDocument>> scannedDocumentList = Collections.EMPTY_LIST;
             PcqQuestions pcqQuestions = PcqQuestions.builder()
                     .text(title)
-                    .pcqId(pcqId)
+                    .pcqId(generateUuid())
                     .scannedDocuments(scannedDocumentList)
                     .build();
             return caseCreator.createCase(pcqQuestions);
@@ -140,5 +135,14 @@ public class ConsolidationServiceTestBase {
     private String convertTimeStampToString(Timestamp timestamp) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(COMPLETED_DATE_FORMAT, Locale.UK);
         return dateFormat.format(timestamp);
+    }
+    protected String generateUuid() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
+
+    protected String generateDCN() {
+        double no = Math.random();
+        return String.valueOf(no);
     }
 }

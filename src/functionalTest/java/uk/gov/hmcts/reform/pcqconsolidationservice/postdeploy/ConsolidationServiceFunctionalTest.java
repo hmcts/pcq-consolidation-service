@@ -131,6 +131,11 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         removeTestAnswerRecord(pcqBackendUrl, pcqId, jwtSecretKey);
     }
 
+    protected void removeTestAnswerRecord(String apiUrl, String pcqId, String jwtSecretKey)
+            throws IOException {
+        deleteTestRecordFromBackend(apiUrl, pcqId, jwtSecretKey);
+    }
+
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private void assertPcqIdsRetrieved(PcqAnswerResponse[] pcqAnswerRecords,
                                        String pcqRecord1,String pcqRecord2,
@@ -153,5 +158,9 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         }
         assertTrue("The pcqRecord 1 is not processed.", pcqIds.contains(pcqRecord1));
         assertTrue("The pcqRecord 2 is not processed.", pcqIds.contains(pcqRecord2));
+    }
+
+    protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) throws IOException {
+        return getResponseFromBackend(apiUrl, pcqId, secretKey);
     }
 }

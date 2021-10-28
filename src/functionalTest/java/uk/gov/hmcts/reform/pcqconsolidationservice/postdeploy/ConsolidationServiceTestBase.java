@@ -19,7 +19,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonObjectFromString;
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonStringFromFile;
@@ -43,15 +49,6 @@ public class ConsolidationServiceTestBase {
         postRequestPcqBackend(apiUrl, pcqAnswerRequest, jwtSecretKey);
     }
 
-    protected void removeTestAnswerRecord(String apiUrl, String pcqId, String jwtSecretKey)
-            throws IOException {
-        deleteTestRecordFromBackend(apiUrl, pcqId, jwtSecretKey);
-    }
-
-    protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) throws IOException {
-        return getResponseFromBackend(apiUrl, pcqId, secretKey);
-    }
-
     private void postRequestPcqBackend(String apiUrl, PcqAnswerRequest requestObject, String secretKey) {
         WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
         WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.post().uri(URI.create(
@@ -60,7 +57,7 @@ public class ConsolidationServiceTestBase {
         log.info("Returned response " + response3.toString());
     }
 
-    private void deleteTestRecordFromBackend(String apiUrl, String pcqId, String secretKey) {
+    protected void deleteTestRecordFromBackend(String apiUrl, String pcqId, String secretKey) {
         WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
         WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.delete().uri(URI.create(
                 apiUrl + "/pcq/backend/deletePcqRecord/" + pcqId));
@@ -68,7 +65,7 @@ public class ConsolidationServiceTestBase {
         log.info("Returned response " + response3.toString());
     }
 
-    private PcqAnswerResponse getResponseFromBackend(String apiUrl, String pcqId, String secretKey) {
+    protected PcqAnswerResponse getResponseFromBackend(String apiUrl, String pcqId, String secretKey) {
         WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
         WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.get().uri(URI.create(
                 apiUrl + "/pcq/backend/getAnswer/" + pcqId));
@@ -94,7 +91,7 @@ public class ConsolidationServiceTestBase {
         Optional<CaseDetails> caseDetails = caseCreator.findCase(title);
         if (caseDetails.isEmpty()) {
             CcdCollectionElement<ScannedDocument> scannedDoc =
-                    new CcdCollectionElement(caseCreator.createScannedDocument(generateDCN()));
+                    new CcdCollectionElement(caseCreator.createScannedDocument(generateDcn()));
             List<CcdCollectionElement<ScannedDocument>> scannedDocumentList = Collections.singletonList(scannedDoc);
             PcqQuestions pcqQuestions = PcqQuestions.builder()
                     .text(title)
@@ -136,12 +133,13 @@ public class ConsolidationServiceTestBase {
         SimpleDateFormat dateFormat = new SimpleDateFormat(COMPLETED_DATE_FORMAT, Locale.UK);
         return dateFormat.format(timestamp);
     }
+
     protected String generateUuid() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
     }
 
-    protected String generateDCN() {
+    protected String generateDcn() {
         double no = Math.random();
         return String.valueOf(no);
     }

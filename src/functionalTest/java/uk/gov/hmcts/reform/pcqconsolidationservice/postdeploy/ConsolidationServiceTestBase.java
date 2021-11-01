@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonObjectFromString;
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonStringFromFile;
@@ -37,24 +38,19 @@ public class ConsolidationServiceTestBase {
     @Autowired
     private CaseCreator caseCreator;
 
-    protected void createTestAnswerRecord(String fileName, String apiUrl, String pcqId, String jwtSecretKey)
+    protected void createTestAnswerRecord(String fileName, String apiUrl, String pcqId,
+                                          String jwtSecretKey, String dcnNumber)
             throws IOException {
         String jsonString = jsonStringFromFile(fileName);
         PcqAnswerRequest pcqAnswerRequest = jsonObjectFromString(jsonString);
 
         pcqAnswerRequest.setPcqId(pcqId);
         pcqAnswerRequest.setCompletedDate(updateCompletedDate(pcqAnswerRequest.getCompletedDate()));
+        if (dcnNumber != null) {
+            pcqAnswerRequest.setDcnNumber(dcnNumber);
+        }
 
         postRequestPcqBackend(apiUrl, pcqAnswerRequest, jwtSecretKey);
-    }
-
-    protected void removeTestAnswerRecord(String apiUrl, String pcqId, String jwtSecretKey)
-            throws IOException {
-        deleteTestRecordFromBackend(apiUrl, pcqId, jwtSecretKey);
-    }
-
-    protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) throws IOException {
-        return getResponseFromBackend(apiUrl, pcqId, secretKey);
     }
 
     private void postRequestPcqBackend(String apiUrl, PcqAnswerRequest requestObject, String secretKey) {
@@ -65,7 +61,7 @@ public class ConsolidationServiceTestBase {
         log.info("Returned response " + response3.toString());
     }
 
-    private void deleteTestRecordFromBackend(String apiUrl, String pcqId, String secretKey) {
+    protected void deleteTestRecordFromBackend(String apiUrl, String pcqId, String secretKey) {
         WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
         WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.delete().uri(URI.create(
                 apiUrl + "/pcq/backend/deletePcqRecord/" + pcqId));
@@ -73,7 +69,7 @@ public class ConsolidationServiceTestBase {
         log.info("Returned response " + response3.toString());
     }
 
-    private PcqAnswerResponse getResponseFromBackend(String apiUrl, String pcqId, String secretKey) {
+    protected PcqAnswerResponse getResponseFromBackend(String apiUrl, String pcqId, String secretKey) {
         WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
         WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.get().uri(URI.create(
                 apiUrl + "/pcq/backend/getAnswer/" + pcqId));
@@ -95,11 +91,11 @@ public class ConsolidationServiceTestBase {
     }
 
     @SuppressWarnings("unchecked")
-    protected CaseDetails createCcdPcqQuestionsPaperCase(String title, String dcn) {
+    protected CaseDetails createCcdPcqQuestionsPaperCase(String title) {
         Optional<CaseDetails> caseDetails = caseCreator.findCase(title);
         if (caseDetails.isEmpty()) {
             CcdCollectionElement<ScannedDocument> scannedDoc =
-                    new CcdCollectionElement(caseCreator.createScannedDocument(dcn));
+                    new CcdCollectionElement(caseCreator.createScannedDocument(generateDcn()));
             List<CcdCollectionElement<ScannedDocument>> scannedDocumentList = Collections.singletonList(scannedDoc);
             PcqQuestions pcqQuestions = PcqQuestions.builder()
                     .text(title)
@@ -114,13 +110,13 @@ public class ConsolidationServiceTestBase {
     }
 
     @SuppressWarnings("unchecked")
-    protected CaseDetails createCcdPcqQuestionsDigitalCase(String title, String pcqId) {
+    protected CaseDetails createCcdPcqQuestionsDigitalCase(String title) {
         Optional<CaseDetails> caseDetails = caseCreator.findCase(title);
         if (caseDetails.isEmpty()) {
             List<CcdCollectionElement<ScannedDocument>> scannedDocumentList = Collections.EMPTY_LIST;
             PcqQuestions pcqQuestions = PcqQuestions.builder()
                     .text(title)
-                    .pcqId(pcqId)
+                    .pcqId(generateUuid())
                     .scannedDocuments(scannedDocumentList)
                     .build();
             return caseCreator.createCase(pcqQuestions);
@@ -140,5 +136,15 @@ public class ConsolidationServiceTestBase {
     private String convertTimeStampToString(Timestamp timestamp) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(COMPLETED_DATE_FORMAT, Locale.UK);
         return dateFormat.format(timestamp);
+    }
+
+    protected String generateUuid() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
+
+    protected String generateDcn() {
+        double no = Math.random();
+        return String.valueOf(no);
     }
 }

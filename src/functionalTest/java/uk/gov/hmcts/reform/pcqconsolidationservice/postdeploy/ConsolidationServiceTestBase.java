@@ -38,13 +38,17 @@ public class ConsolidationServiceTestBase {
     @Autowired
     private CaseCreator caseCreator;
 
-    protected void createTestAnswerRecord(String fileName, String apiUrl, String pcqId, String jwtSecretKey)
+    protected void createTestAnswerRecord(String fileName, String apiUrl, String pcqId,
+                                          String jwtSecretKey, String dcnNumber)
             throws IOException {
         String jsonString = jsonStringFromFile(fileName);
         PcqAnswerRequest pcqAnswerRequest = jsonObjectFromString(jsonString);
 
         pcqAnswerRequest.setPcqId(pcqId);
         pcqAnswerRequest.setCompletedDate(updateCompletedDate(pcqAnswerRequest.getCompletedDate()));
+        if (dcnNumber != null) {
+            pcqAnswerRequest.setDcnNumber(dcnNumber);
+        }
 
         postRequestPcqBackend(apiUrl, pcqAnswerRequest, jwtSecretKey);
     }

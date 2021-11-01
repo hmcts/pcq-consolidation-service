@@ -13,16 +13,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ReflectionUtils;
-import uk.gov.hmcts.reform.ccd.client.model.CaseDataContent;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.pcq.commons.model.PcqAnswerResponse;
 import uk.gov.hmcts.reform.pcqconsolidationservice.ConsolidationComponent;
-import uk.gov.hmcts.reform.pcqconsolidationservice.ccd.model.PcqQuestions;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.TestApplicationConfiguration;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,12 +63,12 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         pcqCase2 = createCcdPcqQuestionsPaperCase(TEST_PAPER_CASE_TITLE);
 
         // Create the PCQ answer records.
-        testPcqId1  = ((PcqQuestions)((CaseDataContent)pcqCase1.getData()).getData()).getPcqId();
+        testPcqId1  = (String)pcqCase1.getData().get("pcqId");
         createTestAnswerRecordWithoutCase(testPcqId1);
-        createTestAnswerRecordDcnWithoutCase(TEST_PCQ_ID_2);
+        LinkedHashMap doc = (LinkedHashMap)((ArrayList)pcqCase2.getData().get("scannedDocuments")).get(0);
+        String testDcnNumber = ((LinkedHashMap)doc.get("value")).get("controlNumber").toString();
+        createTestAnswerRecordDcnWithoutCase(TEST_PCQ_ID_2,testDcnNumber);
         createTestAnswerRecordWithCase(TEST_PCQ_ID_3);
-
-
     }
 
     @After
@@ -117,15 +116,18 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
     }
 
     private void createTestAnswerRecordWithoutCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswer.json", pcqBackendUrl, pcqId, jwtSecretKey);
+        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswer.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,null);
     }
 
-    private void createTestAnswerRecordDcnWithoutCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/SecondSubmitAnswerWithDcn.json", pcqBackendUrl, pcqId, jwtSecretKey);
+    private void createTestAnswerRecordDcnWithoutCase(String pcqId,String dcnNumber) throws IOException {
+        createTestAnswerRecord("JsonTestFiles/SecondSubmitAnswerWithDcn.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,dcnNumber);
     }
 
     private void createTestAnswerRecordWithCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswerWithCase.json", pcqBackendUrl, pcqId, jwtSecretKey);
+        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswerWithCase.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,null);
     }
 
     private void removeTestAnswerRecord(String pcqId) throws IOException {

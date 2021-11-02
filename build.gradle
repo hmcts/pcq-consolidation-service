@@ -258,10 +258,10 @@ def versions = [
         pitest              : '1.6.3',
         sonarPitest         : '0.5',
         serviceAuthVersion  : '4.0.0',
-        springFramework     : '5.3.9'
+        springFramework     : '5.3.12'
 ]
 
-ext['spring-framework.version'] = '5.3.7'
+ext['spring-framework.version'] = '5.3.12'
 
 configurations.all {
     resolutionStrategy {

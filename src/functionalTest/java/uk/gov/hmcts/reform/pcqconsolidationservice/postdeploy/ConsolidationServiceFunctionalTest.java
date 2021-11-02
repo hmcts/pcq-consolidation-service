@@ -21,6 +21,7 @@ import uk.gov.hmcts.reform.pcqconsolidationservice.config.TestApplicationConfigu
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,13 +36,11 @@ import static org.junit.Assert.assertNotNull;
 @Slf4j
 public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTestBase {
 
-    public static final String TEST_DIGITAL_CASE_TITLE = "Func-Test-Digital-Case-5";
-    public static final String TEST_PAPER_CASE_TITLE = "Func-Test-Paper-Case-5";
-    public static final String TEST_PCQ_ID_1 = "2ab8767c-f3e9-293b-afd4-128e1e57fc34";
+    public static final String TEST_DIGITAL_CASE_TITLE = "Func-Test-Digital-Case-6";
+    public static final String TEST_PAPER_CASE_TITLE = "Func-Test-Paper-Case-6";
+
     public static final String TEST_PCQ_ID_2 = "73c5a4de-932a-2093-851a-da3b99a70bba";
     public static final String TEST_PCQ_ID_3 = "b0ab25a9-a04d-2ba1-b9f5-3108b7b7884c";
-
-    public static final String TEST_PAPER_CASE_DCN = "2020032244230034";
 
     @Value("${pcqBackendUrl}")
     private String pcqBackendUrl;
@@ -54,25 +53,29 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
 
     private CaseDetails pcqCase1;
     private CaseDetails pcqCase2;
+    private String testPcqId1;
 
     @Before
     public void createPcqData() throws IOException {
+        // Create the Sample service core case data.
+
+        pcqCase1 = createCcdPcqQuestionsDigitalCase(TEST_DIGITAL_CASE_TITLE);
+        pcqCase2 = createCcdPcqQuestionsPaperCase(TEST_PAPER_CASE_TITLE);
 
         // Create the PCQ answer records.
-        createTestAnswerRecordWithoutCase(TEST_PCQ_ID_1);
-        createTestAnswerRecordDcnWithoutCase(TEST_PCQ_ID_2);
+        testPcqId1  = (String)pcqCase1.getData().get("pcqId");
+        createTestAnswerRecordWithoutCase(testPcqId1);
+        LinkedHashMap doc = (LinkedHashMap)((ArrayList)pcqCase2.getData().get("scannedDocuments")).get(0);
+        String testDcnNumber = ((LinkedHashMap)doc.get("value")).get("controlNumber").toString();
+        createTestAnswerRecordDcnWithoutCase(TEST_PCQ_ID_2,testDcnNumber);
         createTestAnswerRecordWithCase(TEST_PCQ_ID_3);
-
-        // Create the Sample service core case data.
-        pcqCase1 = createCcdPcqQuestionsDigitalCase(TEST_DIGITAL_CASE_TITLE, TEST_PCQ_ID_1);
-        pcqCase2 = createCcdPcqQuestionsPaperCase(TEST_PAPER_CASE_TITLE, TEST_PAPER_CASE_DCN);
     }
 
     @After
     public void removePcqData() throws IOException {
 
         // Remove the PCQ answer records.
-        removeTestAnswerRecord(TEST_PCQ_ID_1);
+        removeTestAnswerRecord(testPcqId1);
         removeTestAnswerRecord(TEST_PCQ_ID_2);
         removeTestAnswerRecord(TEST_PCQ_ID_3);
     }
@@ -95,14 +98,14 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
                 consolidationComponent);
         assertNotNull("Status Map is null", statusMap);
         PcqAnswerResponse[] pcqAnswerRecords = statusMap.get("PCQ_ID_FOUND");
-        assertPcqIdsRetrieved(pcqAnswerRecords, TEST_PCQ_ID_1, TEST_PCQ_ID_2, TEST_PCQ_ID_3);
+        assertPcqIdsRetrieved(pcqAnswerRecords, testPcqId1, TEST_PCQ_ID_2, TEST_PCQ_ID_3);
 
         //Check that the API - addCaseForPcq has been called and that the test records are updated.
         PcqAnswerResponse[] pcqRecordsProcessed = statusMap.get("PCQ_ID_PROCESSED");
-        assertPcqIdsProcessed(pcqRecordsProcessed, TEST_PCQ_ID_1, TEST_PCQ_ID_2);
+        assertPcqIdsProcessed(pcqRecordsProcessed, testPcqId1, TEST_PCQ_ID_2);
 
         //Make a call to the getAnswer from pcq backend to verify that case Id has been updated search by pcqId.
-        PcqAnswerResponse answerResponse = getTestAnswerRecord(TEST_PCQ_ID_1, pcqBackendUrl, jwtSecretKey);
+        PcqAnswerResponse answerResponse = getTestAnswerRecord(testPcqId1, pcqBackendUrl, jwtSecretKey);
         assertNotNull("The get response is not null", answerResponse);
         assertEquals("The get response matches ccd case id", pcqCase1.getId().toString(), answerResponse.getCaseId());
 
@@ -113,19 +116,27 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
     }
 
     private void createTestAnswerRecordWithoutCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswer.json", pcqBackendUrl, pcqId, jwtSecretKey);
+        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswer.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,null);
     }
 
-    private void createTestAnswerRecordDcnWithoutCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/SecondSubmitAnswerWithDcn.json", pcqBackendUrl, pcqId, jwtSecretKey);
+    private void createTestAnswerRecordDcnWithoutCase(String pcqId,String dcnNumber) throws IOException {
+        createTestAnswerRecord("JsonTestFiles/SecondSubmitAnswerWithDcn.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,dcnNumber);
     }
 
     private void createTestAnswerRecordWithCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswerWithCase.json", pcqBackendUrl, pcqId, jwtSecretKey);
+        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswerWithCase.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,null);
     }
 
     private void removeTestAnswerRecord(String pcqId) throws IOException {
         removeTestAnswerRecord(pcqBackendUrl, pcqId, jwtSecretKey);
+    }
+
+    protected void removeTestAnswerRecord(String apiUrl, String pcqId, String jwtSecretKey)
+            throws IOException {
+        deleteTestRecordFromBackend(apiUrl, pcqId, jwtSecretKey);
     }
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
@@ -150,5 +161,9 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         }
         assertTrue("The pcqRecord 1 is not processed.", pcqIds.contains(pcqRecord1));
         assertTrue("The pcqRecord 2 is not processed.", pcqIds.contains(pcqRecord2));
+    }
+
+    protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) throws IOException {
+        return getResponseFromBackend(apiUrl, pcqId, secretKey);
     }
 }

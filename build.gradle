@@ -122,7 +122,7 @@ checkstyle {
     maxWarnings = 0
     toolVersion = '8.29'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
-    configDir = new File(rootDir, 'config/checkstyle')
+    getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
 pmd {
@@ -230,6 +230,10 @@ dependencyManagement {
         dependencySet(group: 'com.github.jknack', version: '4.2.0') {
             entry 'handlebars'
         }
+        dependencySet(group: 'org.springframework.cloud', version: '3.0.5') {
+            entry 'spring-cloud-starter-openfeign'
+            entry 'spring-cloud-openfeign-core'
+        }
         // CVE-2021-29425
         dependency group: 'commons-io', name: 'commons-io', version: '2.11.0'
     }
@@ -312,7 +316,6 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.1'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.7.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.2.7.RELEASE'
 
     compile group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     compile group: "com.networknt", name: "json-schema-validator", version: "1.0.31"
@@ -359,7 +362,7 @@ dependencies {
 
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.27.2'
 
-    testCompile 'com.github.hmcts:fortify-client:1.2.1:all'
+    testCompile group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.2'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
     testImplementation group: "com.gilecode.yagson", name:"j9-reflection-utils", version:"1.0"

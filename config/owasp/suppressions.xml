@@ -10,6 +10,7 @@
         <cve>CVE-2020-11979</cve>
         <cve>CVE-2021-29428</cve>
         <cve>CVE-2021-29429</cve>
+        <cve>CVE-2021-32751</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[Nested dependency of adal4j. Microsoft needs to update strong relation of this library in ServiceBus]]></notes>

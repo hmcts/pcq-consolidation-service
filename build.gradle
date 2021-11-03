@@ -362,8 +362,8 @@ dependencies {
 
     testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.27.2'
 
-    testCompile group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.1'
-
+    //testCompile group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.2:all'
+    testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
     testImplementation group: "com.gilecode.yagson", name:"j9-reflection-utils", version:"1.0"
     testImplementation group: "io.jsonwebtoken", name: "jjwt", version: "0.9.1"

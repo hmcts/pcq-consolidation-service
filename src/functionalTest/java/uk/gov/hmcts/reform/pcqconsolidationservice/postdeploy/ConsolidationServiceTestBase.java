@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonObjectFromString;
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonStringFromFile;
@@ -50,6 +51,7 @@ public class ConsolidationServiceTestBase {
             pcqAnswerRequest.setDcnNumber(dcnNumber);
         }
 
+        log.info("Creating test PCQ record with pcqId {} and dcn {}", pcqId, dcnNumber);
         postRequestPcqBackend(apiUrl, pcqAnswerRequest, jwtSecretKey);
     }
 
@@ -91,11 +93,11 @@ public class ConsolidationServiceTestBase {
     }
 
     @SuppressWarnings("unchecked")
-    protected CaseDetails createCcdPcqQuestionsPaperCase(String title) {
+    protected CaseDetails createCcdPcqQuestionsPaperCase(String title, String dcn) {
         Optional<CaseDetails> caseDetails = caseCreator.findCase(title);
         if (caseDetails.isEmpty()) {
             CcdCollectionElement<ScannedDocument> scannedDoc =
-                    new CcdCollectionElement(caseCreator.createScannedDocument(generateDcn()));
+                    new CcdCollectionElement(caseCreator.createScannedDocument(dcn));
             List<CcdCollectionElement<ScannedDocument>> scannedDocumentList = Collections.singletonList(scannedDoc);
             PcqQuestions pcqQuestions = PcqQuestions.builder()
                     .text(title)
@@ -104,24 +106,30 @@ public class ConsolidationServiceTestBase {
                     .build();
             return caseCreator.createCase(pcqQuestions);
         } else {
-            log.info("Found Paper Case ID: " + caseDetails.get().getId());
+            LinkedHashMap doc = (LinkedHashMap)((ArrayList)caseDetails.get().getData().get("scannedDocuments")).get(0);
+            String testDcnNumber = ((LinkedHashMap)doc.get("value")).get("controlNumber").toString();
+            log.info("Found Paper Case ID: {} with DCN {}",
+                    caseDetails.get().getId(),
+                    testDcnNumber);
             return caseDetails.get();
         }
     }
 
     @SuppressWarnings("unchecked")
-    protected CaseDetails createCcdPcqQuestionsDigitalCase(String title) {
+    protected CaseDetails createCcdPcqQuestionsDigitalCase(String title, String pcqId) {
         Optional<CaseDetails> caseDetails = caseCreator.findCase(title);
         if (caseDetails.isEmpty()) {
             List<CcdCollectionElement<ScannedDocument>> scannedDocumentList = Collections.EMPTY_LIST;
             PcqQuestions pcqQuestions = PcqQuestions.builder()
                     .text(title)
-                    .pcqId(generateUuid())
+                    .pcqId(pcqId)
                     .scannedDocuments(scannedDocumentList)
                     .build();
             return caseCreator.createCase(pcqQuestions);
         } else {
-            log.info("Found Digital Case ID: " + caseDetails.get().getId());
+            log.info("Found Digital Case ID: {} with pcqId {}",
+                    caseDetails.get().getId(),
+                    caseDetails.get().getData().get("pcqId"));
             return caseDetails.get();
         }
     }
@@ -136,15 +144,5 @@ public class ConsolidationServiceTestBase {
     private String convertTimeStampToString(Timestamp timestamp) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(COMPLETED_DATE_FORMAT, Locale.UK);
         return dateFormat.format(timestamp);
-    }
-
-    protected String generateUuid() {
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString();
-    }
-
-    protected String generateDcn() {
-        double no = Math.random();
-        return String.valueOf(no);
     }
 }

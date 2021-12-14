@@ -272,7 +272,7 @@ configurations.all {
     resolutionStrategy {
         eachDependency { DependencyResolveDetails details ->
             if (details.requested.group in ['org.apache.logging.log4j']) {
-                details.useVersion '2.13.2'
+                details.useVersion '2.15.0'
             }
             if (details.requested.group in ['org.scala-lang']) {
                 details.useVersion '2.12.10'

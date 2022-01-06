@@ -416,3 +416,7 @@ rootProject.tasks.named("processIntegrationTestResources") {
 rootProject.tasks.named("processSmokeTestResources") {
     duplicatesStrategy = 'include'
 }
+
+rootProject.tasks.named("processResources") {
+    dependsOn("generateGitProperties")
+}

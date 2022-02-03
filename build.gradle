@@ -262,7 +262,6 @@ def versions = [
         gradlePitest        : '1.6.0',
         pitest              : '1.6.3',
         sonarPitest         : '0.5',
-        serviceAuthVersion  : '4.0.0',
         springFramework     : '5.3.12'
 ]
 
@@ -334,10 +333,8 @@ dependencies {
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.1.4'
-    implementation(group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: versions.serviceAuthVersion) {
-        force = true
-    }
+    implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.1.5'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.0.3'
 
 
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.7'

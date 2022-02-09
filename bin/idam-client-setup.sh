@@ -7,7 +7,7 @@ REDIRECT_URI="http://localhost:3451/oauth2redirect"
 CLIENT_ID="ccd_gateway"
 CLIENT_SECRET="ccd_gateway_secret"
 
-authToken=$(curl -v -H 'Content-Type: application/x-www-form-urlencoded' -XPOST "${IDAM_URI}/loginUser?username=idamOwner@hmcts.net&password=Ref0rmIsFun" | jq -r .api_auth_token)
+authToken=$(curl -v -H 'Content-Type: application/x-www-form-urlencoded' -XPOST "${IDAM_URI}/loginUser?username=${IDAM_ADMIN_USER}&password=${IDAM_ADMIN_PASSWORD}" | jq -r .api_auth_token)
 
 echo "authtoken is ${authToken}"
 

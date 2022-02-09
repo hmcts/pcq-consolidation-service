@@ -25,13 +25,12 @@ public class CcdClientApi {
 
     public static final long USER_TOKEN_REFRESH_IN_SECONDS = 300;
 
-    public static final String SEARCH_BY_PCQ_ID_QUERY_FORMAT =
+    public static final String ES_MATCH_PHRASE_QUERY_FORMAT =
             "{\"query\": { \"match_phrase\" : { \"data.%s\" : \"%s\" }}}";
 
-    public static final String SEARCH_BY_DCN_QUERY_FORMAT =
-            "{\"query\": { \"match_phrase\" : { \"data.scannedDocuments.value.controlNumber\" : \"%s\" }}}";
-
     public static final String SEARCH_BY_PCQ_ID_DEFAULT_FIELD_NAME = "pcqId";
+
+    public static final String SEARCH_BY_DCN_DEFAULT_FIELD_NAME = "scannedDocuments.value.controlNumber";
 
     public CcdClientApi(
             CoreCaseDataApi feignCcdApi,
@@ -65,13 +64,13 @@ public class CcdClientApi {
                     "Searching for pcqId {} within the service {} using ES query {}",
                     pcqId,
                     service,
-                    format(SEARCH_BY_PCQ_ID_QUERY_FORMAT, caseFieldNamePcqId, pcqId)
+                    format(ES_MATCH_PHRASE_QUERY_FORMAT, caseFieldNamePcqId, pcqId)
             );
             SearchResult searchResult = feignCcdApi.searchCases(
                     authenticator.getUserToken(),
                     authenticator.getServiceToken(),
                     caseTypeIdsStr,
-                    format(SEARCH_BY_PCQ_ID_QUERY_FORMAT, caseFieldNamePcqId, pcqId)
+                    format(ES_MATCH_PHRASE_QUERY_FORMAT, caseFieldNamePcqId, pcqId)
             );
             return searchResult.getCases().stream().map(CaseDetails::getId).collect(toList());
         }
@@ -92,18 +91,22 @@ public class CcdClientApi {
 
         } else {
             String caseTypeIdsStr = String.join(",", serviceConfig.getCaseTypeIds());
+            String dcnSearch = serviceConfig.getCaseDcnDocumentSuffix() == null
+                    ? dcn : dcn + serviceConfig.getCaseDcnDocumentSuffix();
+            String caseDocumentDcn = serviceConfig.getCaseDcnDocumentMapping() == null
+                    ? SEARCH_BY_DCN_DEFAULT_FIELD_NAME : serviceConfig.getCaseDcnDocumentMapping();
 
             log.debug(
                     "Searching for DCN {} within the service {} using ES query {}",
                     dcn,
                     service,
-                    format(SEARCH_BY_DCN_QUERY_FORMAT, dcn)
+                    format(ES_MATCH_PHRASE_QUERY_FORMAT, caseDocumentDcn, dcnSearch)
             );
             SearchResult searchResult = feignCcdApi.searchCases(
                     authenticator.getUserToken(),
                     authenticator.getServiceToken(),
                     caseTypeIdsStr,
-                    format(SEARCH_BY_DCN_QUERY_FORMAT, dcn)
+                    format(ES_MATCH_PHRASE_QUERY_FORMAT, caseDocumentDcn, dcnSearch)
             );
             return searchResult.getCases().stream().map(CaseDetails::getId).collect(toList());
         }

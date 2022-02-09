@@ -23,13 +23,15 @@ class ServiceConfigProviderTest {
                 ServiceConfigHelper.serviceConfigItem(
                         "service1",
                         Arrays.asList("ctid1", "ctid2"),
-                        singletonList(ServiceConfigHelper.createCaseFieldMap("ACTOR_1", "pcqId1")));
+                        singletonList(ServiceConfigHelper.createCaseFieldMap("ACTOR_1", "pcqId1")),
+                        "scannedDocuments.value.controlNumber", null);
 
         ServiceConfigItem service2Config =
                 ServiceConfigHelper.serviceConfigItem(
                         "service2",
                         Arrays.asList("ctid1", "ctid3"),
-                        singletonList(ServiceConfigHelper.createCaseFieldMap("ACTOR_2", "pcqId2")));
+                        singletonList(ServiceConfigHelper.createCaseFieldMap("ACTOR_2", "pcqId2")),
+                        "scannedDocuments.value.fileName", ".pdf");
 
         List<ServiceConfigItem> configuredServices = Arrays.asList(service1Config, service2Config);
 
@@ -39,7 +41,7 @@ class ServiceConfigProviderTest {
         Set<String> serviceNames = serviceConfigProvider.getServiceNames();
 
         // then
-        assertThat(configItem).isEqualToComparingFieldByField(service2Config);
+        assertThat(configItem).isEqualTo(service2Config);
         assertThat(serviceNames).containsOnly("SERVICE1", "SERVICE2");
     }
 
@@ -51,7 +53,8 @@ class ServiceConfigProviderTest {
                         ServiceConfigHelper.serviceConfigItem(
                                 "service",
                                 singletonList("ctid"),
-                                singletonList(ServiceConfigHelper.createCaseFieldMap("ACTOR_2", "pcqId2")))
+                                singletonList(ServiceConfigHelper.createCaseFieldMap("ACTOR_2", "pcqId2")),
+                                null, null)
                 )
         );
 

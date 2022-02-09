@@ -15,11 +15,15 @@ public final class ServiceConfigHelper {
     public static ServiceConfigItem serviceConfigItem(
             String service,
             List<String> caseTypeIds,
-            List<CaseFieldMapping> caseFieldMappings) {
+            List<CaseFieldMapping> caseFieldMappings,
+            String caseDcnDocumentMapping,
+            String caseDcnDocumentSuffix) {
         ServiceConfigItem serviceConfigItem = new ServiceConfigItem();
         serviceConfigItem.setService(service);
         serviceConfigItem.setCaseTypeIds(caseTypeIds);
         serviceConfigItem.setCaseFieldMappings(caseFieldMappings);
+        serviceConfigItem.setCaseDcnDocumentMapping(caseDcnDocumentMapping);
+        serviceConfigItem.setCaseDcnDocumentSuffix(caseDcnDocumentSuffix);
         return serviceConfigItem;
     }
 

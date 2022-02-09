@@ -14,6 +14,10 @@ public class ServiceConfigItem {
 
     private List<CaseFieldMapping> caseFieldMappings;
 
+    private String caseDcnDocumentMapping;
+
+    private String caseDcnDocumentSuffix;
+
     public String getService() {
         return service.toUpperCase(Locale.ENGLISH);
     }
@@ -47,5 +51,21 @@ public class ServiceConfigItem {
 
     public void setCaseFieldMappings(List<CaseFieldMapping> caseFieldMappings) {
         this.caseFieldMappings = caseFieldMappings;
+    }
+
+    public void setCaseDcnDocumentMapping(String caseDcnDocumentMapping) {
+        this.caseDcnDocumentMapping = caseDcnDocumentMapping;
+    }
+
+    public String getCaseDcnDocumentMapping() {
+        return caseDcnDocumentMapping;
+    }
+
+    public void setCaseDcnDocumentSuffix(String caseDcnDocumentSuffix) {
+        this.caseDcnDocumentSuffix = caseDcnDocumentSuffix;
+    }
+
+    public String getCaseDcnDocumentSuffix() {
+        return caseDcnDocumentSuffix;
     }
 }

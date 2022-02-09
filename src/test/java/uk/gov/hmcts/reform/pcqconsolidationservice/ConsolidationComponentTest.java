@@ -67,8 +67,11 @@ class ConsolidationComponentTest {
     private static final String ACTOR_NAME_2 = "ACTOR_2";
     private static final String FIELD_NAME_1 = "pcqId1";
     private static final String FIELD_NAME_2 = "pcqId2";
+    private static final String DOCUMENT_DCN = "document.fileName";
+    private static final String DOCUMENT_PREFIX_DCN = ".pdf";
     private static final String FIELD_DCN_1 = "12345";
     private static final String FIELD_DCN_2 = null;
+
 
     private static final PcqAnswerResponse[] EMPTY_PCQ_ANSWER_RESPONSE = {};
 
@@ -81,7 +84,10 @@ class ConsolidationComponentTest {
             ServiceConfigHelper.serviceConfigItem(
                     SERVICE_NAME_1,
                     Arrays.asList(CASE_TYPE_ID),
-                    Arrays.asList(CASE_FIELD_MAPPING_1, CASE_FIELD_MAPPING_2));
+                    Arrays.asList(CASE_FIELD_MAPPING_1, CASE_FIELD_MAPPING_2),
+                    DOCUMENT_DCN,
+                    DOCUMENT_PREFIX_DCN
+            );
 
     @Test
     void executeApiSuccess() {

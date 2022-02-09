@@ -27,9 +27,12 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 
 @TestPropertySource(locations = "/application.properties")
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class CcdClientApiTest extends SpringBootIntegrationTest {
 
     private static final String TEST_PCQ_ID = "455e6fe4-537a-4e82-9d1d-9a324465f2b5";
+    private static final String TEST_DCN = "1657600014430175";
+    private static final String TEST_SUFFIX_DCN = ".pdf";
     private static final String CASE_SEARCH_URL = "/searchCases";
     private static final Long EXPECTED_CASE_ID = 1_988_575L;
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
@@ -45,6 +48,9 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     private static final String TEST_PROBATE_CASE_FIELD_MAP_ACTOR_1 = "APPLICANT";
     private static final String TEST_PROBATE_EXPECTED_ES_STRING =
             "{\"query\": { \"match_phrase\" : { \"data.pcqId\" : \"" + TEST_PCQ_ID + "\" }}}";
+    private static final String TEST_PROBATE_EXPECTED_DCN_ES_STRING =
+            "{\"query\": { \"match_phrase\" : { \"data.scannedDocuments.value.controlNumber\" : \""
+                    + TEST_DCN + "\" }}}";
 
     private static final String TEST_DIVORCE_SERVICE_NAME = "DIVORCE";
     private static final String TEST_DIVORCE_CASE_FIELD_MAP_ACTOR_1 = "PETITIONER";
@@ -55,6 +61,14 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     private static final String TEST_CMC_CASE_FIELD_MAP_ACTOR_1 = "DEFENDANT";
     private static final String TEST_CMC_EXPECTED_ES_STRING =
             "{\"query\": { \"match_phrase\" : { \"data.respondents.value.pcqId\" : \"" + TEST_PCQ_ID + "\" }}}";
+
+    private static final String TEST_SSCS_SERVICE_NAME = "SSCS";
+    private static final String TEST_SSCS_CASE_FIELD_MAP_ACTOR_1 = "APPELLANT";
+    private static final String TEST_SSCS_EXPECTED_ES_STRING =
+            "{\"query\": { \"match_phrase\" : { \"data.pcqId\" : \"" + TEST_PCQ_ID + "\" }}}";
+    private static final String TEST_SSCS_EXPECTED_DCN_ES_STRING =
+            "{\"query\": { \"match_phrase\" : { \"data.sscsDocument.value.documentFileName\" : \""
+                    + TEST_DCN + TEST_SUFFIX_DCN + "\" }}}";
 
     @Autowired
     private CcdAuthenticatorFactory authenticatorFactory;
@@ -79,6 +93,23 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                 TEST_PCQ_ID,
                 TEST_PROBATE_SERVICE_NAME,
                 TEST_PROBATE_CASE_FIELD_MAP_ACTOR_1);
+
+        Assert.assertEquals(1, response.size());
+        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+
+        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+        WireMock.verify(1,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+    }
+
+    @Test
+    public void testProbateDcnSearchExecuteSuccess() {
+        searchCasesMockSuccess(TEST_PROBATE_EXPECTED_DCN_ES_STRING);
+
+        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = ccdClientApi.getCaseRefsByOriginatingFormDcn(
+                TEST_DCN,
+                TEST_PROBATE_SERVICE_NAME);
 
         Assert.assertEquals(1, response.size());
         Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
@@ -122,6 +153,41 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
         WireMock.verify(2,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
         WireMock.verify(2,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
         WireMock.verify(2,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+    }
+
+    @Test
+    public void testSscsPcqWithoutCaseExecuteSuccess() {
+        searchCasesMockSuccess(TEST_SSCS_EXPECTED_ES_STRING);
+
+        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = ccdClientApi.getCaseRefsByPcqId(
+                TEST_PCQ_ID,
+                TEST_SSCS_SERVICE_NAME,
+                TEST_SSCS_CASE_FIELD_MAP_ACTOR_1);
+
+        Assert.assertEquals(1, response.size());
+        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+
+        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+        WireMock.verify(1,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+    }
+
+    @Test
+    public void testSscsDcnSearchExecuteSuccess() {
+        searchCasesMockSuccess(TEST_SSCS_EXPECTED_DCN_ES_STRING);
+
+        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = ccdClientApi.getCaseRefsByOriginatingFormDcn(
+                TEST_DCN,
+                TEST_SSCS_SERVICE_NAME);
+
+        Assert.assertEquals(1, response.size());
+        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+
+        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+        WireMock.verify(1,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
     }
 
     public static String fileContentAsString(String file) {

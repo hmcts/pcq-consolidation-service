@@ -43,11 +43,22 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
     private static final String TEST_SERVICE3_CASE_FIELD_MAP_NAME_2 = "respondents.value.pcqId";
     private static final int TEST_SERVICE3_CASE_TYPES_SIZE = 1;
 
+    // Example Service 4 - SSCS
+    private static final String TEST_SERVICE4_NAME = "SSCS";
+    private static final String TEST_SERVICE4_CASE_TYPE_ID_1 = "Benefit";
+    private static final String TEST_SERVICE4_CASE_FIELD_MAP_ACTOR_1 = "APPELLANT";
+    private static final String TEST_SERVICE4_CASE_FIELD_MAP_NAME_1 = "pcqId";
+    private static final String TEST_SERVICE4_CASE_DCN_MAPPING = "sscsDocument.value.documentFileName";
+    private static final String TEST_SERVICE4_CASE_DCN_SUFFIX = ".pdf";
+    private static final int TEST_SERVICE4_CASE_TYPES_SIZE = 1;
+
     // Messages
     private static final String TEST_SERVICE_NAME_MESSAGE = "Case Service Name is correct";
     private static final String TEST_CASE_TYPE_MESSAGE = "Case Type is correct";
     private static final String TEST_ACTOR_COMPARISON_MESSAGE = "Case Actor Mapping is correct";
     private static final String TEST_NO_CASE_TYPES_MESSAGE = "Number of Case Types is correct";
+    private static final String TEST_DCN_DOCUMENT_MAPPING_MESSAGE = "Case Document DCN Mapping is correct";
+    private static final String TEST_DCN_DOCUMENT_SUFFIX_MESSAGE = "Case Document DCN Suffix is correct";
 
     @Autowired
     private ServiceConfigProvider serviceConfigProvider;
@@ -100,6 +111,24 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
                 configItem.getCaseField(TEST_SERVICE3_CASE_FIELD_MAP_ACTOR_1), TEST_ACTOR_COMPARISON_MESSAGE);
         assertEquals(TEST_SERVICE3_CASE_FIELD_MAP_NAME_2,
                 configItem.getCaseField(TEST_SERVICE3_CASE_FIELD_MAP_ACTOR_2), TEST_ACTOR_COMPARISON_MESSAGE);
+    }
+
+    @Test
+    public void serviceConfigItemShouldCaptureServiceCustomDcnMapping() {
+        ServiceConfigItem configItem = serviceConfigProvider.getConfig(TEST_SERVICE4_NAME);
+
+        assertEquals(TEST_SERVICE4_NAME,
+                configItem.getService(),TEST_SERVICE_NAME_MESSAGE);
+        assertEquals(TEST_SERVICE4_CASE_TYPES_SIZE,
+                configItem.getCaseTypeIds().size(), TEST_NO_CASE_TYPES_MESSAGE);
+        assertEquals(TEST_SERVICE4_CASE_TYPE_ID_1,
+                configItem.getCaseTypeIds().get(0), TEST_CASE_TYPE_MESSAGE);
+        assertEquals(TEST_SERVICE4_CASE_FIELD_MAP_NAME_1,
+                configItem.getCaseField(TEST_SERVICE4_CASE_FIELD_MAP_ACTOR_1), TEST_ACTOR_COMPARISON_MESSAGE);
+        assertEquals(TEST_SERVICE4_CASE_DCN_MAPPING,
+                configItem.getCaseDcnDocumentMapping(), TEST_DCN_DOCUMENT_MAPPING_MESSAGE);
+        assertEquals(TEST_SERVICE4_CASE_DCN_SUFFIX,
+                configItem.getCaseDcnDocumentSuffix(), TEST_DCN_DOCUMENT_SUFFIX_MESSAGE);
     }
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")

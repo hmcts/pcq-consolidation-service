@@ -58,6 +58,7 @@ idam:
 service-config:
   services:
     - service: PROBATE_TEST
+      case-dcn-document-mapping: scannedDocuments.value.controlNumber
       case-field-mappings:
         - actor: defendant
           name: pcqId

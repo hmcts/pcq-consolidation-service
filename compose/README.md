@@ -26,18 +26,24 @@ Removing images will result in downloading all images again which you may want t
 ```
 
 ##### 4) Run environments scripts
+First run the CCD login script
 ```bash
    ./ccd login
 ```
-
-For mac: 
+For mac:
 ```bash
    source ./bin/set-environment-variables.sh
 ```
 For linux
 ```bash
    source ./bin/linux-set-environment-variables.sh
-```  
+```
+In addition all scripts require the following environment variables to be set with the corresponding values from the confluence page at https://tools.hmcts.net/confluence/x/eQP3P
+```bash
+export IDAM_ADMIN_USER=<value of username>
+export IDAM_ADMIN_PASSWORD=<value of password>
+```
+
 ##### 4.1) setup the logstash
 In order to work locally on pcq-consolidation-service you will need build ccd-logstash locally
 ```
@@ -46,6 +52,7 @@ In order to work locally on pcq-consolidation-service you will need build ccd-lo
    cp hub.Dockerfile Dockerfile
    docker build . -t ccd-logstash:latest 
 ```   
+
 ##### 5) Start up docker 
 ```bash
    docker network create compose_default
@@ -73,7 +80,7 @@ Restart the dm-store container
    ./bin/idam-client-setup.sh
 ```
 
-To check the IDAM data, you can log into IDAM-web `http://localhost:8082/login` with `idamOwner@hmcts.net/Ref0rmIsFun`.
+To check the IDAM data, you can log into IDAM-web `http://localhost:8082/login` with `idamOwner@hmcts.net` and the password used for `IDAM_ADMIN_PASSWORD`.
 
 ##### 9) Generate roles, import xls
 

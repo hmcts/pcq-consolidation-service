@@ -20,28 +20,32 @@ import uk.gov.hmcts.reform.pcqconsolidationservice.config.TestApplicationConfigu
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.UUID;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestApplicationConfiguration.class)
 @ActiveProfiles("functional")
 @Slf4j
+@SuppressWarnings("PMD.TooManyMethods")
 public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTestBase {
 
-    public static final String TEST_DIGITAL_CASE_TITLE = "Func-Test-Digital-Case-2";
-    public static final String TEST_PAPER_CASE_TITLE = "Func-Test-Paper-Case-2";
-    public static final String TEST_PCQ_ID_1 = "2ab8767c-f3e9-293b-afd4-128e1e57fc41";
-    public static final String TEST_PCQ_ID_2 = "73c5a4de-932a-2093-851a-da3b99a70bba";
-    public static final String TEST_PCQ_ID_3 = "b0ab25a9-a04d-2ba1-b9f5-3108b7b7884c";
+    public static final String TEST_DIGITAL_CASE_TITLE = "Digital-Case-Functional-Tests-1";
+    public static final String TEST_PAPER_CASE_TITLE = "Paper-Case-Functional-Tests-1";
 
-    public static final String TEST_PAPER_CASE_DCN = "2020032244220001";
+    protected String testPcqId1 = UUID.randomUUID().toString();
+    protected String testPcqId2 = UUID.randomUUID().toString();
+    protected String testPcqId3 = UUID.randomUUID().toString();
+    protected String testDcn = generateDcn();
 
     @Value("${pcqBackendUrl}")
     private String pcqBackendUrl;
@@ -57,24 +61,31 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
 
     @Before
     public void createPcqData() throws IOException {
-
-        // Create the PCQ answer records.
-        createTestAnswerRecordWithoutCase(TEST_PCQ_ID_1);
-        createTestAnswerRecordDcnWithoutCase(TEST_PCQ_ID_2);
-        createTestAnswerRecordWithCase(TEST_PCQ_ID_3);
-
         // Create the Sample service core case data.
-        pcqCase1 = createCcdPcqQuestionsDigitalCase(TEST_DIGITAL_CASE_TITLE, TEST_PCQ_ID_1);
-        pcqCase2 = createCcdPcqQuestionsPaperCase(TEST_PAPER_CASE_TITLE, TEST_PAPER_CASE_DCN);
+
+        pcqCase1 = createCcdPcqQuestionsDigitalCase(TEST_DIGITAL_CASE_TITLE, testPcqId1);
+        pcqCase2 = createCcdPcqQuestionsPaperCase(TEST_PAPER_CASE_TITLE, testDcn);
+
+        // Collect PCQ from first CCD case.
+        testPcqId1 = (String)pcqCase1.getData().get("pcqId");
+        createTestAnswerRecordWithoutCase(testPcqId1);
+
+        // Collect DCN from second CCD case.
+        LinkedHashMap doc = (LinkedHashMap)((ArrayList)pcqCase2.getData().get("scannedDocuments")).get(0);
+        testDcn = ((LinkedHashMap)doc.get("value")).get("controlNumber").toString();
+
+        // Create PCQ records in database.
+        createTestAnswerRecordDcnWithoutCase(testPcqId2, testDcn);
+        createTestAnswerRecordWithCase(testPcqId3);
     }
 
     @After
     public void removePcqData() throws IOException {
 
-        // Create the PCQ answer records.
-        removeTestAnswerRecord(TEST_PCQ_ID_1);
-        removeTestAnswerRecord(TEST_PCQ_ID_2);
-        removeTestAnswerRecord(TEST_PCQ_ID_3);
+        // Remove the PCQ answer records.
+        removeTestAnswerRecord(testPcqId1);
+        removeTestAnswerRecord(testPcqId2);
+        removeTestAnswerRecord(testPcqId3);
     }
 
 
@@ -95,41 +106,50 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
                 consolidationComponent);
         assertNotNull("Status Map is null", statusMap);
         PcqAnswerResponse[] pcqAnswerRecords = statusMap.get("PCQ_ID_FOUND");
-        assertPcqIdsRetrieved(pcqAnswerRecords, TEST_PCQ_ID_1, TEST_PCQ_ID_2, TEST_PCQ_ID_3);
+        assertPcqIdsRetrieved(pcqAnswerRecords, testPcqId1, testPcqId2, testPcqId3);
 
         //Check that the API - addCaseForPcq has been called and that the test records are updated.
         PcqAnswerResponse[] pcqRecordsProcessed = statusMap.get("PCQ_ID_PROCESSED");
-        assertPcqIdsProcessed(pcqRecordsProcessed, TEST_PCQ_ID_1, TEST_PCQ_ID_2);
+        assertPcqIdsProcessed(pcqRecordsProcessed, testPcqId1, testPcqId2);
 
         //Make a call to the getAnswer from pcq backend to verify that case Id has been updated search by pcqId.
-        PcqAnswerResponse answerResponse = getTestAnswerRecord(TEST_PCQ_ID_1, pcqBackendUrl, jwtSecretKey);
+        PcqAnswerResponse answerResponse = getTestAnswerRecord(testPcqId1, pcqBackendUrl, jwtSecretKey);
         assertNotNull("The get response is not null", answerResponse);
         assertEquals("The get response matches ccd case id", pcqCase1.getId().toString(), answerResponse.getCaseId());
 
         //Make a call to the getAnswer from pcq backend to verify that case Id has been updated search by dcn.
-        answerResponse = getTestAnswerRecord(TEST_PCQ_ID_2, pcqBackendUrl, jwtSecretKey);
+        answerResponse = getTestAnswerRecord(testPcqId2, pcqBackendUrl, jwtSecretKey);
         assertNotNull("The get response is not null", answerResponse);
         assertEquals("The get response matches ccd case id", pcqCase2.getId().toString(), answerResponse.getCaseId());
     }
 
     private void createTestAnswerRecordWithoutCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswer.json", pcqBackendUrl, pcqId, jwtSecretKey);
+        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswer.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,null);
     }
 
-    private void createTestAnswerRecordDcnWithoutCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/SecondSubmitAnswerWithDcn.json", pcqBackendUrl, pcqId, jwtSecretKey);
+    private void createTestAnswerRecordDcnWithoutCase(String pcqId,String dcnNumber) throws IOException {
+        createTestAnswerRecord("JsonTestFiles/SecondSubmitAnswerWithDcn.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,dcnNumber);
     }
 
     private void createTestAnswerRecordWithCase(String pcqId) throws IOException {
-        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswerWithCase.json", pcqBackendUrl, pcqId, jwtSecretKey);
+        createTestAnswerRecord("JsonTestFiles/FirstSubmitAnswerWithCase.json", pcqBackendUrl, pcqId,
+                jwtSecretKey,null);
     }
 
     private void removeTestAnswerRecord(String pcqId) throws IOException {
-        removeTestAnswerRecord("JsonTestFiles/FirstSubmitAnswer.json", pcqBackendUrl, pcqId, jwtSecretKey);
+        removeTestAnswerRecord(pcqBackendUrl, pcqId, jwtSecretKey);
+    }
+
+    protected void removeTestAnswerRecord(String apiUrl, String pcqId, String jwtSecretKey)
+            throws IOException {
+        deleteTestRecordFromBackend(apiUrl, pcqId, jwtSecretKey);
     }
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
-    private void assertPcqIdsRetrieved(PcqAnswerResponse[] pcqAnswerRecords, String pcqRecord1, String pcqRecord2,
+    private void assertPcqIdsRetrieved(PcqAnswerResponse[] pcqAnswerRecords,
+                                       String pcqRecord1,String pcqRecord2,
                                        String pcqRecord3) {
         List<String> pcqIds = new ArrayList<>();
         for (PcqAnswerResponse answerResponse : pcqAnswerRecords) {
@@ -149,5 +169,17 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         }
         assertTrue("The pcqRecord 1 is not processed.", pcqIds.contains(pcqRecord1));
         assertTrue("The pcqRecord 2 is not processed.", pcqIds.contains(pcqRecord2));
+    }
+
+    protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) throws IOException {
+        return getResponseFromBackend(apiUrl, pcqId, secretKey);
+    }
+
+    protected String generateDcn() {
+        // numberOfDigits must be < 10
+        int numberOfDigits = 8;
+        int member = (int) Math.pow(10, numberOfDigits - 1);
+        int dcn = member + new Random().nextInt(9 * member);
+        return Integer.toString(dcn);
     }
 }

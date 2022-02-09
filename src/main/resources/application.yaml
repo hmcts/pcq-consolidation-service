@@ -38,6 +38,7 @@ idam:
 service-config:
   services:
     - service: probate
+      case-dcn-document-mapping: scannedDocuments.value.controlNumber
       case-field-mappings:
         - actor: APPLICANT
           name: pcqId
@@ -63,6 +64,8 @@ service-config:
       case-type-ids:
         - MoneyClaimCase
     - service: sscs
+      case-dcn-document-mapping: sscsDocument.value.documentFileName
+      case-dcn-document-suffix: .pdf
       case-field-mappings:
         - actor: APPELLANT
           name: pcqId

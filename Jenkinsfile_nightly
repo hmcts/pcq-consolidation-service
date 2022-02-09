@@ -51,10 +51,14 @@ withNightlyPipeline(type, product, component) {
     enableAksStagingDeployment()
     disableLegacyDeployment()
     nonServiceApp()
-
     enableSecurityScan()
-
     enableMutationTest()
+    enableFortifyScan()
+
+    after('fortify-scan') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+    }
+
     after('mutationTest') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'builds/reports/pitest/**/*'
     }

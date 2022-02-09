@@ -24,8 +24,7 @@ import static java.util.Collections.singletonList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi.SEARCH_BY_DCN_QUERY_FORMAT;
-import static uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi.SEARCH_BY_PCQ_ID_QUERY_FORMAT;
+import static uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi.ES_MATCH_PHRASE_QUERY_FORMAT;
 
 @ExtendWith(MockitoExtension.class)
 class CcdClientApiTest {
@@ -37,18 +36,22 @@ class CcdClientApiTest {
     private static final String DCN = "6789";
     private static final String ACTOR = "applicant";
     private static final String DEFAULT_PCQID_FIELD = "pcqId";
+    private static final String DEFAULT_DCN_FIELD = "scannedDocuments.value.controlNumber";
     private static final String APPLICANT_PCQID_FIELD = "applicantPcdId";
+    private static final String SSCS_DCN_FIELD = "sscsDocument.value.documentFileName";
+    private static final String SSCS_DCN_DOCUMENT_SUFFIX = ".pdf";
 
     public static final String SERVICE_TOKEN = "SERVICE_TOKEN";
     public static final String USER_TOKEN = "USER_TOKEN";
     public static final String USER_ID = "USER_ID";
     public static final String SEARCH_CASES_DEFAULT_PCQ_FIELD_SEARCH_STRING
-            = format(SEARCH_BY_PCQ_ID_QUERY_FORMAT, DEFAULT_PCQID_FIELD, PCQ_ID);
+            = format(ES_MATCH_PHRASE_QUERY_FORMAT, DEFAULT_PCQID_FIELD, PCQ_ID);
     public static final String SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING
-            = format(SEARCH_BY_PCQ_ID_QUERY_FORMAT, APPLICANT_PCQID_FIELD, PCQ_ID);
+            = format(ES_MATCH_PHRASE_QUERY_FORMAT, APPLICANT_PCQID_FIELD, PCQ_ID);
     public static final String SEARCH_CASES_DEFAULT_DCN_FIELD_SEARCH_STRING
-            = format(SEARCH_BY_DCN_QUERY_FORMAT, DCN);
-
+            = format(ES_MATCH_PHRASE_QUERY_FORMAT, DEFAULT_DCN_FIELD, DCN);
+    public static final String SEARCH_CASES_CUSTOM_DCN_FIELD_SEARCH_STRING
+            = format(ES_MATCH_PHRASE_QUERY_FORMAT, SSCS_DCN_FIELD, DCN + SSCS_DCN_DOCUMENT_SUFFIX);
     public static final UserDetails USER_DETAILS = new UserDetails(USER_ID,
             null, null, null, emptyList()
     );
@@ -72,6 +75,8 @@ class CcdClientApiTest {
 
     private ServiceConfigItem serviceConfigWithCustomCcdFieldMapping;
 
+    private ServiceConfigItem serviceConfigWithCustomDcnFieldMapping;
+
     private ServiceConfigItem serviceConfigWithMissingIncorrectActorCcdFieldMapping;
 
     private ServiceConfigItem serviceConfigNoCaseTypesMapping;
@@ -86,24 +91,32 @@ class CcdClientApiTest {
 
     @BeforeEach
     void setUp() {
-
         serviceConfigWithCustomCcdFieldMapping =
                 ServiceConfigHelper.serviceConfigItem(
                         SERVICE,
                         singletonList(CASE_TYPE_ID),
-                        singletonList(ServiceConfigHelper.createCaseFieldMap(ACTOR, APPLICANT_PCQID_FIELD)));
+                        singletonList(ServiceConfigHelper.createCaseFieldMap(ACTOR, APPLICANT_PCQID_FIELD)),
+                        null, null);
+
+        serviceConfigWithCustomDcnFieldMapping =
+                ServiceConfigHelper.serviceConfigItem(
+                        SERVICE,
+                        singletonList(CASE_TYPE_ID),
+                        emptyList(),
+                        SSCS_DCN_FIELD, SSCS_DCN_DOCUMENT_SUFFIX);
 
         serviceConfigWithMissingIncorrectActorCcdFieldMapping =
                 ServiceConfigHelper.serviceConfigItem(
                         SERVICE,
                         singletonList(CASE_TYPE_ID),
-                        null);
+                        null, null, null);
 
         serviceConfigNoCaseTypesMapping =
                 ServiceConfigHelper.serviceConfigItem(
                         SERVICE,
                         emptyList(),
-                        singletonList(ServiceConfigHelper.createCaseFieldMap(ACTOR, APPLICANT_PCQID_FIELD)));
+                        singletonList(ServiceConfigHelper.createCaseFieldMap(ACTOR, APPLICANT_PCQID_FIELD)),
+                        null, null);
     }
 
     @Test
@@ -174,6 +187,23 @@ class CcdClientApiTest {
         List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
         Assert.assertEquals("Search find correct number of cases with custom pcqId field", 1, response.size());
         Assert.assertEquals("Search find correct case with custom pcqId field", CASE_REF, response.get(0));
+    }
+
+    @Test
+    void useCcdClientToFindCasesByDcnWithCustomDcnField() {
+        when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
+        when(serviceConfigProvider.getConfig(anyString()))
+                .thenReturn(serviceConfigWithCustomDcnFieldMapping);
+        when(feignCcdApi.searchCases(
+                eq(USER_TOKEN),
+                eq(SERVICE_TOKEN),
+                eq(CASE_TYPE_ID),
+                eq(SEARCH_CASES_CUSTOM_DCN_FIELD_SEARCH_STRING))).thenReturn(singleSearchResult);
+
+        testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = testCcdClientApi.getCaseRefsByOriginatingFormDcn(DCN, SERVICE);
+        Assert.assertEquals("Search find correct number of cases", 1, response.size());
+        Assert.assertEquals("Search find correct case with dcn field", CASE_REF, response.get(0));
     }
 
     @Test

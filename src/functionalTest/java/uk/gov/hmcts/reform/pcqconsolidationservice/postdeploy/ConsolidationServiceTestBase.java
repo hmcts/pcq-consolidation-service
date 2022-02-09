@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonObjectFromString;
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonStringFromFile;
@@ -33,36 +35,24 @@ import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonStringFr
 public class ConsolidationServiceTestBase {
 
     private static final String COMPLETED_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-    private static final String OPT_OUT_YES = "Y";
 
     @Autowired
     private CaseCreator caseCreator;
 
-    protected void createTestAnswerRecord(String fileName, String apiUrl, String pcqId, String jwtSecretKey)
+    protected void createTestAnswerRecord(String fileName, String apiUrl, String pcqId,
+                                          String jwtSecretKey, String dcnNumber)
             throws IOException {
         String jsonString = jsonStringFromFile(fileName);
         PcqAnswerRequest pcqAnswerRequest = jsonObjectFromString(jsonString);
 
         pcqAnswerRequest.setPcqId(pcqId);
         pcqAnswerRequest.setCompletedDate(updateCompletedDate(pcqAnswerRequest.getCompletedDate()));
+        if (dcnNumber != null) {
+            pcqAnswerRequest.setDcnNumber(dcnNumber);
+        }
 
+        log.info("Creating test PCQ record with pcqId {} and dcn {}", pcqId, dcnNumber);
         postRequestPcqBackend(apiUrl, pcqAnswerRequest, jwtSecretKey);
-    }
-
-    protected void removeTestAnswerRecord(String fileName, String apiUrl, String pcqId, String jwtSecretKey)
-            throws IOException {
-        String jsonString = jsonStringFromFile(fileName);
-        PcqAnswerRequest pcqAnswerRequest = jsonObjectFromString(jsonString);
-
-        pcqAnswerRequest.setPcqId(pcqId);
-        pcqAnswerRequest.setOptOut(OPT_OUT_YES);
-        pcqAnswerRequest.setCompletedDate(updateCompletedDate(pcqAnswerRequest.getCompletedDate()));
-
-        postRequestPcqBackend(apiUrl, pcqAnswerRequest, jwtSecretKey);
-    }
-
-    protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) throws IOException {
-        return getResponseFromBackend(apiUrl, pcqId, secretKey);
     }
 
     private void postRequestPcqBackend(String apiUrl, PcqAnswerRequest requestObject, String secretKey) {
@@ -73,7 +63,15 @@ public class ConsolidationServiceTestBase {
         log.info("Returned response " + response3.toString());
     }
 
-    private PcqAnswerResponse getResponseFromBackend(String apiUrl, String pcqId, String secretKey) {
+    protected void deleteTestRecordFromBackend(String apiUrl, String pcqId, String secretKey) {
+        WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
+        WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.delete().uri(URI.create(
+                apiUrl + "/pcq/backend/deletePcqRecord/" + pcqId));
+        Map response3 = requestBodySpec.retrieve().bodyToMono(Map.class).block();
+        log.info("Returned response " + response3.toString());
+    }
+
+    protected PcqAnswerResponse getResponseFromBackend(String apiUrl, String pcqId, String secretKey) {
         WebClient pcqWebClient = createPcqBackendWebClient(apiUrl, secretKey);
         WebClient.RequestHeadersSpec requestBodySpec = pcqWebClient.get().uri(URI.create(
                 apiUrl + "/pcq/backend/getAnswer/" + pcqId));
@@ -108,6 +106,11 @@ public class ConsolidationServiceTestBase {
                     .build();
             return caseCreator.createCase(pcqQuestions);
         } else {
+            LinkedHashMap doc = (LinkedHashMap)((ArrayList)caseDetails.get().getData().get("scannedDocuments")).get(0);
+            String testDcnNumber = ((LinkedHashMap)doc.get("value")).get("controlNumber").toString();
+            log.info("Found Paper Case ID: {} with DCN {}",
+                    caseDetails.get().getId(),
+                    testDcnNumber);
             return caseDetails.get();
         }
     }
@@ -124,6 +127,9 @@ public class ConsolidationServiceTestBase {
                     .build();
             return caseCreator.createCase(pcqQuestions);
         } else {
+            log.info("Found Digital Case ID: {} with pcqId {}",
+                    caseDetails.get().getId(),
+                    caseDetails.get().getData().get("pcqId"));
             return caseDetails.get();
         }
     }

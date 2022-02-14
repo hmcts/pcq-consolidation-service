@@ -340,7 +340,7 @@ dependencies {
 
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.7'
 
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
+    //implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit

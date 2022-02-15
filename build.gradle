@@ -221,7 +221,6 @@ dependencyManagement {
             entry 'netty-transport-native-epoll'
             entry 'netty-transport-native-kqueue'
             entry 'netty-transport-native-unix-common'
-            entry 'netty-tcnative-classes'
         }
         dependency group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.69'
         // CVE-2018-10237 - Unbounded memory allocation
@@ -303,6 +302,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.6.3'
 
     implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
@@ -313,6 +313,7 @@ dependencies {
     implementation group: 'org.springframework', name:'spring-oxm', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-web', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
+    testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.1'
@@ -331,20 +332,21 @@ dependencies {
 
     implementation group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '1.5.5'
     implementation group: 'uk.gov.hmcts.reform', name: 'core-case-data-store-client', version: '4.7.3'
-
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.1.5'
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.0.3'
 
-
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.7'
 
-    //implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
+
+    //testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    //testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 
     testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
     testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.5.1'
@@ -353,12 +355,15 @@ dependencies {
     testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
 
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.3.1'
-    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.1.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.3.1'
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.3.1'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '4.3.1'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.22.0'
 
     testImplementation group: 'com.github.tomakehurst', name: 'wiremock', version: '2.27.2'
 
     testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
     testImplementation group: "com.gilecode.yagson", name:"j9-reflection-utils", version:"1.0"
     testImplementation group: "io.jsonwebtoken", name: "jjwt", version: "0.9.1"

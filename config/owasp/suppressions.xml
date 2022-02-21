@@ -11,6 +11,17 @@
         <cve>CVE-2021-29428</cve>
         <cve>CVE-2021-29429</cve>
         <cve>CVE-2021-32751</cve>
+        <cve>CVE-2014-3488</cve>
+        <cve>CVE-2019-16869</cve>
+        <cve>CVE-2019-20444</cve>
+        <cve>CVE-2019-20445</cve>
+        <cve>CVE-2021-21290</cve>
+        <cve>CVE-2021-21295</cve>
+        <cve>CVE-2021-21409</cve>
+        <cve>CVE-2021-37136</cve>
+        <cve>CVE-2021-37137</cve>
+        <cve>CVE-2021-43797</cve>
+        <cve>CVE-2015-2156</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[Nested dependency of adal4j. Microsoft needs to update strong relation of this library in ServiceBus]]></notes>

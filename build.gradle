@@ -341,6 +341,7 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.1.5'
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.0.3'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2'
 
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.7'
 

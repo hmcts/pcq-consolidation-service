@@ -22,7 +22,6 @@ import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi.ES_MATCH_PHRASE_QUERY_FORMAT;
 
@@ -124,11 +123,8 @@ class CcdClientApiTest {
         when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
         when(serviceConfigProvider.getConfig(anyString()))
                 .thenReturn(serviceConfigWithMissingIncorrectActorCcdFieldMapping);
-        when(feignCcdApi.searchCases(
-                (USER_TOKEN),
-                (SERVICE_TOKEN),
-                (CASE_TYPE_ID),
-                (SEARCH_CASES_DEFAULT_PCQ_FIELD_SEARCH_STRING))).thenReturn(singleSearchResult);
+        when(feignCcdApi.searchCases(USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_DEFAULT_PCQ_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
 
         testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
         List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
@@ -141,11 +137,8 @@ class CcdClientApiTest {
         when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
         when(serviceConfigProvider.getConfig(anyString()))
                 .thenReturn(serviceConfigWithCustomCcdFieldMapping);
-        when(feignCcdApi.searchCases(
-                (USER_TOKEN),
-                (SERVICE_TOKEN),
-                (CASE_TYPE_ID),
-                (SEARCH_CASES_DEFAULT_DCN_FIELD_SEARCH_STRING))).thenReturn(singleSearchResult);
+        when(feignCcdApi.searchCases(USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_DEFAULT_DCN_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
 
         testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
         List<Long> response = testCcdClientApi.getCaseRefsByOriginatingFormDcn(DCN, SERVICE);
@@ -158,10 +151,8 @@ class CcdClientApiTest {
         when(serviceConfigProvider.getConfig(anyString()))
                 .thenReturn(serviceConfigWithMissingIncorrectActorCcdFieldMapping);
         when(feignCcdApi.searchCases(
-                (USER_TOKEN),
-                (SERVICE_TOKEN),
-                (CASE_TYPE_ID),
-                (SEARCH_CASES_DEFAULT_PCQ_FIELD_SEARCH_STRING))).thenReturn(singleSearchResult);
+                USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_DEFAULT_PCQ_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
 
         testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
         ReflectionTestUtils.setField(testCcdClientApi, // inject into this object
@@ -178,10 +169,8 @@ class CcdClientApiTest {
         when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
         when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigWithCustomCcdFieldMapping);
         when(feignCcdApi.searchCases(
-                (USER_TOKEN),
-                (SERVICE_TOKEN),
-                (CASE_TYPE_ID),
-                (SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING))).thenReturn(singleSearchResult);
+                USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
 
         testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
         List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
@@ -195,10 +184,8 @@ class CcdClientApiTest {
         when(serviceConfigProvider.getConfig(anyString()))
                 .thenReturn(serviceConfigWithCustomDcnFieldMapping);
         when(feignCcdApi.searchCases(
-                (USER_TOKEN),
-                (SERVICE_TOKEN),
-                (CASE_TYPE_ID),
-                (SEARCH_CASES_CUSTOM_DCN_FIELD_SEARCH_STRING))).thenReturn(singleSearchResult);
+                USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_CUSTOM_DCN_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
 
         testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
         List<Long> response = testCcdClientApi.getCaseRefsByOriginatingFormDcn(DCN, SERVICE);
@@ -211,10 +198,8 @@ class CcdClientApiTest {
         when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
         when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigWithCustomCcdFieldMapping);
         when(feignCcdApi.searchCases(
-                (USER_TOKEN),
-                (SERVICE_TOKEN),
-                (CASE_TYPE_ID),
-                (SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING))).thenReturn(emptySearchResult);
+                USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING)).thenReturn(emptySearchResult);
 
         testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
         List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);

@@ -324,8 +324,7 @@ class ConsolidationComponentTest {
         verify(ccdClientApi, times(1)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
     }
 
-    @SuppressWarnings("unchecked")
-    private ResponseEntity generateTestSuccessResponse(String message, int statusCode) {
+    private ResponseEntity<PcqRecordWithoutCaseResponse> generateTestSuccessResponse(String message, int statusCode) {
         PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = new PcqRecordWithoutCaseResponse();
         pcqWithoutCaseResponse.setResponseStatus(message);
         pcqWithoutCaseResponse.setResponseStatusCode(String.valueOf(statusCode));
@@ -340,7 +339,7 @@ class ConsolidationComponentTest {
         PcqAnswerResponse[] answerResponses = {answerResponse1, answerResponse2};
         pcqWithoutCaseResponse.setPcqRecord(answerResponses);
 
-        return new ResponseEntity(pcqWithoutCaseResponse, HttpStatus.valueOf(statusCode));
+        return new ResponseEntity<PcqRecordWithoutCaseResponse>(pcqWithoutCaseResponse, HttpStatus.valueOf(statusCode));
     }
 
     private Set<String> getServiceSet() {

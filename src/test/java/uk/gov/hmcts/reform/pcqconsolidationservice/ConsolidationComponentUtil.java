@@ -11,14 +11,14 @@ public final class ConsolidationComponentUtil {
         //not called
     }
 
-    @SuppressWarnings("unchecked")
-    public static ResponseEntity generateSubmitTestSuccessResponse(String pcqId, String message, int statusCode) {
+    public static ResponseEntity<SubmitResponse> generateSubmitTestSuccessResponse(
+            String pcqId, String message, int statusCode) {
         SubmitResponse submitResponse = new SubmitResponse();
         submitResponse.setResponseStatus(message);
         submitResponse.setResponseStatusCode(String.valueOf(statusCode));
         submitResponse.setPcqId(pcqId);
 
-        return new ResponseEntity(submitResponse, HttpStatus.valueOf(statusCode));
+        return new ResponseEntity<SubmitResponse>(submitResponse, HttpStatus.valueOf(statusCode));
     }
 
     @SuppressWarnings("PMD.UseObjectForClearerAPI")

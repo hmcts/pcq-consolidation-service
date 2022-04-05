@@ -267,7 +267,7 @@ def versions = [
         gradlePitest        : '1.6.0',
         pitest              : '1.6.3',
         sonarPitest         : '0.5',
-        springFramework     : '5.3.15',
+        springFramework     : '5.3.18',
         fasterXmlJackson    : '2.13.2'
 ]
 

@@ -54,14 +54,6 @@
         <cve>CVE-2020-29582</cve>
     </suppress>
     <suppress>
-        <notes><![CDATA[
-       file name: kotlin-stdlib-*.jar
-   ]]></notes>
-        <filePath regex="true">.*kotlin-stdlib-(common-|jdk7-|jdk8-|)1\.4\.30\.jar</filePath>
-        <cve>CVE-2020-15824</cve>
-        <cve>CVE-2020-29582</cve>
-    </suppress>
-    <suppress>
         <notes><![CDATA[name: spring-plugin-core and spring-plugin-metadata 2.0.0.RELEASE]]></notes>
         <cve>CVE-2013-4152</cve>
         <cve>CVE-2013-7315</cve>

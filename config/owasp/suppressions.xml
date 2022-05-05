@@ -4,15 +4,6 @@
         <notes><![CDATA[
        file name: gradle-pitest-plugin-1.5.1.jar
        ]]></notes>
-        <!--
-        <cve>CVE-2019-11065</cve>
-        <cve>CVE-2019-15052</cve>
-        <cve>CVE-2019-16370</cve>
-        <cve>CVE-2020-11979</cve>
-        <cve>CVE-2021-29428</cve>
-        <cve>CVE-2021-29429</cve>
-        <cve>CVE-2021-32751</cve>
-        -->
         <cve>CVE-2014-3488</cve>
         <cve>CVE-2019-16869</cve>
         <cve>CVE-2019-20444</cve>
@@ -31,32 +22,6 @@
         <cve>CVE-2016-5394</cve>
         <cve>CVE-2016-6798</cve>
     </suppress>
-    <!--
-    <suppress until="2030-01-01">
-        <notes><![CDATA[
-             Suppressing as it's a false positive (see: https://pivotal.io/security/cve-2018-1258)
-            ]]></notes>
-        <filePath regex="true">.*spring-security-(config|crypto|web|test|core)-5\.5\.1\.jar</filePath>
-        <cpe>cpe:/a:pivotal_software:spring_security</cpe>
-        <cve>CVE-2018-1258</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-       file name: jquery-3.4.1.min.js
-   ]]></notes>
-        <filePath regex="true">.*jquery-3\.4\.1\.min\.js</filePath>
-        <cve>CVE-2020-11022</cve>
-        <cve>CVE-2020-11023</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-       file name: kotlin-stdlib-*.jar
-   ]]></notes>
-        <filePath regex="true">.*kotlin-stdlib-(common-|jdk7-|jdk8-|)1\.4\.30\.jar</filePath>
-        <cve>CVE-2020-15824</cve>
-        <cve>CVE-2020-29582</cve>
-    </suppress>
-    -->
     <suppress>
         <notes><![CDATA[name: spring-plugin-core and spring-plugin-metadata 2.0.0.RELEASE]]></notes>
         <cve>CVE-2013-4152</cve>

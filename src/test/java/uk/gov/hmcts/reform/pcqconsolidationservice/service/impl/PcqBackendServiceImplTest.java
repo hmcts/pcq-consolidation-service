@@ -16,6 +16,9 @@ import uk.gov.hmcts.reform.pcqconsolidationservice.controller.advice.ErrorRespon
 
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -231,8 +234,9 @@ class PcqBackendServiceImplTest {
 
     @Test
     void executeFeignApiError() {
+        Map<String, Collection<String>> maps = new ConcurrentHashMap<>();
         FeignException feignException = new FeignException.BadGateway("Bade Gateway Error", mock(Request.class),
-                "Test".getBytes());
+                "Test".getBytes(),maps);
 
         when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenThrow(feignException);
 
@@ -243,8 +247,9 @@ class PcqBackendServiceImplTest {
 
     @Test
     void executeFeignApiError2() {
+        Map<String, Collection<String>> maps = new ConcurrentHashMap<>();
         FeignException feignException = new FeignException.BadGateway("Bade Gateway Error", mock(Request.class),
-                "Test".getBytes());
+                "Test".getBytes(),maps);
         when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID,
                 TEST_CASE_ID)).thenThrow(feignException);
 

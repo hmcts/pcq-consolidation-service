@@ -204,7 +204,7 @@ dependencyCheck {
 dependencyManagement {
     dependencies {
         // CVE-2021-21290
-        dependencySet(group: 'io.netty', version: '4.1.76.Final') {
+        dependencySet(group: 'io.netty', version: '4.1.77.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-codec-dns'
@@ -221,6 +221,9 @@ dependencyManagement {
             entry 'netty-transport-native-epoll'
             entry 'netty-transport-native-kqueue'
             entry 'netty-transport-native-unix-common'
+            entry 'netty-resolver-dns-classes-macos'
+            entry 'netty-transport-classes-epoll'
+            entry 'netty-transport-classes-kqueue'
         }
         dependency group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.69'
         // CVE-2018-10237 - Unbounded memory allocation

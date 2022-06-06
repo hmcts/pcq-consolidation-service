@@ -240,7 +240,7 @@ dependencyManagement {
         }
         // CVE-2021-29425
         dependency group: 'commons-io', name: 'commons-io', version: '2.11.0'
-        dependencySet(group: 'org.springframework.security', version: '5.6.1') {
+        dependencySet(group: 'org.springframework.security', version: '5.7.1') {
             entry 'spring-security-core'
             entry 'spring-security-test'
         }
@@ -270,7 +270,8 @@ def versions = [
         pitest              : '1.6.3',
         sonarPitest         : '0.5',
         springFramework     : '5.3.20',
-        fasterXmlJackson    : '2.13.2'
+        fasterXmlJackson    : '2.13.2',
+        springSecurity      : '5.7.1'
 ]
 
 ext['spring-framework.version'] = '5.3.12'
@@ -326,6 +327,10 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.2'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
+
+    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.31"

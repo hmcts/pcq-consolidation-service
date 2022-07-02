@@ -55,7 +55,7 @@ stages:
       chartEnv: $(environment)
       promEnv: $(env.prom)
       mutationTest: False
-      functionalPostDeployTest: true
+      functionalTest: true
       integrationTest: true
       azureSecreKeys: 'jwt-secret'
       azureKeyMapping:

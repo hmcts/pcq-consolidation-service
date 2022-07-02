@@ -101,7 +101,7 @@ withPipeline(type, product, component) {
     sh "sleep 120s"
     echo "Verifying that functional test data was processed correctly"
     try {
-      builder.gradle('functionalPostDeploy')
+      builder.gradle('functional')
     } finally {
       junit '**/test-results/**/*.xml'
     }

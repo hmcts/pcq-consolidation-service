@@ -95,11 +95,7 @@ task unit(type: Test, description: 'Runs the unit tests.', group: 'Verification'
     useJUnitPlatform()
 }
 
-task functional() {
-    // This task is required for a Jenkins hook (fullFunctionalTest)
-}
-
-task functionalPostDeploy(type: Test) {
+task functional(type: Test) {
     group = 'Functional Tests'
     description = 'Verifies that files from functionPreDeploy step were processed following job creation in AKS'
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)

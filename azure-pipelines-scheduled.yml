@@ -46,7 +46,7 @@ stages:
       azureVault: $(vault)
       chartEnv: $(environment)
       mutationTest: True
-      functionalPostDeployTest: true
+      functionalTest: true
       integrationTest: true
       azureSecreKeys: 'jwt-secret'
       azureKeyMapping:

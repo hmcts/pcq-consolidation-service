@@ -351,7 +351,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
     implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
 
-    implementation group: 'net.minidev', name: 'json-smart', version: '2.4.7'
+    implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
 

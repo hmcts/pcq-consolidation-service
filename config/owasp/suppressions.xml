@@ -10,7 +10,6 @@
         <cve>CVE-2022-22968</cve>
         <cve>CVE-2022-22976</cve>
         <cve>CVE-2022-22978</cve>
-        <cve>CVE-2022-31569</cve>
     </suppress>
     <suppress>
         <packageUrl regex="true">^pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@.*$</packageUrl>
@@ -23,5 +22,8 @@
     <suppress>
         <packageUrl regex="true">^pkg:maven/org.apache.logging.log4j/log4j-api@.*$</packageUrl>
         <cve>CVE-2022-33915</cve>
+    </suppress>
+    <suppress until="2023-01-07">
+        <cve>CVE-2022-31569</cve>
     </suppress>
 </suppressions>

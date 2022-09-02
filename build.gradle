@@ -329,7 +329,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-    implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.31"
+    implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.72"
 
     implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
     implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'

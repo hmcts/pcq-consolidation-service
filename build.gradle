@@ -224,7 +224,7 @@ dependencyManagement {
         dependency group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70'
         // CVE-2018-10237 - Unbounded memory allocation
         // CVE-2020-8908 - Temp directory creation vulnerability
-        dependencySet(group: 'com.google.guava', version: '30.1-jre') {
+        dependencySet(group: 'com.google.guava', version: '31.1-jre') {
             entry 'guava'
         }
         dependencySet(group: 'com.github.jknack', version: '4.3.1') {

@@ -50,7 +50,7 @@ withPipeline(type, product, component) {
 
   overrideVaultEnvironments(vaultOverrides)
   loadVaultSecrets(secrets)
-  after('test') {
+  afterAlways('test') {
     builder.gradle('integration')
   }
   enableSlackNotifications('#pcq-builds')
@@ -62,7 +62,7 @@ withPipeline(type, product, component) {
   env.TEST_URL = "http://pcq-consolidation-service-aat.service.core-compute-aat.internal"
   env.PCQ_BACKEND_URL = "http://pcq-backend-aat.service.core-compute-aat.internal"
 
-  after('test') {
+  afterAlways('test') {
 
     junit 'build/test-results/test/**/*.xml'
     archiveArtifacts 'build/reports/tests/test/index.html'
@@ -87,7 +87,7 @@ withPipeline(type, product, component) {
 
   }
 
-  after('akschartsinstall') {
+  afterAlways('akschartsinstall') {
 
     echo "Overriding vault environment"
     overrideVaultEnvironments(vaultOverrides)
@@ -114,7 +114,7 @@ withPipeline(type, product, component) {
     }
   }
 
-  after('functionalTest:aat') {
+  afterAlways('functionalTest:aat') {
     junit 'build/test-results/functional/**/*.xml'
     archiveArtifacts 'build/reports/tests/functional/index.html'
 
@@ -128,7 +128,7 @@ withPipeline(type, product, component) {
     ]
   }
 
-  after('functionalTest:preview') {
+  afterAlways('functionalTest:preview') {
     junit 'build/test-results/functional/**/*.xml'
     archiveArtifacts 'build/reports/tests/functional/index.html'
 

@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class ConsolidationComponent {
 
-    private final Map<String, PcqAnswerResponse[]> pcqIdsMap = new ConcurrentHashMap<>();
+    Map<String, PcqAnswerResponse[]> pcqIdsMap = new ConcurrentHashMap<>();
     private final Map<String, Integer> serviceSummaryMap = new ConcurrentHashMap<>();
 
     private static final String ONLINE_MATCH_SUFFIX = "_online_channel_matched";

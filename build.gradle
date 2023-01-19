@@ -27,9 +27,19 @@ apply plugin: "org.owasp.dependencycheck"
 group = 'uk.gov.hmcts.reform'
 version = '0.1.0'
 
-allprojects {
+/*allprojects {
     sourceCompatibility = '11'
     targetCompatibility = '11'
+}*/
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
 }
 
 gitProperties {

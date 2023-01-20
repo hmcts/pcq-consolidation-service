@@ -96,14 +96,18 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         //Invoke the executor
         consolidationComponent.execute();
 
+
         //Make the status map accessible from the ConsolidationComponent.
-        Field mapField = ReflectionUtils.findField(ConsolidationComponent.class, "pcqIdsMap");
+        /*Field mapField = ReflectionUtils.findField(ConsolidationComponent.class, "pcqIdsMap");
         ReflectionAccessor accessor = ReflectionAccessUtils.getReflectionAccessor();
-        accessor.makeAccessible(mapField);
+        accessor.makeAccessible(mapField);*/
+
+
 
         //Check that the API - pcqWithoutCase has been called and that the test records are found.
-        Map<String, PcqAnswerResponse[]> statusMap = (Map<String, PcqAnswerResponse[]>)mapField.get(
-                consolidationComponent);
+        //Map<String, PcqAnswerResponse[]> statusMap = (Map<String, PcqAnswerResponse[]>)mapField.get(
+                //consolidationComponent);
+        Map<String, PcqAnswerResponse[]> statusMap = consolidationComponent.getPcqIdsMap();
         assertNotNull("Status Map is null", statusMap);
         PcqAnswerResponse[] pcqAnswerRecords = statusMap.get("PCQ_ID_FOUND");
         assertPcqIdsRetrieved(pcqAnswerRecords, testPcqId1, testPcqId2, testPcqId3);

@@ -25,10 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class ConsolidationComponent {
 
-    public Map<String, PcqAnswerResponse[]> getPcqIdsMap() {
-        return pcqIdsMap;
-    }
-
     private final Map<String, PcqAnswerResponse[]> pcqIdsMap = new ConcurrentHashMap<>();
     private final Map<String, Integer> serviceSummaryMap = new ConcurrentHashMap<>();
 
@@ -197,6 +193,10 @@ public class ConsolidationComponent {
             int count = serviceSummaryMap.get(serviceKey) + 1;
             serviceSummaryMap.put(serviceKey, count);
         }
+    }
+
+    public Map<String, PcqAnswerResponse[]> getPcqIdsMap() {
+        return pcqIdsMap;
     }
 
 }

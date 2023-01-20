@@ -27,11 +27,6 @@ apply plugin: "org.owasp.dependencycheck"
 group = 'uk.gov.hmcts.reform'
 version = '0.1.0'
 
-/*allprojects {
-    sourceCompatibility = '11'
-    targetCompatibility = '11'
-}*/
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -390,7 +385,6 @@ dependencies {
     testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
-    testImplementation group: "com.gilecode.yagson", name:"j9-reflection-utils", version:"1.0"
     testImplementation group: "io.jsonwebtoken", name: "jjwt", version: "0.9.1"
 
     integrationTestImplementation sourceSets.main.runtimeClasspath

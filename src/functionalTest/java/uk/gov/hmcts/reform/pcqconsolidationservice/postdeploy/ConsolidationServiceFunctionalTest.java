@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.postdeploy;
 
-import com.gilecode.reflection.ReflectionAccessUtils;
-import com.gilecode.reflection.ReflectionAccessor;
+//import com.gilecode.reflection.ReflectionAccessUtils;
+//import com.gilecode.reflection.ReflectionAccessor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
@@ -12,14 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.ReflectionUtils;
+//import org.springframework.util.ReflectionUtils;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.pcq.commons.model.PcqAnswerResponse;
 import uk.gov.hmcts.reform.pcqconsolidationservice.ConsolidationComponent;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.TestApplicationConfiguration;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
+//import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -106,7 +106,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
 
         //Check that the API - pcqWithoutCase has been called and that the test records are found.
         //Map<String, PcqAnswerResponse[]> statusMap = (Map<String, PcqAnswerResponse[]>)mapField.get(
-                //consolidationComponent);
+        //consolidationComponent);
         Map<String, PcqAnswerResponse[]> statusMap = consolidationComponent.getPcqIdsMap();
         assertNotNull("Status Map is null", statusMap);
         PcqAnswerResponse[] pcqAnswerRecords = statusMap.get("PCQ_ID_FOUND");

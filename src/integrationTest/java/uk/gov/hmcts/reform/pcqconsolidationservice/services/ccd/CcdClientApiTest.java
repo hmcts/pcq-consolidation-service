@@ -80,7 +80,7 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     private ServiceConfigProvider serviceConfigProvider;
 
     @ClassRule
-    public static WireMockClassRule wireMockServer = new WireMockClassRule(
+    private static final WireMockClassRule WIRE_MOCK_CLASS_RULE = new WireMockClassRule(
             WireMockConfiguration.options().port(4554));
 
 
@@ -94,8 +94,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                 TEST_PROBATE_SERVICE_NAME,
                 TEST_PROBATE_CASE_FIELD_MAP_ACTOR_1);
 
-        Assert.assertEquals(1, response.size());
-        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+        Assert.assertEquals("Response size not equals 1",1, response.size());
+        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
         WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
         WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -111,8 +111,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                 TEST_DCN,
                 TEST_PROBATE_SERVICE_NAME);
 
-        Assert.assertEquals(1, response.size());
-        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+        Assert.assertEquals("Response size not equals 1",1, response.size());
+        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
         WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
         WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -129,8 +129,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                 TEST_DIVORCE_SERVICE_NAME,
                 TEST_DIVORCE_CASE_FIELD_MAP_ACTOR_1);
 
-        Assert.assertEquals(1, response.size());
-        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+        Assert.assertEquals("Response size not equals 1",1, response.size());
+        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
         WireMock.verify(3,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
         WireMock.verify(3,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -147,8 +147,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                 TEST_CMC_SERVICE_NAME,
                 TEST_CMC_CASE_FIELD_MAP_ACTOR_1);
 
-        Assert.assertEquals(1, response.size());
-        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+        Assert.assertEquals("Response size not equals 1",1, response.size());
+        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
         WireMock.verify(2,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
         WireMock.verify(2,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -165,8 +165,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                 TEST_SSCS_SERVICE_NAME,
                 TEST_SSCS_CASE_FIELD_MAP_ACTOR_1);
 
-        Assert.assertEquals(1, response.size());
-        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+        Assert.assertEquals("Response size not equals 1",1, response.size());
+        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
         WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
         WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -182,8 +182,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                 TEST_DCN,
                 TEST_SSCS_SERVICE_NAME);
 
-        Assert.assertEquals(1, response.size());
-        Assert.assertEquals(EXPECTED_CASE_ID, response.get(0));
+        Assert.assertEquals("Response size not equals 1",1, response.size());
+        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
         WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
         WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -204,26 +204,26 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     }
 
     private void searchCasesMockSuccess(String expectedElasticSearchString) {
-        wireMockServer.stubFor(post(WIREMOCK_TOKEN_ENDPOINT)
+        WIRE_MOCK_CLASS_RULE.stubFor(post(WIREMOCK_TOKEN_ENDPOINT)
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)
                         .withBody(WIREMOCK_TOKEN_RESULT)));
 
-        wireMockServer.stubFor(post(urlPathMatching(CASE_SEARCH_URL))
+        WIRE_MOCK_CLASS_RULE.stubFor(post(urlPathMatching(CASE_SEARCH_URL))
                 .withRequestBody(equalTo(expectedElasticSearchString))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)
                         .withBody(fileContentAsString("ccd/searchCases/successful-response.json"))));
 
-        wireMockServer.stubFor(get(urlPathMatching(WIREMOCK_DETAILS_ENDPOINT))
+        WIRE_MOCK_CLASS_RULE.stubFor(get(urlPathMatching(WIREMOCK_DETAILS_ENDPOINT))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)
                         .withBody("{\"user_details\":\"user details\"}")));
 
-        wireMockServer.stubFor(post(urlPathMatching(WIREMOCK_LEASE_ENDPOINT))
+        WIRE_MOCK_CLASS_RULE.stubFor(post(urlPathMatching(WIREMOCK_LEASE_ENDPOINT))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE_HEADER, JSON_RESPONSE)
                         .withStatus(200)

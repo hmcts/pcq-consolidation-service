@@ -44,18 +44,18 @@ class CcdAuthenticatorFactoryTest {
         CcdAuthenticatorFactory service = new CcdAuthenticatorFactory(tokenGenerator, idamClient);
         CcdAuthenticator authenticator = service.createCcdAuthenticator();
 
-        Assert.assertEquals(SERVICE_TOKEN, authenticator.getServiceToken());
-        Assert.assertEquals(USER_TOKEN, authenticator.getUserToken());
-        Assert.assertEquals(USER_ID, authenticator.getUserDetails().getId());
-        Assert.assertTrue(authenticator.userTokenAgeInSeconds() > 0);
+        Assert.assertEquals("Service Token Not Matching",SERVICE_TOKEN, authenticator.getServiceToken());
+        Assert.assertEquals("User Token not matching", USER_TOKEN, authenticator.getUserToken());
+        Assert.assertEquals("User Id Not matching", USER_ID, authenticator.getUserDetails().getId());
+        Assert.assertTrue("User Token not valid",authenticator.userTokenAgeInSeconds() > 0);
     }
 
     @Test
     void returnSuccessfulCredentials() {
         Credential user = new Credential(IDAM_USERS_PCQ_USERNAME, IDAM_USERS_PCQ_PASSWORD);
 
-        Assert.assertEquals(IDAM_USERS_PCQ_USERNAME, user.getUsername());
-        Assert.assertEquals(IDAM_USERS_PCQ_PASSWORD, user.getPassword());
+        Assert.assertEquals("Idam UserName not mattching",IDAM_USERS_PCQ_USERNAME, user.getUsername());
+        Assert.assertEquals("Idam password not matching",IDAM_USERS_PCQ_PASSWORD, user.getPassword());
     }
 
 }

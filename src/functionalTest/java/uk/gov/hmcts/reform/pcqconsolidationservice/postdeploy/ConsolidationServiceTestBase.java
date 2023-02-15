@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -136,8 +136,8 @@ public class ConsolidationServiceTestBase {
 
     private String updateCompletedDate(String completedDateStr) {
         Timestamp completedTime = PcqUtils.getTimeFromString(completedDateStr);
-        Calendar calendar = Calendar.getInstance();
-        completedTime.setTime(calendar.getTimeInMillis());
+        Date currentDate = new Date();
+        completedTime.setTime(currentDate.getTime());
         return convertTimeStampToString(completedTime);
     }
 

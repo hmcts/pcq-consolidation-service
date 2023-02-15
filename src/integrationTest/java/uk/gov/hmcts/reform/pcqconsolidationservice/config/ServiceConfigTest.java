@@ -64,7 +64,7 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
     private ServiceConfigProvider serviceConfigProvider;
 
     @Test
-    public void serviceConfigItemShouldCaptureServiceWithMultipleCaseTypes() {
+    void serviceConfigItemShouldCaptureServiceWithMultipleCaseTypes() {
         ServiceConfigItem configItem = serviceConfigProvider.getConfig(TEST_SERVICE1_NAME);
 
         assertEquals(TEST_SERVICE1_NAME,
@@ -80,7 +80,7 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void serviceConfigItemShouldCaptureServiceWithMultipleActors() {
+    void serviceConfigItemShouldCaptureServiceWithMultipleActors() {
         ServiceConfigItem configItem = serviceConfigProvider.getConfig(TEST_SERVICE2_NAME);
 
         assertEquals(TEST_SERVICE2_NAME,
@@ -98,7 +98,7 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void serviceConfigItemShouldCaptureServiceWithNestedPcqNames() {
+    void serviceConfigItemShouldCaptureServiceWithNestedPcqNames() {
         ServiceConfigItem configItem = serviceConfigProvider.getConfig(TEST_SERVICE3_NAME);
 
         assertEquals(TEST_SERVICE3_NAME,
@@ -114,7 +114,7 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void serviceConfigItemShouldCaptureServiceCustomDcnMapping() {
+    void serviceConfigItemShouldCaptureServiceCustomDcnMapping() {
         ServiceConfigItem configItem = serviceConfigProvider.getConfig(TEST_SERVICE4_NAME);
 
         assertEquals(TEST_SERVICE4_NAME,
@@ -133,7 +133,7 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     @Test
-    public void serviceConfigItemShouldThrowExeceptionIfMissing() {
+    void serviceConfigItemShouldThrowExeceptionIfMissing() {
         Exception exception = assertThrows(ServiceNotConfiguredException.class, () -> {
             serviceConfigProvider.getConfig(TEST_SERVICE_UNKNOWN_NAME);
         });

@@ -8,5 +8,5 @@ maintainers:
   - name: HMCTS PCQ Team
 dependencies:
   - name: job
-    version: ~0.7.5
+    version: ~0.7.9
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'

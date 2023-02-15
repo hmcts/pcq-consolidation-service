@@ -195,4 +195,8 @@ public class ConsolidationComponent {
         }
     }
 
+    public Map<String, PcqAnswerResponse[]> getPcqIdsMap() {
+        return pcqIdsMap;
+    }
+
 }

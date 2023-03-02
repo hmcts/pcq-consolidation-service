@@ -323,6 +323,7 @@ dependencies {
     implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
     testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
 
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
@@ -337,6 +338,7 @@ dependencies {
     implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
     implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.5'
 
     implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.1.0', withoutSpringCloudContext
     implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging

@@ -10,7 +10,6 @@
         <cve>CVE-2022-22968</cve>
         <cve>CVE-2022-22976</cve>
         <cve>CVE-2022-22978</cve>
-        <cve>CVE-2021-37533</cve>
     </suppress>
     <suppress>
         <packageUrl regex="true">^pkg:maven/org.apache.tomcat.embed/tomcat-embed-core@.*$</packageUrl>

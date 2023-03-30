@@ -234,7 +234,7 @@ dependencyManagement {
         dependencySet(group: 'com.github.jknack', version: '4.3.1') {
             entry 'handlebars'
         }
-        dependencySet(group: 'org.springframework.cloud', version: '3.1.5') {
+        dependencySet(group: 'org.springframework.cloud', version: '4.0.2') {
             entry 'spring-cloud-starter-openfeign'
             entry 'spring-cloud-openfeign-core'
         }

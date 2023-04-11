@@ -226,7 +226,11 @@ dependencyManagement {
             entry 'netty-transport-classes-kqueue'
         }
         dependency group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70'
-
+        // CVE-2018-10237 - Unbounded memory allocation
+        // CVE-2020-8908 - Temp directory creation vulnerability
+        dependencySet(group: 'com.google.guava', version: '31.1-jre') {
+            entry 'guava'
+        }
         dependencySet(group: 'com.github.jknack', version: '4.3.1') {
             entry 'handlebars'
         }
@@ -281,6 +285,9 @@ configurations.all {
             if (details.requested.group in ['org.scala-lang']) {
                 details.useVersion '2.12.10'
             }
+            if (details.requested.group in ['org.apache.tomcat.embed']) {
+                details.useVersion '9.0.72'
+            }
             if (details.requested.group in ['org.apache.httpcomponents.httpclient']) {
                 details.useVersion '4.5.13'
             }
@@ -312,6 +319,8 @@ dependencies {
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.1'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
+    implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
+    implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
     implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity

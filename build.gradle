@@ -303,27 +303,25 @@ dependencies {
     def withoutSpringCloudContext = {
         exclude group: 'org.springframework.cloud', module: 'spring-cloud-context'
     }
-
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web-services', version: versions.springBoot
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
-    implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: versions.springBoot
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
-
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
-
-    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.1'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web-services'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '3.0.5'
 
     implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
-    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
+    //implementation group: 'org.springframework', name:'spring-context', version: versions.springFramework
+    //implementation group: 'org.springframework', name:'spring-core', version: versions.springFramework
+    //implementation group: 'org.springframework', name:'spring-expression', version: versions.springFramework
+    //implementation group: 'org.springframework', name:'spring-jcl', version: versions.springFramework
+    //implementation group: 'org.springframework', name:'spring-oxm', version: versions.springFramework
+    //implementation group: 'org.springframework', name:'spring-web', version: versions.springFramework
+    //implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
+    //testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.73"

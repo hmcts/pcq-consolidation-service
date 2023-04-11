@@ -304,7 +304,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json', version: versions.springBoot
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: versions.springBoot
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
-    
+
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'

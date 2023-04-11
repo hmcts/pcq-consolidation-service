@@ -311,6 +311,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '3.0.5'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 
     implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
@@ -323,6 +324,14 @@ dependencies {
     //implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
     //testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
 
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
+
+    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.73"
 

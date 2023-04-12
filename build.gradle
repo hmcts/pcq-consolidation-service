@@ -268,12 +268,12 @@ def versions = [
         lombok              : '1.18.22',
         pitest              : '1.9.0',
         sonarPitest         : '0.5',
-        springFramework     : '5.3.26',
+        springFramework     : '6.0.7',
         fasterXmlJackson    : '2.14.2',
         springSecurity      : '5.7.5'
 ]
 
-ext['spring-framework.version'] = '5.3.26'
+ext['spring-framework.version'] = '6.0.7'
 
 configurations.all {
     resolutionStrategy {
@@ -321,9 +321,9 @@ dependencies {
     implementation group: 'org.springframework', name:'spring-web', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
     testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework*/
-    implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-core',version: versions.springFramework
-    testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
+    implementation group: 'org.springframework', name:'spring-beans', version:'6.0.7'
+    implementation group: 'org.springframework', name:'spring-core',version: '6.0.7'
+    testImplementation group: 'org.springframework', name: 'spring-test', version: '6.0.7'
 
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'

@@ -12,7 +12,7 @@ plugins {
     id 'pmd'
     id 'jacoco'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '2.7.5'
+    id 'org.springframework.boot' version '3.0.5'
     id 'org.owasp.dependencycheck' version '8.2.1'
     id 'com.github.ben-manes.versions' version '0.46.0'
     id "info.solidsoft.pitest" version '1.9.0'
@@ -140,9 +140,9 @@ project.tasks['jacocoTestReport'].dependsOn test, integration
 jacocoTestReport {
     executionData(test, integration)
     reports {
-        xml.enabled = true
-        csv.enabled = false
-        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        xml.required = true
+        csv.required = false
+        xml.outputLocation = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
 
@@ -246,7 +246,7 @@ dependencyManagement {
         }
     }
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2021.0.2'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2022.0.2'
     }
 }
 
@@ -260,11 +260,11 @@ repositories {
 }
 
 def versions = [
-        junit               : '5.7.0',
+        junit               : '5.9.2',
         reformLogging       : '5.1.1',
         springBoot          : springBoot.class.package.implementationVersion,
         springfoxSwagger    : '3.0.0',
-        restAssured         : '4.2.0',
+        restAssured         : '5.2.1',
         lombok              : '1.18.22',
         pitest              : '1.9.0',
         sonarPitest         : '0.5',
@@ -279,7 +279,7 @@ configurations.all {
     resolutionStrategy {
         eachDependency { DependencyResolveDetails details ->
             if (details.requested.group in ['org.apache.logging.log4j']) {
-                details.useVersion '2.17.2'
+                details.useVersion '2.20.0'
             }
             if (details.requested.group in ['org.scala-lang']) {
                 details.useVersion '2.12.10'
@@ -413,7 +413,7 @@ test {
 mainClassName = 'uk.gov.hmcts.reform.pcqconsolidationservice.ConsolidationApplication'
 
 bootJar {
-    archiveName = 'pcq-consolidation-service.jar'
+    archiveFileName = 'pcq-consolidation-service.jar'
 
     manifest {
         attributes('Implementation-Version': project.version.toString())

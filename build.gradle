@@ -140,9 +140,9 @@ project.tasks['jacocoTestReport'].dependsOn test, integration
 jacocoTestReport {
     executionData(test, integration)
     reports {
-        xml.required = true
-        csv.required = false
-        xml.outputLocation = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        xml.enabled = true
+        csv.enabled = false
+        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 }
 

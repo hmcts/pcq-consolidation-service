@@ -25,7 +25,7 @@ apply plugin: "com.gorylenko.gradle-git-properties"
 apply plugin: "org.owasp.dependencycheck"
 
 group = 'uk.gov.hmcts.reform'
-version = '0.1.0'
+version = '1.0.2'
 
 java {
     toolchain {

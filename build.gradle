@@ -260,7 +260,7 @@ repositories {
 }
 
 def versions = [
-        junit               : '5.7.0',
+        junit               : '5.9.2',
         reformLogging       : '5.1.1',
         springBoot          : springBoot.class.package.implementationVersion,
         springfoxSwagger    : '3.0.0',
@@ -268,12 +268,12 @@ def versions = [
         lombok              : '1.18.22',
         pitest              : '1.9.0',
         sonarPitest         : '0.5',
-        springFramework     : '6.0.7',
+        springFramework     : '5.3.26',
         fasterXmlJackson    : '2.14.2',
         springSecurity      : '5.7.5'
 ]
 
-ext['spring-framework.version'] = '6.0.7'
+ext['spring-framework.version'] = '5.3.26'
 
 configurations.all {
     resolutionStrategy {
@@ -311,7 +311,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 
-    /*implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
+    implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-context', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-core', version: versions.springFramework
@@ -320,11 +320,7 @@ dependencies {
     implementation group: 'org.springframework', name:'spring-oxm', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-web', version: versions.springFramework
     implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
-    testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework*/
-    implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-core',version: versions.springFramework
     testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
-
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
@@ -368,6 +364,8 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
+
+    //testImplementation("org.junit.vintage:junit-vintage-engine:${junit}")
 
     //testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     //testImplementation group: 'org.springframework.security', name: 'spring-security-test'

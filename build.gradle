@@ -299,6 +299,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-logging'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
 

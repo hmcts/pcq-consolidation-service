@@ -226,11 +226,6 @@ dependencyManagement {
             entry 'netty-transport-classes-kqueue'
         }
         dependency group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70'
-        // CVE-2018-10237 - Unbounded memory allocation
-        // CVE-2020-8908 - Temp directory creation vulnerability
-        dependencySet(group: 'com.google.guava', version: '31.1-jre') {
-            entry 'guava'
-        }
         dependencySet(group: 'com.github.jknack', version: '4.3.1') {
             entry 'handlebars'
         }
@@ -252,7 +247,6 @@ dependencyManagement {
 
 repositories {
     mavenLocal()
-    jcenter()
     mavenCentral()
     maven {
         url 'https://jitpack.io'
@@ -261,19 +255,14 @@ repositories {
 
 def versions = [
         junit               : '5.9.2',
-        reformLogging       : '5.1.1',
+        logging             : '6.0.1',
         springBoot          : springBoot.class.package.implementationVersion,
         springfoxSwagger    : '3.0.0',
         restAssured         : '5.2.1',
         lombok              : '1.18.22',
         pitest              : '1.9.0',
-        sonarPitest         : '0.5',
-        springFramework     : '5.3.26',
-        fasterXmlJackson    : '2.14.2',
-        springSecurity      : '5.7.5'
+        sonarPitest         : '0.5'
 ]
-
-ext['spring-framework.version'] = '5.3.26'
 
 configurations.all {
     resolutionStrategy {
@@ -284,9 +273,9 @@ configurations.all {
             if (details.requested.group in ['org.scala-lang']) {
                 details.useVersion '2.12.10'
             }
-            if (details.requested.group in ['org.apache.tomcat.embed']) {
-                details.useVersion '9.0.72'
-            }
+            /*if (details.requested.group in ['org.apache.tomcat.embed']) {
+                details.useVersion '10.1.7'
+            }*/
             if (details.requested.group in ['org.apache.httpcomponents.httpclient']) {
                 details.useVersion '4.5.13'
             }
@@ -311,25 +300,14 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 
-    implementation group: 'org.springframework', name:'spring-aop', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-beans', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-context', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-core', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-expression', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-jcl', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-oxm', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-web', version: versions.springFramework
-    implementation group: 'org.springframework', name:'spring-webmvc', version: versions.springFramework
-    testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
-
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.2'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
-    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
+    //implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
+    //implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
+    //implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.73"
@@ -340,33 +318,26 @@ dependencies {
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.5'
     implementation group: 'commons-net', name: 'commons-net', version: '3.9.0'
 
-    implementation group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.1.0', withoutSpringCloudContext
-    implementation group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
-    implementation group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
+    implementation group: 'com.github.hmcts', name: 'properties-volume-spring-boot-starter', version:'0.1.1', withoutSpringCloudContext
+    implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
-    implementation group: 'uk.gov.hmcts.reform', name: 'idam-client', version: '2.0.0'
-    implementation group: 'uk.gov.hmcts.reform', name: 'core-case-data-store-client', version: '4.7.6'
+    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.0'
+    implementation group: 'com.github.hmcts', name: 'ccd-client', version: 'v4.9.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.1.5'
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.1'
-
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
+    implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.2.2'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.20.0'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: '2.20.0'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
-
-    //testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    //testImplementation group: 'org.springframework.security', name: 'spring-security-test'
 
     testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
     testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.9.0'

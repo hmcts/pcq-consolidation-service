@@ -39,4 +39,12 @@
         <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
         <vulnerabilityName>CVE-2020-8908</vulnerabilityName>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+            There is no fix, Google deprecated the method but did not remove it or fix it.
+            We don't use it.
+        ]]></notes>
+        <packageUrl regex="true">^pkg:maven/com.google.guava/guava@16.0</packageUrl>
+        <vulnerabilityName>CVE-2018-10237</vulnerabilityName>
+    </suppress>
 </suppressions>

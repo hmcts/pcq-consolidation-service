@@ -262,7 +262,9 @@ def versions = [
         lombok              : '1.18.22',
         pitest              : '1.9.0',
         sonarPitest         : '0.5',
-        springFramework     : '6.0.7'
+        springFramework     : '6.0.8',
+        fasterXmlJackson    : '2.14.2',
+        springSecurity      : '6.0.2'
 ]
 
 configurations.all {
@@ -301,6 +303,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     //implementation group: 'org.springframework.boot', name: 'spring-boot-starter-logging'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+
     testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
@@ -308,9 +311,9 @@ dependencies {
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.2'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
-    //implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
-    //implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
-    //implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.73"
@@ -330,6 +333,11 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.2.2'
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
+    implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'

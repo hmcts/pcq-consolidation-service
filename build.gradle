@@ -260,8 +260,7 @@ def versions = [
         restAssured         : '5.2.1',
         lombok              : '1.18.22',
         pitest              : '1.9.0',
-        sonarPitest         : '0.5',
-        fasterXmlJackson    : '2.14.2'
+        sonarPitest         : '0.5'
 ]
 
 configurations.all {
@@ -321,12 +320,6 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.2.2'
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
-
-    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
-    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
-    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
-    //implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
-    //implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: versions.fasterXmlJackson
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'

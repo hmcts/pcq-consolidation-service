@@ -312,9 +312,6 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'properties-volume-spring-boot-starter', version:'0.1.1', withoutSpringCloudContext
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '5.1.9'
 
-    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.4.5'
-    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.5'
-
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.0'
     implementation group: 'com.github.hmcts', name: 'ccd-client', version: 'v4.9.1'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
@@ -323,8 +320,6 @@ dependencies {
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'
-    //implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.20.0'
-    //implementation group: 'org.apache.logging.log4j', name: 'log4j-to-slf4j', version: '2.20.0'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
     implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.4.11'

@@ -1,8 +1,9 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.config;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 import java.util.Locale;
-import javax.validation.constraints.NotNull;
 
 public class ServiceConfigItem {
 

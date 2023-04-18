@@ -331,8 +331,6 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.6'
-
     testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
     testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.9.0'
     testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'

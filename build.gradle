@@ -298,8 +298,6 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 
-    testImplementation group: 'org.springframework', name: 'spring-test', version: versions.springFramework
-
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.2'
@@ -344,7 +342,7 @@ dependencies {
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
     implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.4.11'
-    
+
     testImplementation(platform(group: 'org.junit', name: 'junit-bom', version: '5.9.2'))
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {

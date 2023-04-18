@@ -301,10 +301,6 @@ dependencies {
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.2'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
 
-    //implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
-    //implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: versions.springSecurity
-    //implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
-
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     implementation group: "com.networknt", name: "json-schema-validator", version: "1.0.73"
 
@@ -326,11 +322,11 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.2.2'
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
 
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
-    implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
-    implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: versions.fasterXmlJackson
+    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.fasterXmlJackson
+    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.fasterXmlJackson
+    //implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.fasterXmlJackson
+    //implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.fasterXmlJackson, ext: 'pom'
+    //implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-jaxb-annotations', version: versions.fasterXmlJackson
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'

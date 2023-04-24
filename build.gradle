@@ -255,6 +255,7 @@ repositories {
 
 def versions = [
         junit               : '5.9.2',
+        reformLogging       : '6.0.1',
         springBoot          : springBoot.class.package.implementationVersion,
         springfoxSwagger    : '3.0.0',
         restAssured         : '5.2.1',
@@ -309,7 +310,9 @@ dependencies {
     implementation group: 'commons-net', name: 'commons-net', version: '3.9.0'
 
     implementation group: 'com.github.hmcts', name: 'properties-volume-spring-boot-starter', version:'0.1.1', withoutSpringCloudContext
-    implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: '5.1.9'
+    implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.reformLogging
+    implementation group: 'com.github.hmcts.java-logging', name: 'logging-appinsights', version: versions.reformLogging
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
 
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.0'
     implementation group: 'com.github.hmcts', name: 'ccd-client', version: 'v4.9.1'
@@ -321,7 +324,6 @@ dependencies {
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
-    implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.4.11'
 
     testImplementation(platform(group: 'org.junit', name: 'junit-bom', version: '5.9.2'))
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'

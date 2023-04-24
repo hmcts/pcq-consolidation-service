@@ -31,4 +31,8 @@
         <notes>False positive as project does not contain json-java or hutool</notes>
         <cve>CVE-2022-45688</cve>
     </suppress>
+    <suppress>
+        <packageUrl regex="true">^pkg:maven/org.springframework/spring-aop@.*$</packageUrl>
+        <cve>CVE-2023-20863</cve>
+    </suppress>
 </suppressions>

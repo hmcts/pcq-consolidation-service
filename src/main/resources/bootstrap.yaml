@@ -5,7 +5,7 @@ spring:
       prefixed: false
       paths: /mnt/secrets/pcq
       aliases:
-        AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
+        app-insights-connection-string: app-insights-connection-string
         jwt-secret: ${JWT_SECRET:JWT_SECRET}
         idam-client-secret: ${IDAM_CLIENT_SECRET:IDAM_CLIENT_SECRET}
         s2s-secret-pcq-consolidation-service: ${S2S_SECRET:S2S_SECRET}

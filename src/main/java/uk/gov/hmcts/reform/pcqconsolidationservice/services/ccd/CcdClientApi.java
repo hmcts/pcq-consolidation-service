@@ -115,7 +115,6 @@ public class CcdClientApi {
     private void refreshExpiredIdamToken() {
         if (this.authenticator == null
                 || this.authenticator.userTokenAgeInSeconds() > USER_TOKEN_REFRESH_IN_SECONDS) {
-            log.info("Refeshing user token.");
             this.authenticator = authenticatorFactory.createCcdAuthenticator();
         }
     }

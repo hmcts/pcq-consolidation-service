@@ -47,8 +47,6 @@ public class ConsolidationComponent {
     @SuppressWarnings({"unchecked", "PMD.DataflowAnomalyAnalysis"})
     public void execute() {
         try {
-            log.info("ConsolidationComponent started...");
-
             // Step 1. Get the list of PCQs without Case Id.
             ResponseEntity<PcqRecordWithoutCaseResponse> responseEntity = pcqBackendService.getPcqWithoutCase();
             PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = responseEntity.getBody();
@@ -75,8 +73,6 @@ public class ConsolidationComponent {
         } finally {
             LoggingSummaryUtils.logSummary(serviceSummaryMap, serviceConfigProvider.getServiceNames());
         }
-
-        log.info("ConsolidationComponent finished.");
     }
 
     @SuppressWarnings({"PMD.DataflowAnomalyAnalysis","PMD.ConfusingTernary"})

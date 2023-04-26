@@ -55,8 +55,6 @@ public class CaseCreator {
         CaseDetails pcqQuestionsCase = CaseDetails.builder().build();
         refreshExpiredIdamToken();
 
-        log.info("Authenticating with user {}", authenticator.getUserDetails().getEmail());
-
         try {
             StartEventResponse eventResponse = feignCcdApi.startForCaseworker(
                     authenticator.getUserToken(),
@@ -79,7 +77,6 @@ public class CaseCreator {
                     .eventToken(eventResponse.getToken())
                     .build();
 
-            log.info("Creating {} case with title {}", TEST_CASE_TYPE_ID, pcqQuestions.getText());
             pcqQuestionsCase = feignCcdApi.submitForCaseworker(
                     authenticator.getUserToken(),
                     authenticator.getServiceToken(),
@@ -100,10 +97,7 @@ public class CaseCreator {
     public Optional<CaseDetails> findCase(String caseName) {
         refreshExpiredIdamToken();
 
-        log.info("Authenticating with user {}", authenticator.getUserDetails().getEmail());
-
         try {
-            log.info("Finding case using title {}", caseName);
             SearchResult searchResult = feignCcdApi.searchCases(
                     authenticator.getUserToken(),
                     authenticator.getServiceToken(),
@@ -135,7 +129,6 @@ public class CaseCreator {
     private void refreshExpiredIdamToken() {
         if (this.authenticator == null
                 || this.authenticator.userTokenAgeInSeconds() > USER_TOKEN_REFRESH_IN_SECONDS) {
-            log.info("Refeshing user token.");
             this.authenticator = authenticatorFactory.createCcdAuthenticator();
         }
     }

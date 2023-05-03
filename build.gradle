@@ -292,7 +292,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
 
-    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+    implementation group: 'org.yaml', name: 'snakeyaml', version: '2.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.2'
 
@@ -315,8 +315,7 @@ dependencies {
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.2.2'
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
-
-    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.33'
+    
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'

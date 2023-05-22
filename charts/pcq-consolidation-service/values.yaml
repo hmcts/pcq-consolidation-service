@@ -23,11 +23,11 @@ job:
           alias: IDAM_CLIENT_SECRET
         - name: s2s-secret-pcq-consolidation-service
           alias: S2S_SECRET
-       -  name: idam-users-pcq-username
+        - name: idam-users-pcq-username
           alias: IDAM_USERS_PCQ_USERNAME
-       - name: idam-users-pcq-password
+        - name: idam-users-pcq-password
           alias: IDAM_USERS_PCQ_PASSWORD
-       - name: app-insights-connection-string
-         alias: app-insights-connection-string
+        - name: app-insights-connection-string
+          alias: app-insights-connection-string
 global:
   jobKind: CronJob

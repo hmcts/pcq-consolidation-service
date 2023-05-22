@@ -17,12 +17,6 @@ job:
     pcq:
       resourceGroup: pcq
       secrets:
-        - jwt-secret
-        - idam-client-secret
-        - s2s-secret-pcq-consolidation-service
-        - idam-users-pcq-username
-        - idam-users-pcq-password
-        - app-insights-connection-string
         - name: jwt-secret
           alias: JWT_SECRET
         - name: idam-client-secret

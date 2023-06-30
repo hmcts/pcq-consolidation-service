@@ -4,7 +4,7 @@ plugins {
     id 'pmd'
     id 'jacoco'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '3.1.0'
+    id 'org.springframework.boot' version '3.1.1'
     id 'org.owasp.dependencycheck' version '8.3.1'
     id 'com.github.ben-manes.versions' version '0.47.0'
     id "info.solidsoft.pitest" version '1.9.0'
@@ -221,7 +221,7 @@ dependencyManagement {
         dependencySet(group: 'com.github.jknack', version: '4.3.1') {
             entry 'handlebars'
         }
-        dependencySet(group: 'org.springframework.cloud', version: '4.0.2') {
+        dependencySet(group: 'org.springframework.cloud', version: '4.0.3') {
             entry 'spring-cloud-starter-openfeign'
             entry 'spring-cloud-openfeign-core'
         }
@@ -242,6 +242,7 @@ repositories {
 }
 
 def versions = [
+        jjwt                : '0.11.5',
         junit               : '5.9.2',
         reformLogging       : '6.0.1',
         springBoot          : springBoot.class.package.implementationVersion,
@@ -304,7 +305,7 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.0'
     implementation group: 'com.github.hmcts', name: 'ccd-client', version: 'v4.9.1'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.2.2'
+    implementation group: 'com.github.hmcts', name: 'pcq-commons', version: '1.2.4'
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.0'
 
     implementation group: 'net.minidev', name: 'json-smart', version: '2.4.8'
@@ -335,7 +336,9 @@ dependencies {
     testImplementation 'com.github.hmcts:fortify-client:1.2.2:all'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
-    testImplementation group: "io.jsonwebtoken", name: "jjwt", version: "0.9.1"
+    testImplementation group: "io.jsonwebtoken", name: "jjwt-api", version: versions.jjwt
+    testImplementation group: "io.jsonwebtoken", name: "jjwt-impl", version: versions.jjwt
+    testImplementation group: 'io.jsonwebtoken', name: 'jjwt-gson', version: versions.jjwt
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath

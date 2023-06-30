@@ -16,17 +16,20 @@ import uk.gov.hmcts.reform.pcqconsolidationservice.ConsolidationComponent;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.TestApplicationConfiguration;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.ArrayList;
-import java.util.UUID;
 import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestApplicationConfiguration.class)
@@ -76,7 +79,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
     }
 
     @After
-    public void removePcqData() throws IOException {
+    public void removePcqData() {
 
         // Remove the PCQ answer records.
         removeTestAnswerRecord(testPcqId1);
@@ -87,7 +90,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testExecuteMethod() throws IOException, IllegalAccessException {
+    public void testExecuteMethod() {
 
         //Invoke the executor
         consolidationComponent.execute();
@@ -130,12 +133,11 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
                 jwtSecretKey,null);
     }
 
-    private void removeTestAnswerRecord(String pcqId) throws IOException {
+    private void removeTestAnswerRecord(String pcqId) {
         removeTestAnswerRecord(pcqBackendUrl, pcqId, jwtSecretKey);
     }
 
-    protected void removeTestAnswerRecord(String apiUrl, String pcqId, String jwtSecretKey)
-            throws IOException {
+    protected void removeTestAnswerRecord(String apiUrl, String pcqId, String jwtSecretKey) {
         deleteTestRecordFromBackend(apiUrl, pcqId, jwtSecretKey);
     }
 
@@ -143,10 +145,10 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
     private void assertPcqIdsRetrieved(PcqAnswerResponse[] pcqAnswerRecords,
                                        String pcqRecord1,String pcqRecord2,
                                        String pcqRecord3) {
-        List<String> pcqIds = new ArrayList<>();
-        for (PcqAnswerResponse answerResponse : pcqAnswerRecords) {
-            pcqIds.add(answerResponse.getPcqId());
-        }
+
+        Set<String> pcqIds = Arrays.stream(pcqAnswerRecords)
+                .map(PcqAnswerResponse::getPcqId)
+                .collect(Collectors.toSet());
 
         assertTrue("The pcqRecord 1 is not found.", pcqIds.contains(pcqRecord1));
         assertTrue("The pcqRecord 2 is not found.", pcqIds.contains(pcqRecord2));
@@ -163,7 +165,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         assertTrue("The pcqRecord 2 is not processed.", pcqIds.contains(pcqRecord2));
     }
 
-    protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) throws IOException {
+    protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) {
         return getResponseFromBackend(apiUrl, pcqId, secretKey);
     }
 

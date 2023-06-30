@@ -18,6 +18,7 @@ import org.springframework.context.annotation.FilterType;
         "uk.gov.hmcts.reform.pcq.commons"
 })
 @EnableAutoConfiguration
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 public class TestApplicationConfiguration {
 
 }

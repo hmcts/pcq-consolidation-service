@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice;
 
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -127,6 +128,13 @@ public class ConsolidationComponent {
         } catch (ServiceNotConfiguredException snce) {
             log.error("Error searching cases for PCQ ID {} as no {} configuration was found", pcqId, serviceId);
             incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
+        } catch (FeignException e) {
+            ccdClientApi.refreshToken();
+            log.error("Error searching cases for PCQ ID {} as FeignException was thrown : {} ", pcqId, e);
+            incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
+        } catch (Exception e) {
+            log.error("Error searching cases for PCQ ID {} as Exception was thrown : {}", pcqId, e);
+            incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
         }
 
         return null;
@@ -153,6 +161,13 @@ public class ConsolidationComponent {
         } catch (ServiceNotConfiguredException snce) {
             log.error("Error searching cases for DCN {} as no {} configuration was found", dcn, serviceId);
             incrementServiceCount(serviceId + PAPER_ERROR_SUFFIX);
+        } catch (FeignException e) {
+            ccdClientApi.refreshToken();
+            log.error("Error searching cases for PCQ ID {} as FeignException was thrown : {} ", dcn, e);
+            incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
+        } catch (Exception e) {
+            log.error("Error searching cases for PCQ ID {} as Exception was thrown : {}", dcn, e);
+            incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
         }
 
         return caseReferenceForPcq;

@@ -16,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Component
+@SuppressWarnings({"PMD.SignatureDeclareThrowsException"})
 public class CcdClientApi {
 
     private final CoreCaseDataApi feignCcdApi;
@@ -42,7 +43,7 @@ public class CcdClientApi {
         this.serviceConfigProvider = serviceConfigProvider;
     }
 
-    public List<Long> getCaseRefsByPcqId(String pcqId, String service, String actor) {
+    public List<Long> getCaseRefsByPcqId(String pcqId, String service, String actor) throws Exception {
 
         refreshExpiredIdamToken();
         ServiceConfigItem serviceConfig = serviceConfigProvider.getConfig(service);
@@ -76,7 +77,7 @@ public class CcdClientApi {
         }
     }
 
-    public List<Long> getCaseRefsByOriginatingFormDcn(String dcn, String service) {
+    public List<Long> getCaseRefsByOriginatingFormDcn(String dcn, String service) throws Exception {
 
         refreshExpiredIdamToken();
         ServiceConfigItem serviceConfig = serviceConfigProvider.getConfig(service);
@@ -117,6 +118,10 @@ public class CcdClientApi {
                 || this.authenticator.userTokenAgeInSeconds() > USER_TOKEN_REFRESH_IN_SECONDS) {
             this.authenticator = authenticatorFactory.createCcdAuthenticator();
         }
+    }
+
+    public void refreshToken() {
+        this.authenticator = authenticatorFactory.createCcdAuthenticator();
     }
 }
 

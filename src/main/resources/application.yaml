@@ -19,18 +19,18 @@ spring:
 
 core_case_data:
   api:
-    url: ${CORE_CASE_DATA_API_URL:http://localhost:4452}
+    url: http://ccd-data-store-api-aat.service.core-compute-aat.internal
 
 idam:
   s2s-auth:
-    url:    ${S2S_URL:http://localhost:4502}
-    secret: ${S2S_SECRET:AAAAAAAAAAAAAAAA}
-    name:   ${S2S_NAME:pcq_consolidation_service}
+    url:    http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    secret: 7ZYTVP6UUA5FKXEI
+    name:   pcq_consolidation_service
   api:
-    url: ${IDAM_API_URL:http://localhost:5000}
+    url: https://idam-api.aat.platform.hmcts.net
   client:
-    id: ${IDAM_CLIENT_NAME:ccd_gateway}
-    secret: ${IDAM_CLIENT_SECRET:ccd_gateway_secret}
+    id: ccd_gateway
+    secret: VfKR33aG4T9v
     redirect_uri: ${IDAM_CLIENT_REDIRECT_URI:http://localhost:3451/oauth2redirect}
   users:
     pcq:

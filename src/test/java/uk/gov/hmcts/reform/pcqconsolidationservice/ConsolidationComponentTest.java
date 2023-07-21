@@ -1,5 +1,6 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,6 +32,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SuppressWarnings("PMD.TooManyMethods")
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 class ConsolidationComponentTest {
 
@@ -159,6 +161,44 @@ class ConsolidationComponentTest {
             verify(ccdClientApi, times(0)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
         } catch (Exception e) {
             fail(ERROR_MSG_PREFIX + e.getMessage());
+        }
+    }
+
+    @Test
+    void executeApiExceptionForPcqSearch() {
+        try {
+            when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
+            when(ccdClientApi.getCaseRefsByPcqId(anyString(), anyString(), anyString()))
+                    .thenThrow(new Exception("Exception is thrown"));
+
+            testConsolidationComponent.execute();
+
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
+            verify(ccdClientApi, times(1)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+    }
+
+    @Test
+    void executeApiExceptionForDCNSearch() {
+        try {
+            when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
+            when(ccdClientApi.getCaseRefsByOriginatingFormDcn(anyString(), anyString()))
+                    .thenThrow(new Exception("Exception is thrown"));
+
+            testConsolidationComponent.execute();
+
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
+            verify(ccdClientApi, times(1)).getCaseRefsByOriginatingFormDcn(FIELD_DCN_1, SERVICE_NAME_1);
+        } catch (Exception e) {
+            log.info(e.getMessage());
         }
     }
 

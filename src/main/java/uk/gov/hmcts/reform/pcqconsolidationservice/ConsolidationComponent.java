@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice;
 
-import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import uk.gov.hmcts.reform.pcq.commons.model.PcqRecordWithoutCaseResponse;
 import uk.gov.hmcts.reform.pcq.commons.model.SubmitResponse;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigItem;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigProvider;
+import uk.gov.hmcts.reform.pcqconsolidationservice.exception.ServiceFeignException;
 import uk.gov.hmcts.reform.pcqconsolidationservice.exception.ServiceNotConfiguredException;
 import uk.gov.hmcts.reform.pcqconsolidationservice.service.PcqBackendService;
 import uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi;
@@ -128,7 +128,7 @@ public class ConsolidationComponent {
         } catch (ServiceNotConfiguredException snce) {
             log.error("Error searching cases for PCQ ID {} as no {} configuration was found", pcqId, serviceId);
             incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
-        } catch (FeignException e) {
+        } catch (ServiceFeignException e) {
             ccdClientApi.refreshToken();
             log.error("Error searching cases for PCQ ID {} as FeignException was thrown : {} ", pcqId, e);
             incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
@@ -161,7 +161,7 @@ public class ConsolidationComponent {
         } catch (ServiceNotConfiguredException snce) {
             log.error("Error searching cases for DCN {} as no {} configuration was found", dcn, serviceId);
             incrementServiceCount(serviceId + PAPER_ERROR_SUFFIX);
-        } catch (FeignException e) {
+        } catch (ServiceFeignException e) {
             ccdClientApi.refreshToken();
             log.error("Error searching cases for PCQ ID {} as FeignException was thrown : {} ", dcn, e);
             incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);

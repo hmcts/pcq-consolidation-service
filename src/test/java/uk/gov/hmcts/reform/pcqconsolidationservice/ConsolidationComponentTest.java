@@ -16,6 +16,7 @@ import uk.gov.hmcts.reform.pcqconsolidationservice.config.CaseFieldMapping;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigHelper;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigItem;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigProvider;
+import uk.gov.hmcts.reform.pcqconsolidationservice.exception.ServiceFeignException;
 import uk.gov.hmcts.reform.pcqconsolidationservice.exception.ServiceNotConfiguredException;
 import uk.gov.hmcts.reform.pcqconsolidationservice.service.PcqBackendService;
 import uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi;
@@ -191,6 +192,44 @@ class ConsolidationComponentTest {
             when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
             when(ccdClientApi.getCaseRefsByOriginatingFormDcn(anyString(), anyString()))
                     .thenThrow(new Exception("Exception is thrown"));
+
+            testConsolidationComponent.execute();
+
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
+            verify(ccdClientApi, times(1)).getCaseRefsByOriginatingFormDcn(FIELD_DCN_1, SERVICE_NAME_1);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+    }
+
+    @Test
+    void executeApiFeignExceptionForPcqSearch() {
+        try {
+            when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
+            when(ccdClientApi.getCaseRefsByPcqId(anyString(), anyString(), anyString()))
+                    .thenThrow(new ServiceFeignException(401,"Feign Exception is thrown"));
+
+            testConsolidationComponent.execute();
+
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
+            verify(ccdClientApi, times(1)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+    }
+
+    @Test
+    void executeApiFeignExceptionForDcnSearch() {
+        try {
+            when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
+            when(ccdClientApi.getCaseRefsByOriginatingFormDcn(anyString(), anyString()))
+                    .thenThrow(new ServiceFeignException(401,"Feign Exception is thrown"));
 
             testConsolidationComponent.execute();
 

@@ -361,6 +361,34 @@ class ConsolidationComponentTest {
         }
     }
 
+    private ResponseEntity<PcqRecordWithoutCaseResponse> generateTestSuccessResponse(String message, int statusCode) {
+        PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = new PcqRecordWithoutCaseResponse();
+        pcqWithoutCaseResponse.setResponseStatus(message);
+        pcqWithoutCaseResponse.setResponseStatusCode(String.valueOf(statusCode));
+
+        PcqAnswerResponse answerResponse1
+                = ConsolidationComponentUtil.generateTestAnswer(
+                        TEST_PCQ_ID_1, SERVICE_NAME_1, ACTOR_NAME_1, FIELD_DCN_1);
+        PcqAnswerResponse answerResponse2
+                = ConsolidationComponentUtil.generateTestAnswer(
+                        TEST_PCQ_ID_2, SERVICE_NAME_2, ACTOR_NAME_2, FIELD_DCN_2);
+
+        PcqAnswerResponse[] answerResponses = {answerResponse1, answerResponse2};
+        pcqWithoutCaseResponse.setPcqRecord(answerResponses);
+
+        return new ResponseEntity<PcqRecordWithoutCaseResponse>(pcqWithoutCaseResponse, HttpStatus.valueOf(statusCode));
+    }
+
+    private Set<String> getServiceSet() {
+        if (serviceSet == null) {
+            serviceSet = new HashSet<>();
+            serviceSet.add(SERVICE_NAME_1);
+            serviceSet.add(SERVICE_NAME_2);
+        }
+
+        return serviceSet;
+    }
+
     @Test
     void executeApiExceptionForPcqSearch() {
         try {
@@ -413,32 +441,5 @@ class ConsolidationComponentTest {
         }
     }
 
-    private ResponseEntity<PcqRecordWithoutCaseResponse> generateTestSuccessResponse(String message, int statusCode) {
-        PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = new PcqRecordWithoutCaseResponse();
-        pcqWithoutCaseResponse.setResponseStatus(message);
-        pcqWithoutCaseResponse.setResponseStatusCode(String.valueOf(statusCode));
-
-        PcqAnswerResponse answerResponse1
-                = ConsolidationComponentUtil.generateTestAnswer(
-                        TEST_PCQ_ID_1, SERVICE_NAME_1, ACTOR_NAME_1, FIELD_DCN_1);
-        PcqAnswerResponse answerResponse2
-                = ConsolidationComponentUtil.generateTestAnswer(
-                        TEST_PCQ_ID_2, SERVICE_NAME_2, ACTOR_NAME_2, FIELD_DCN_2);
-
-        PcqAnswerResponse[] answerResponses = {answerResponse1, answerResponse2};
-        pcqWithoutCaseResponse.setPcqRecord(answerResponses);
-
-        return new ResponseEntity<PcqRecordWithoutCaseResponse>(pcqWithoutCaseResponse, HttpStatus.valueOf(statusCode));
-    }
-
-    private Set<String> getServiceSet() {
-        if (serviceSet == null) {
-            serviceSet = new HashSet<>();
-            serviceSet.add(SERVICE_NAME_1);
-            serviceSet.add(SERVICE_NAME_2);
-        }
-
-        return serviceSet;
-    }
 
 }

@@ -11,7 +11,6 @@ import uk.gov.hmcts.reform.pcq.commons.model.PcqRecordWithoutCaseResponse;
 import uk.gov.hmcts.reform.pcq.commons.model.SubmitResponse;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigItem;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigProvider;
-import uk.gov.hmcts.reform.pcqconsolidationservice.exception.ServiceFeignException;
 import uk.gov.hmcts.reform.pcqconsolidationservice.exception.ServiceNotConfiguredException;
 import uk.gov.hmcts.reform.pcqconsolidationservice.service.PcqBackendService;
 import uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi;
@@ -109,7 +108,7 @@ public class ConsolidationComponent {
         }
     }
 
-    private Long findCaseReferenceFromPcqId(String pcqId, String serviceId, String actor) {
+    public Long findCaseReferenceFromPcqId(String pcqId, String serviceId, String actor) {
         try {
             ServiceConfigItem serviceConfigItemByServiceId = serviceConfigProvider.getConfig(serviceId);
             List<Long> caseReferences
@@ -128,11 +127,8 @@ public class ConsolidationComponent {
         } catch (ServiceNotConfiguredException snce) {
             log.error("Error searching cases for PCQ ID {} as no {} configuration was found", pcqId, serviceId);
             incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
-        } catch (ServiceFeignException e) {
-            ccdClientApi.refreshToken();
-            log.error("Error searching cases for PCQ ID {} as FeignException was thrown : {} ", pcqId, e);
-            incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
         } catch (Exception e) {
+            ccdClientApi.refreshToken();
             log.error("Error searching cases for PCQ ID {} as Exception was thrown : {}", pcqId, e);
             incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
         }
@@ -141,7 +137,7 @@ public class ConsolidationComponent {
     }
 
     @SuppressWarnings({"PMD.DataflowAnomalyAnalysis"})
-    private Long findCaseReferenceFromDcn(String dcn, String serviceId) {
+    public Long findCaseReferenceFromDcn(String dcn, String serviceId) {
         Long caseReferenceForPcq = null;
 
         try {
@@ -161,11 +157,8 @@ public class ConsolidationComponent {
         } catch (ServiceNotConfiguredException snce) {
             log.error("Error searching cases for DCN {} as no {} configuration was found", dcn, serviceId);
             incrementServiceCount(serviceId + PAPER_ERROR_SUFFIX);
-        } catch (ServiceFeignException e) {
-            ccdClientApi.refreshToken();
-            log.error("Error searching cases for PCQ ID {} as FeignException was thrown : {} ", dcn, e);
-            incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
         } catch (Exception e) {
+            ccdClientApi.refreshToken();
             log.error("Error searching cases for PCQ ID {} as Exception was thrown : {}", dcn, e);
             incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
         }

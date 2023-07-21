@@ -165,59 +165,6 @@ class ConsolidationComponentTest {
     }
 
     @Test
-    void executeApiExceptionForPcqSearch() {
-        try {
-            when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
-            when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);
-            when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
-            when(ccdClientApi.getCaseRefsByOriginatingFormDcn(anyString(), anyString()))
-                    .thenReturn(Arrays.asList(TEST_CASE_ID));
-            when(ccdClientApi.getCaseRefsByPcqId(anyString(), anyString(), anyString()))
-                    .thenThrow(new Exception("Exception is thrown"));
-            when(pcqBackendService.addCaseForPcq(TEST_PCQ_ID_2, TEST_CASE_ID.toString())).thenReturn(
-                    ConsolidationComponentUtil.generateSubmitTestSuccessResponse(TEST_PCQ_ID_2, SUCCESS, 200));
-
-            testConsolidationComponent.execute();
-
-            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
-            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
-            verify(ccdClientApi, times(1)).getCaseRefsByOriginatingFormDcn(FIELD_DCN_1, SERVICE_NAME_1);
-            verify(ccdClientApi, times(1)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
-            verify(pcqBackendService, times(1)).addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString());
-
-
-        } catch (Exception e) {
-            log.info(e.getMessage());
-        }
-    }
-
-    @Test
-    void executeApiExceptionForDcnSearch() {
-        try {
-            when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
-            when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);
-            when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
-            when(ccdClientApi.getCaseRefsByOriginatingFormDcn(anyString(), anyString()))
-                    .thenThrow(new Exception("Exception is thrown"));
-            when(ccdClientApi.getCaseRefsByPcqId(anyString(), anyString(), anyString()))
-                    .thenReturn(Arrays.asList(TEST_CASE_ID));
-            when(pcqBackendService.addCaseForPcq(TEST_PCQ_ID_2, TEST_CASE_ID.toString())).thenReturn(
-                    ConsolidationComponentUtil.generateSubmitTestSuccessResponse(TEST_PCQ_ID_2, SUCCESS, 200));
-
-            testConsolidationComponent.execute();
-
-            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
-            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
-            verify(ccdClientApi, times(1)).getCaseRefsByOriginatingFormDcn(FIELD_DCN_1, SERVICE_NAME_1);
-            verify(ccdClientApi, times(1)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
-            verify(pcqBackendService, times(1)).addCaseForPcq(TEST_PCQ_ID_2, TEST_CASE_ID.toString());
-        } catch (Exception e) {
-            log.info(e.getMessage());
-        }
-    }
-
-
-    @Test
     void executeApiNoCaseMatchesFoundInSearch() {
         try {
             when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
@@ -411,6 +358,58 @@ class ConsolidationComponentTest {
             verify(ccdClientApi, times(1)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
         } catch (Exception e) {
             fail(ERROR_MSG_PREFIX + e.getMessage());
+        }
+    }
+
+    @Test
+    void executeApiExceptionForPcqSearch() {
+        try {
+            when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
+            when(ccdClientApi.getCaseRefsByOriginatingFormDcn(anyString(), anyString()))
+                    .thenReturn(Arrays.asList(TEST_CASE_ID));
+            when(ccdClientApi.getCaseRefsByPcqId(anyString(), anyString(), anyString()))
+                    .thenThrow(new Exception("Exception is thrown"));
+            when(pcqBackendService.addCaseForPcq(TEST_PCQ_ID_2, TEST_CASE_ID.toString())).thenReturn(
+                    ConsolidationComponentUtil.generateSubmitTestSuccessResponse(TEST_PCQ_ID_2, SUCCESS, 200));
+
+            testConsolidationComponent.execute();
+
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
+            verify(ccdClientApi, times(1)).getCaseRefsByOriginatingFormDcn(FIELD_DCN_1, SERVICE_NAME_1);
+            verify(ccdClientApi, times(1)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
+            verify(pcqBackendService, times(1)).addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString());
+
+
+        } catch (Exception e) {
+            log.info(e.getMessage());
+        }
+    }
+
+    @Test
+    void executeApiExceptionForDcnSearch() {
+        try {
+            when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);
+            when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
+            when(ccdClientApi.getCaseRefsByOriginatingFormDcn(anyString(), anyString()))
+                    .thenThrow(new Exception("Exception is thrown"));
+            when(ccdClientApi.getCaseRefsByPcqId(anyString(), anyString(), anyString()))
+                    .thenReturn(Arrays.asList(TEST_CASE_ID));
+            when(pcqBackendService.addCaseForPcq(TEST_PCQ_ID_2, TEST_CASE_ID.toString())).thenReturn(
+                    ConsolidationComponentUtil.generateSubmitTestSuccessResponse(TEST_PCQ_ID_2, SUCCESS, 200));
+
+            testConsolidationComponent.execute();
+
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
+            verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
+            verify(ccdClientApi, times(1)).getCaseRefsByOriginatingFormDcn(FIELD_DCN_1, SERVICE_NAME_1);
+            verify(ccdClientApi, times(1)).getCaseRefsByPcqId(TEST_PCQ_ID_2, SERVICE_NAME_1, ACTOR_NAME_2);
+            verify(pcqBackendService, times(1)).addCaseForPcq(TEST_PCQ_ID_2, TEST_CASE_ID.toString());
+        } catch (Exception e) {
+            log.info(e.getMessage());
         }
     }
 

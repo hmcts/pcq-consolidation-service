@@ -108,7 +108,7 @@ public class ConsolidationComponent {
         }
     }
 
-    public Long findCaseReferenceFromPcqId(String pcqId, String serviceId, String actor) {
+    private Long findCaseReferenceFromPcqId(String pcqId, String serviceId, String actor) {
         try {
             ServiceConfigItem serviceConfigItemByServiceId = serviceConfigProvider.getConfig(serviceId);
             List<Long> caseReferences
@@ -137,7 +137,7 @@ public class ConsolidationComponent {
     }
 
     @SuppressWarnings({"PMD.DataflowAnomalyAnalysis"})
-    public Long findCaseReferenceFromDcn(String dcn, String serviceId) {
+    private Long findCaseReferenceFromDcn(String dcn, String serviceId) {
         Long caseReferenceForPcq = null;
 
         try {

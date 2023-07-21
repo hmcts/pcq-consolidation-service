@@ -399,7 +399,7 @@ class ConsolidationComponentTest {
                     .thenReturn(Arrays.asList(TEST_CASE_ID));
             when(ccdClientApi.getCaseRefsByPcqId(anyString(), anyString(), anyString()))
                     .thenThrow(new Exception("Exception is thrown"));
-            when(pcqBackendService.addCaseForPcq(TEST_PCQ_ID_2, TEST_CASE_ID.toString())).thenReturn(
+            when(pcqBackendService.addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString())).thenReturn(
                     ConsolidationComponentUtil.generateSubmitTestSuccessResponse(TEST_PCQ_ID_2, SUCCESS, 200));
 
             testConsolidationComponent.execute();

@@ -160,7 +160,7 @@ public class ConsolidationComponent {
         } catch (Exception e) {
             ccdClientApi.refreshToken();
             log.error("Error searching cases for PCQ ID {} as Exception was thrown : {}", dcn, e);
-            incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
+            incrementServiceCount(serviceId + PAPER_ERROR_SUFFIX);
         }
 
         return caseReferenceForPcq;

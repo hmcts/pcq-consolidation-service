@@ -184,7 +184,7 @@ class ConsolidationComponentTest {
     }
 
     @Test
-    void executeApiExceptionForDCNSearch() {
+    void executeApiExceptionForDcnSearch() {
         try {
             when(pcqBackendService.getPcqWithoutCase()).thenReturn(generateTestSuccessResponse(SUCCESS, 200));
             when(serviceConfigProvider.getConfig(SERVICE_NAME_1)).thenReturn(SERVICE_CONFIG);

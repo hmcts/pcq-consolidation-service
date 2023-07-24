@@ -127,6 +127,10 @@ public class ConsolidationComponent {
         } catch (ServiceNotConfiguredException snce) {
             log.error("Error searching cases for PCQ ID {} as no {} configuration was found", pcqId, serviceId);
             incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
+        } catch (Exception e) {
+            ccdClientApi.refreshToken();
+            log.error("Error searching cases for PCQ ID {} as Exception was thrown : {}", pcqId, e);
+            incrementServiceCount(serviceId + ONLINE_ERROR_SUFFIX);
         }
 
         return null;
@@ -152,6 +156,10 @@ public class ConsolidationComponent {
 
         } catch (ServiceNotConfiguredException snce) {
             log.error("Error searching cases for DCN {} as no {} configuration was found", dcn, serviceId);
+            incrementServiceCount(serviceId + PAPER_ERROR_SUFFIX);
+        } catch (Exception e) {
+            ccdClientApi.refreshToken();
+            log.error("Error searching cases for PCQ ID {} as Exception was thrown : {}", dcn, e);
             incrementServiceCount(serviceId + PAPER_ERROR_SUFFIX);
         }
 

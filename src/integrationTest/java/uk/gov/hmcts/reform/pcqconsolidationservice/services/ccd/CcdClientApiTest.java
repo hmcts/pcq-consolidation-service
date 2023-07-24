@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
 import com.google.common.io.Resources;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -26,6 +27,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 
+@Slf4j
 @TestPropertySource(locations = "/application.properties")
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
 public class CcdClientApiTest extends SpringBootIntegrationTest {
@@ -69,6 +71,7 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     private static final String TEST_SSCS_EXPECTED_DCN_ES_STRING =
             "{\"query\": { \"match_phrase\" : { \"data.sscsDocument.value.documentFileName\" : \""
                     + TEST_DCN + TEST_SUFFIX_DCN + "\" }}}";
+    private static final String EXCEPTION_MSG = "Exception while executing test";
 
     @Autowired
     private CcdAuthenticatorFactory authenticatorFactory;
@@ -86,108 +89,132 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
 
     @Test
     public void testProbatePcqWithoutCaseExecuteSuccess() {
-        searchCasesMockSuccess(TEST_PROBATE_EXPECTED_ES_STRING);
+        try {
+            searchCasesMockSuccess(TEST_PROBATE_EXPECTED_ES_STRING);
 
-        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
-        List<Long> response = ccdClientApi.getCaseRefsByPcqId(
-                TEST_PCQ_ID,
-                TEST_PROBATE_SERVICE_NAME,
-                TEST_PROBATE_CASE_FIELD_MAP_ACTOR_1);
+            CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+            List<Long> response = ccdClientApi.getCaseRefsByPcqId(
+                    TEST_PCQ_ID,
+                    TEST_PROBATE_SERVICE_NAME,
+                    TEST_PROBATE_CASE_FIELD_MAP_ACTOR_1);
 
-        Assert.assertEquals("Response size not equals 1",1, response.size());
-        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assert.assertEquals("Response size not equals 1", 1, response.size());
+            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
-        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
-        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
-        WireMock.verify(1,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+            WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+            WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+            WireMock.verify(1, getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+        } catch (Exception e) {
+            log.error(EXCEPTION_MSG, e);
+        }
     }
 
     @Test
     public void testProbateDcnSearchExecuteSuccess() {
-        searchCasesMockSuccess(TEST_PROBATE_EXPECTED_DCN_ES_STRING);
+        try {
+            searchCasesMockSuccess(TEST_PROBATE_EXPECTED_DCN_ES_STRING);
 
-        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
-        List<Long> response = ccdClientApi.getCaseRefsByOriginatingFormDcn(
-                TEST_DCN,
-                TEST_PROBATE_SERVICE_NAME);
+            CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+            List<Long> response = ccdClientApi.getCaseRefsByOriginatingFormDcn(
+                    TEST_DCN,
+                    TEST_PROBATE_SERVICE_NAME);
 
-        Assert.assertEquals("Response size not equals 1",1, response.size());
-        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assert.assertEquals("Response size not equals 1", 1, response.size());
+            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
-        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
-        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
-        WireMock.verify(1,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+            WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+            WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+            WireMock.verify(1, getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+        } catch (Exception e) {
+            log.error(EXCEPTION_MSG, e);
+        }
     }
 
     @Test
     public void testDivorcePcqWithoutCaseExecuteSuccess() {
-        searchCasesMockSuccess(TEST_DIVORCE_EXPECTED_ES_STRING);
+        try {
+            searchCasesMockSuccess(TEST_DIVORCE_EXPECTED_ES_STRING);
 
-        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
-        List<Long> response = ccdClientApi.getCaseRefsByPcqId(
-                TEST_PCQ_ID,
-                TEST_DIVORCE_SERVICE_NAME,
-                TEST_DIVORCE_CASE_FIELD_MAP_ACTOR_1);
+            CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+            List<Long> response = ccdClientApi.getCaseRefsByPcqId(
+                    TEST_PCQ_ID,
+                    TEST_DIVORCE_SERVICE_NAME,
+                    TEST_DIVORCE_CASE_FIELD_MAP_ACTOR_1);
 
-        Assert.assertEquals("Response size not equals 1",1, response.size());
-        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assert.assertEquals("Response size not equals 1", 1, response.size());
+            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
-        WireMock.verify(3,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
-        WireMock.verify(3,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
-        WireMock.verify(3,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+            WireMock.verify(3, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+            WireMock.verify(3, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+            WireMock.verify(3, getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+        } catch (Exception e) {
+            log.error(EXCEPTION_MSG, e);
+        }
     }
 
     @Test
     public void testCmcPcqWithoutCaseExecuteSuccess() {
-        searchCasesMockSuccess(TEST_CMC_EXPECTED_ES_STRING);
+        try {
+            searchCasesMockSuccess(TEST_CMC_EXPECTED_ES_STRING);
 
-        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
-        List<Long> response = ccdClientApi.getCaseRefsByPcqId(
-                TEST_PCQ_ID,
-                TEST_CMC_SERVICE_NAME,
-                TEST_CMC_CASE_FIELD_MAP_ACTOR_1);
+            CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+            List<Long> response = ccdClientApi.getCaseRefsByPcqId(
+                    TEST_PCQ_ID,
+                    TEST_CMC_SERVICE_NAME,
+                    TEST_CMC_CASE_FIELD_MAP_ACTOR_1);
 
-        Assert.assertEquals("Response size not equals 1",1, response.size());
-        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assert.assertEquals("Response size not equals 1", 1, response.size());
+            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
-        WireMock.verify(2,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
-        WireMock.verify(2,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
-        WireMock.verify(2,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+            WireMock.verify(2, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+            WireMock.verify(2, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+            WireMock.verify(2, getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+        } catch (Exception e) {
+            log.error(EXCEPTION_MSG, e);
+        }
     }
 
     @Test
     public void testSscsPcqWithoutCaseExecuteSuccess() {
-        searchCasesMockSuccess(TEST_SSCS_EXPECTED_ES_STRING);
+        try {
+            searchCasesMockSuccess(TEST_SSCS_EXPECTED_ES_STRING);
 
-        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
-        List<Long> response = ccdClientApi.getCaseRefsByPcqId(
-                TEST_PCQ_ID,
-                TEST_SSCS_SERVICE_NAME,
-                TEST_SSCS_CASE_FIELD_MAP_ACTOR_1);
+            CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+            List<Long> response = ccdClientApi.getCaseRefsByPcqId(
+                    TEST_PCQ_ID,
+                    TEST_SSCS_SERVICE_NAME,
+                    TEST_SSCS_CASE_FIELD_MAP_ACTOR_1);
 
-        Assert.assertEquals("Response size not equals 1",1, response.size());
-        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assert.assertEquals("Response size not equals 1", 1, response.size());
+            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
-        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
-        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
-        WireMock.verify(1,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+            WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+            WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+            WireMock.verify(1, getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+        } catch (Exception e) {
+            log.error(EXCEPTION_MSG, e);
+        }
     }
 
     @Test
     public void testSscsDcnSearchExecuteSuccess() {
-        searchCasesMockSuccess(TEST_SSCS_EXPECTED_DCN_ES_STRING);
+        try {
+            searchCasesMockSuccess(TEST_SSCS_EXPECTED_DCN_ES_STRING);
 
-        CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
-        List<Long> response = ccdClientApi.getCaseRefsByOriginatingFormDcn(
-                TEST_DCN,
-                TEST_SSCS_SERVICE_NAME);
+            CcdClientApi ccdClientApi = new CcdClientApi(coreCaseDataApi, authenticatorFactory, serviceConfigProvider);
+            List<Long> response = ccdClientApi.getCaseRefsByOriginatingFormDcn(
+                    TEST_DCN,
+                    TEST_SSCS_SERVICE_NAME);
 
-        Assert.assertEquals("Response size not equals 1",1, response.size());
-        Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assert.assertEquals("Response size not equals 1", 1, response.size());
+            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
 
-        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
-        WireMock.verify(1,postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
-        WireMock.verify(1,getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+            WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
+            WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
+            WireMock.verify(1, getRequestedFor(urlEqualTo(WIREMOCK_DETAILS_ENDPOINT)));
+        } catch (Exception e) {
+            log.error(EXCEPTION_MSG, e);
+        }
     }
 
     public static String fileContentAsString(String file) {

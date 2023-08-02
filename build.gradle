@@ -247,8 +247,7 @@ def versions = [
         restAssured         : '5.2.1',
         lombok              : '1.18.22',
         pitest              : '1.9.0',
-        sonarPitest         : '0.5',
-        springSecurity      : '6.1.2'
+        sonarPitest         : '0.5'
 ]
 
 configurations.all {

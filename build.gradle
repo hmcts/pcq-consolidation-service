@@ -247,7 +247,8 @@ def versions = [
         restAssured         : '5.2.1',
         lombok              : '1.18.22',
         pitest              : '1.9.0',
-        sonarPitest         : '0.5'
+        sonarPitest         : '0.5',
+        springSecurity      : '6.1.2'
 ]
 
 configurations.all {
@@ -281,6 +282,8 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+
+    implementation group: 'org.springframework.security', name: 'spring-security-core', version: '6.1.2'
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '2.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'

@@ -274,7 +274,10 @@ dependencies {
     def withoutSpringCloudContext = {
         exclude group: 'org.springframework.cloud', module: 'spring-cloud-context'
     }
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', {
+        exclude group: 'org.apache.tomcat.embed', module: 'tomcat-embed-websocket'
+        exclude group: 'org.apache.tomcat.embed', module: 'tomcat-embed-core'
+    }
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web-services'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
@@ -308,6 +311,9 @@ dependencies {
     implementation group: 'net.minidev', name: 'json-smart', version: '2.5.0'
 
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-reactor-netty'
+
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '10.1.13'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.1.13'
 
     testImplementation(platform(group: 'org.junit', name: 'junit-bom', version: '5.10.0'))
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'

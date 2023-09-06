@@ -37,6 +37,12 @@ public class PcqBackendServiceImpl implements PcqBackendService {
         ResponseEntity<PcqRecordWithoutCaseResponse> responseEntity;
 
         try (Response response = pcqBackendFeignClient.getPcqWithoutCase(coRelationHeader)) {
+            if (response.headers() != null && response.headers().size() > 0) {
+                java.util.Collection<String> contentTypes = response.headers().get("Content-Type");
+                for (String contentType : contentTypes) {
+                    log.info("Response contentType: ", contentType);
+                }
+            }
             responseEntity = JsonFeignResponseUtil.toResponseEntity(response, PcqRecordWithoutCaseResponse.class);
         } catch (FeignException ex) {
             throw new ExternalApiException(HttpStatus.valueOf(ex.status()), ex.getMessage());

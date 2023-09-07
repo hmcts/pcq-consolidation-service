@@ -40,7 +40,7 @@ public class PcqBackendServiceImpl implements PcqBackendService {
             if (response.headers() != null && response.headers().size() > 0) {
                 java.util.Collection<String> contentTypes = response.headers().get("Content-Type");
                 for (String contentType : contentTypes) {
-                    log.info("Response contentType: ", contentType);
+                    log.info("Response contentType: " + contentType);
                 }
             }
             responseEntity = JsonFeignResponseUtil.toResponseEntity(response, PcqRecordWithoutCaseResponse.class);

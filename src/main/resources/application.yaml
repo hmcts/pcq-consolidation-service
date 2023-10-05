@@ -39,40 +39,6 @@ idam:
 
 service-config:
   services:
-    - service: probate
-      case-dcn-document-mapping: scannedDocuments.value.controlNumber
-      case-field-mappings:
-        - actor: APPLICANT
-          name: pcqId
-      case-type-ids:
-        - Caveat
-        - GrantOfRepresentation
-    - service: divorce
-      case-field-mappings:
-        - actor: PETITIONER
-          name: PetitionerPcqId
-        - actor: RESPONDENT
-          name: RespondentPcqId
-        - actor: CORESPONDENT
-          name: CoRespondentPcqId
-      case-type-ids:
-        - DIVORCE
-    - service: cmc
-      case-field-mappings:
-        - actor: CLAIMANT
-          name: applicants.value.pcqId
-        - actor: DEFENDANT
-          name: respondents.value.pcqId
-      case-type-ids:
-        - MoneyClaimCase
-    - service: sscs
-      case-dcn-document-mapping: sscsDocument.value.documentFileName
-      case-dcn-document-suffix: .pdf
-      case-field-mappings:
-        - actor: APPELLANT
-          name: pcqId
-      case-type-ids:
-        - Benefit
     - service: civil-citizen-ui
       case-field-mappings:
         - actor: APPLICANT

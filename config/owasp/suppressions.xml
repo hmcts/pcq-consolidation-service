@@ -9,6 +9,6 @@
     </suppress>
         <suppress>
         <notes><![CDATA[name: io.netty 4.1.100.Final]]></notes>
-        <cve>CVE-2023-20883</cve>
+        <cve>CVE-2023-4586</cve>
     </suppress>
 </suppressions>

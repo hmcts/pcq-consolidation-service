@@ -99,7 +99,7 @@ service-config:
         - actor: APPLICANT
           name: pcqId
       case-type-ids:
-        - Civil
+        - CIVIL
 
 pcqBackendUrl: ${PCQ_BACKEND_URL:http://localhost:4550}
 coRelationId: PCQ Consolidation Service

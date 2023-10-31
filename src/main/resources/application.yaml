@@ -78,7 +78,7 @@ service-config:
         - actor: APPLICANT
           name: pcqId
       case-type-ids:
-        - Civil
+        - CIVIL
 
 smoke.test.enabled: false
 

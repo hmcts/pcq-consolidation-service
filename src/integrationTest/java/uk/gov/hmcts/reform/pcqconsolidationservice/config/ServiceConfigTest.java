@@ -54,7 +54,7 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
 
     // Example Service 5 - civil_citizen_ui
     private static final String TEST_SERVICE5_NAME = "CIVIL-CITIZEN-UI";
-    private static final String TEST_SERVICE5_CASE_TYPE_ID_1 = "Civil";
+    private static final String TEST_SERVICE5_CASE_TYPE_ID_1 = "CIVIL";
     private static final String TEST_SERVICE5_CASE_FIELD_MAP_ACTOR_1 = "APPLICANT";
     private static final String TEST_SERVICE5_CASE_FIELD_MAP_NAME_1 = "pcqId";
     private static final int TEST_SERVICE5_CASE_TYPES_SIZE = 1;

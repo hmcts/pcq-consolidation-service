@@ -18,8 +18,8 @@ public final class LoggingSummaryUtils {
     private static final String TOTAL_PAPER_STRING = "Total Paper";
     private static final String TOTAL_STRING = "Total";
     private static final String SUMMARY_HEADING_STRING = "\r\nConsolidation Service Case Matching Summary : ";
-    private static final String FORMAT_STR_LENGTH_30 = "%1$-30s";
-    private static final String SERVICE_SUMMARY_STRING = String.format(FORMAT_STR_LENGTH_30, "Service")
+    private static final String FORMAT_STR_LENGTH_40 = "%1$-40s";
+    private static final String SERVICE_SUMMARY_STRING = String.format(FORMAT_STR_LENGTH_40, "Service")
             + "Matched | Not Found | Errors\r\n";
     private static final String ONLINE_CHANNEL_SUFFIX = " Online Channel";
     private static final String ONLINE_MATCH_SUFFIX = "_online_channel_matched";
@@ -50,21 +50,21 @@ public final class LoggingSummaryUtils {
 
         stringBuilder.append(getServiceSummaryString(totalOnlineMatched, totalOnlineNotFound, totalOnlineError,
                 totalPaperMatched, totalPaperNotFound, totalPaperError, serviceSummaryMap))
-                .append(String.format(FORMAT_STR_LENGTH_30,TOTAL_ONLINE_STRING))
+                .append(String.format(FORMAT_STR_LENGTH_40,TOTAL_ONLINE_STRING))
                 .append(String.format(FORMAT_STR_LENGTH_8,totalOnlineMatched.intValue()))
                 .append(TAB_STRING)
                 .append(String.format(FORMAT_STR_LENGTH_10,totalOnlineNotFound.intValue()))
                 .append(TAB_STRING)
                 .append(totalOnlineError.intValue())
                 .append(CR_STRING)
-                .append(String.format(FORMAT_STR_LENGTH_30,TOTAL_PAPER_STRING))
+                .append(String.format(FORMAT_STR_LENGTH_40,TOTAL_PAPER_STRING))
                 .append(String.format(FORMAT_STR_LENGTH_8,totalPaperMatched.intValue()))
                 .append(TAB_STRING)
                 .append(String.format(FORMAT_STR_LENGTH_10,totalPaperNotFound.intValue()))
                 .append(TAB_STRING)
                 .append(totalPaperError.intValue())
                 .append(CR_STRING)
-                .append(String.format(FORMAT_STR_LENGTH_30,TOTAL_STRING))
+                .append(String.format(FORMAT_STR_LENGTH_40,TOTAL_STRING))
                 .append(String.format(FORMAT_STR_LENGTH_8,totalOnlineMatched.intValue() + totalPaperMatched.intValue()))
                 .append(TAB_STRING)
                 .append(String.format(FORMAT_STR_LENGTH_10,totalOnlineNotFound.intValue()
@@ -95,13 +95,13 @@ public final class LoggingSummaryUtils {
 
         serviceKeySet.forEach(service -> {
             String serviceKey = service.toLowerCase(Locale.UK);
-            stringBuilder.append(String.format(FORMAT_STR_LENGTH_30,service.toUpperCase(Locale.UK)
+            stringBuilder.append(String.format(FORMAT_STR_LENGTH_40,service.toUpperCase(Locale.UK)
                     + ONLINE_CHANNEL_SUFFIX));
             Integer onlineMatchedCount = serviceSummaryMap.get(serviceKey + ONLINE_MATCH_SUFFIX);
             Integer onlineNotFoundCount =  serviceSummaryMap.get(serviceKey + ONLINE_NOT_FOUND_SUFFIX);
             Integer onlineErredCount = serviceSummaryMap.get(serviceKey + ONLINE_ERROR_SUFFIX);
             stringBuilder.append(countsString(onlineMatchedCount, onlineNotFoundCount, onlineErredCount))
-                    .append(String.format(FORMAT_STR_LENGTH_30,service.toUpperCase(Locale.UK)
+                    .append(String.format(FORMAT_STR_LENGTH_40,service.toUpperCase(Locale.UK)
                             + PAPER_CHANNEL_SUFFIX));
             Integer paperMatchedCount = serviceSummaryMap.get(serviceKey + PAPER_MATCH_SUFFIX);
             Integer paperNotFoundCount =  serviceSummaryMap.get(serviceKey + PAPER_NOT_FOUND_SUFFIX);

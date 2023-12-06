@@ -7,4 +7,8 @@
     ]]></notes>
         <cve>CVE-2023-35116</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[name: io.netty 4.1.100.Final]]></notes>
+        <cve>CVE-2023-4586</cve>
+    </suppress>
 </suppressions>

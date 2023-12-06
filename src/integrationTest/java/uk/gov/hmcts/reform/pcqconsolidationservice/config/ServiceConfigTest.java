@@ -52,6 +52,13 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
     private static final String TEST_SERVICE4_CASE_DCN_SUFFIX = ".pdf";
     private static final int TEST_SERVICE4_CASE_TYPES_SIZE = 1;
 
+    // Example Service 5 - civil_citizen_ui
+    private static final String TEST_SERVICE5_NAME = "CIVIL-CITIZEN-UI";
+    private static final String TEST_SERVICE5_CASE_TYPE_ID_1 = "CIVIL";
+    private static final String TEST_SERVICE5_CASE_FIELD_MAP_ACTOR_1 = "APPLICANT";
+    private static final String TEST_SERVICE5_CASE_FIELD_MAP_NAME_1 = "pcqId";
+    private static final int TEST_SERVICE5_CASE_TYPES_SIZE = 1;
+
     // Messages
     private static final String TEST_SERVICE_NAME_MESSAGE = "Case Service Name is correct";
     private static final String TEST_CASE_TYPE_MESSAGE = "Case Type is correct";
@@ -130,6 +137,21 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
         assertEquals(TEST_SERVICE4_CASE_DCN_SUFFIX,
                 configItem.getCaseDcnDocumentSuffix(), TEST_DCN_DOCUMENT_SUFFIX_MESSAGE);
     }
+
+    @Test
+    void serviceConfigItemShouldCaptureServiceWithOneCaseType() {
+        ServiceConfigItem configItem = serviceConfigProvider.getConfig(TEST_SERVICE5_NAME);
+
+        assertEquals(TEST_SERVICE5_NAME,
+                configItem.getService(),TEST_SERVICE_NAME_MESSAGE);
+        assertEquals(TEST_SERVICE5_CASE_TYPES_SIZE,
+                configItem.getCaseTypeIds().size(), TEST_NO_CASE_TYPES_MESSAGE);
+        assertEquals(TEST_SERVICE5_CASE_TYPE_ID_1,
+                configItem.getCaseTypeIds().get(0), TEST_CASE_TYPE_MESSAGE);
+        assertEquals(TEST_SERVICE5_CASE_FIELD_MAP_NAME_1,
+                configItem.getCaseField(TEST_SERVICE1_CASE_FIELD_MAP_ACTOR_1), TEST_ACTOR_COMPARISON_MESSAGE);
+    }
+
 
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     @Test

@@ -73,6 +73,12 @@ service-config:
           name: pcqId
       case-type-ids:
         - Benefit
+    - service: civil-citizen-ui
+      case-field-mappings:
+        - actor: APPLICANT
+          name: pcqId
+      case-type-ids:
+        - CIVIL
 
 smoke.test.enabled: false
 

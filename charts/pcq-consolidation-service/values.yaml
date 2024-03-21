@@ -6,6 +6,10 @@ job:
   concurrencyPolicy: Forbid
   ingressHost: pcq-consolidation-service-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   aadIdentityName: pcq
+  autoscaling:
+    enabled: true
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
   spotInstances:
     enabled: true
   environment:

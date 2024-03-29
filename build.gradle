@@ -218,7 +218,7 @@ dependencyManagement {
         dependencySet(group: 'com.github.jknack', version: '4.4.0') {
             entry 'handlebars'
         }
-        dependencySet(group: 'org.springframework.cloud', version: '4.1.0') {
+        dependencySet(group: 'org.springframework.cloud', version: '4.1.1') {
             entry 'spring-cloud-starter-openfeign'
             entry 'spring-cloud-openfeign-core'
         }
@@ -291,7 +291,7 @@ dependencies {
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '2.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.2'
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     implementation group: "com.networknt", name: "json-schema-validator", version: "1.4.0"

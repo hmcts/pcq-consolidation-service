@@ -13,9 +13,7 @@ import org.springframework.context.ApplicationContext;
 
 
 @SpringBootApplication(scanBasePackages = "uk.gov.hmcts.reform")
-@EnableFeignClients(basePackages = {
-        "uk.gov.hmcts.reform.pcq.commons"
-})
+@EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.pcq.commons"})
 @Slf4j
 public class ConsolidationApplication implements ApplicationRunner {
 

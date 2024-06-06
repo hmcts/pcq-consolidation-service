@@ -1,7 +1,7 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class ConsolidationComponent {
 
     private final Map<String, PcqAnswerResponse[]> pcqIdsMap = new ConcurrentHashMap<>();
@@ -35,14 +36,11 @@ public class ConsolidationComponent {
     private static final String PAPER_NOT_FOUND_SUFFIX = "_paper_channel_not_found";
     private static final String PAPER_ERROR_SUFFIX = "_paper_channel_error";
 
-    @Autowired
-    private CcdClientApi ccdClientApi;
+    private final CcdClientApi ccdClientApi;
 
-    @Autowired
-    private PcqBackendService pcqBackendService;
+    private final PcqBackendService pcqBackendService;
 
-    @Autowired
-    private ServiceConfigProvider serviceConfigProvider;
+    private final ServiceConfigProvider serviceConfigProvider;
 
     @SuppressWarnings({"unchecked", "PMD.DataflowAnomalyAnalysis"})
     public void execute() {

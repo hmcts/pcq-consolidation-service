@@ -7,10 +7,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
-import uk.gov.hmcts.reform.idam.client.models.UserDetails;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 import uk.gov.hmcts.reform.pcqconsolidationservice.services.idam.Credential;
 
-import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -25,9 +24,7 @@ class CcdAuthenticatorFactoryTest {
 
     private static final String USER_ID = "pcq";
 
-    public static final UserDetails USER_DETAILS = new UserDetails(USER_ID,
-            null, null, null, emptyList()
-    );
+    public static final UserInfo USER_INFO = UserInfo.builder().uid(USER_ID).build();
 
     @Mock
     private AuthTokenGenerator tokenGenerator;
@@ -38,7 +35,7 @@ class CcdAuthenticatorFactoryTest {
     @Test
     void returnSuccessfulCcdAuthenticator() {
         when(idamClient.getAccessToken(any(), any())).thenReturn(USER_TOKEN);
-        when(idamClient.getUserDetails(any())).thenReturn(USER_DETAILS);
+        when(idamClient.getUserInfo(any())).thenReturn(USER_INFO);
         when(tokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
 
         CcdAuthenticatorFactory service = new CcdAuthenticatorFactory(tokenGenerator, idamClient);
@@ -46,7 +43,7 @@ class CcdAuthenticatorFactoryTest {
 
         Assert.assertEquals("Service Token Not Matching",SERVICE_TOKEN, authenticator.getServiceToken());
         Assert.assertEquals("User Token not matching", USER_TOKEN, authenticator.getUserToken());
-        Assert.assertEquals("User Id Not matching", USER_ID, authenticator.getUserDetails().getId());
+        Assert.assertEquals("User Id Not matching", USER_ID, authenticator.getUserId());
         Assert.assertTrue("User Token not valid",authenticator.userTokenAgeInSeconds() > 0);
     }
 

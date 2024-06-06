@@ -10,7 +10,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.reform.ccd.client.CoreCaseDataApi;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.ccd.client.model.SearchResult;
-import uk.gov.hmcts.reform.idam.client.models.UserDetails;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigHelper;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigItem;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigProvider;
@@ -53,13 +53,11 @@ class CcdClientApiTest {
             = format(ES_MATCH_PHRASE_QUERY_FORMAT, DEFAULT_DCN_FIELD, DCN);
     public static final String SEARCH_CASES_CUSTOM_DCN_FIELD_SEARCH_STRING
             = format(ES_MATCH_PHRASE_QUERY_FORMAT, SSCS_DCN_FIELD, DCN + SSCS_DCN_DOCUMENT_SUFFIX);
-    public static final UserDetails USER_DETAILS = new UserDetails(USER_ID,
-            null, null, null, emptyList()
-    );
+    public static final UserInfo USER_INFO = UserInfo.builder().uid(USER_ID).build();
 
     public static final CcdAuthenticator AUTH_DETAILS = new CcdAuthenticator(
         () -> SERVICE_TOKEN,
-            USER_DETAILS,
+            USER_INFO,
         () -> USER_TOKEN
     );
 

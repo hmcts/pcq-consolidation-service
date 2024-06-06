@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
-import uk.gov.hmcts.reform.idam.client.models.UserDetails;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 import uk.gov.hmcts.reform.pcqconsolidationservice.services.idam.Credential;
 
 @Service
@@ -30,10 +30,10 @@ public class CcdAuthenticatorFactory {
     public CcdAuthenticator createCcdAuthenticator() {
         Credential user = new Credential(pcqCcdExtractorUserName, pcqCcdExtractorPassword);
         String accessToken = idamClient.getAccessToken(user.getUsername(), user.getPassword());
-        UserDetails userDetails = idamClient.getUserDetails(accessToken);
+        UserInfo userInfo = idamClient.getUserInfo(accessToken);
         return new CcdAuthenticator(
                 s2sTokenGenerator::generate,
-                userDetails, () -> accessToken
+                userInfo, () -> accessToken
         );
     }
 }

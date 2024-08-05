@@ -33,6 +33,9 @@ public class ConsolidationApplication implements ApplicationRunner {
             consolidationComponent.execute();
             log.info("Completed the consolidation service job successfully");
         } catch (Exception e) {
+            //To trace the log and create alert
+            log.error("Error executing Consolidation service : " +  e);
+            //To have stack trace
             log.error("Error executing Consolidation service", e);
         } finally {
             client.flush();

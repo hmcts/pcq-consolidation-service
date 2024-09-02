@@ -1,8 +1,8 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice;
 
 import com.microsoft.applicationinsights.TelemetryClient;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,17 +13,14 @@ import org.springframework.context.ApplicationContext;
 
 
 @SpringBootApplication(scanBasePackages = "uk.gov.hmcts.reform")
-@EnableFeignClients(basePackages = {
-        "uk.gov.hmcts.reform.pcq.commons"
-})
+@EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.pcq.commons"})
 @Slf4j
+@RequiredArgsConstructor
 public class ConsolidationApplication implements ApplicationRunner {
 
-    @Autowired
-    private ConsolidationComponent consolidationComponent;
+    private final ConsolidationComponent consolidationComponent;
 
-    @Autowired
-    private TelemetryClient client;
+    private final TelemetryClient client;
 
     @Value("${telemetry.wait.period:10000}")
     private int waitPeriod;
@@ -36,6 +33,9 @@ public class ConsolidationApplication implements ApplicationRunner {
             consolidationComponent.execute();
             log.info("Completed the consolidation service job successfully");
         } catch (Exception e) {
+            //To trace the log and create alert
+            log.error("Error executing Consolidation service : " +  e);
+            //To have stack trace
             log.error("Error executing Consolidation service", e);
         } finally {
             client.flush();

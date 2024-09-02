@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -14,12 +13,9 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @Order(1)
 public class SecurityConfiguration {
 
-    @Autowired
-    HandlerMappingIntrospector introspector;
-
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(
+    public WebSecurityCustomizer webSecurityCustomizer(HandlerMappingIntrospector introspector) {
+        return web -> web.ignoring().requestMatchers(
             new MvcRequestMatcher(introspector, "/swagger-ui.html"),
             new MvcRequestMatcher(introspector, "/webjars/springfox-swagger-ui/**"),
             new MvcRequestMatcher(introspector, "/swagger-resources/**"),

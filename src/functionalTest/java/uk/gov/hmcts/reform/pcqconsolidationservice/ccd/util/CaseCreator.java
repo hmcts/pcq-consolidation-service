@@ -59,7 +59,7 @@ public class CaseCreator {
             StartEventResponse eventResponse = feignCcdApi.startForCaseworker(
                     authenticator.getUserToken(),
                     authenticator.getServiceToken(),
-                    authenticator.getUserDetails().getId(),
+                    authenticator.getUserId(),
                     TEST_CASE_JURISDICTION,
                     TEST_CASE_TYPE_ID,
                     TEST_CREATE_CASE_EVENT_ID
@@ -80,7 +80,7 @@ public class CaseCreator {
             pcqQuestionsCase = feignCcdApi.submitForCaseworker(
                     authenticator.getUserToken(),
                     authenticator.getServiceToken(),
-                    authenticator.getUserDetails().getId(),
+                    authenticator.getUserId(),
                     TEST_CASE_JURISDICTION,
                     TEST_CASE_TYPE_ID,
                     true,

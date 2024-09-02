@@ -9,14 +9,12 @@ import org.springframework.context.annotation.FilterType;
 
 @Configuration
 @ComponentScan(
-        basePackages = {"uk.gov.hmcts.reform"},
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = ApplicationRunner.class)
-        }
+    basePackages = {"uk.gov.hmcts.reform"},
+    excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = ApplicationRunner.class)
+    }
 )
-@EnableFeignClients(basePackages = {
-        "uk.gov.hmcts.reform.pcq.commons"
-})
+@EnableFeignClients(basePackages = {"uk.gov.hmcts.reform.pcq.commons"})
 @EnableAutoConfiguration
 @SuppressWarnings("PMD.TestClassWithoutTestCases")
 public class TestApplicationConfiguration {

@@ -12,7 +12,6 @@ import java.util.List;
 
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Component
@@ -73,7 +72,7 @@ public class CcdClientApi {
                     caseTypeIdsStr,
                     format(ES_MATCH_PHRASE_QUERY_FORMAT, caseFieldNamePcqId, pcqId)
             );
-            return searchResult.getCases().stream().map(CaseDetails::getId).collect(toList());
+            return searchResult.getCases().stream().map(CaseDetails::getId).toList();
         }
     }
 
@@ -109,7 +108,7 @@ public class CcdClientApi {
                     caseTypeIdsStr,
                     format(ES_MATCH_PHRASE_QUERY_FORMAT, caseDocumentDcn, dcnSearch)
             );
-            return searchResult.getCases().stream().map(CaseDetails::getId).collect(toList());
+            return searchResult.getCases().stream().map(CaseDetails::getId).toList();
         }
     }
 

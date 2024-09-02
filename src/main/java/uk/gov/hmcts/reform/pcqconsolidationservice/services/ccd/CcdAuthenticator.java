@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd;
 
-import uk.gov.hmcts.reform.idam.client.models.UserDetails;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -8,18 +8,18 @@ import java.util.function.Supplier;
 
 public class CcdAuthenticator {
 
-    private final UserDetails userDetails;
+    private final UserInfo userInfo;
     private final Supplier<String> serviceTokenSupplier;
     private final Supplier<String> userTokenSupplier;
     private final LocalDateTime userTokenCreationDate;
 
     public CcdAuthenticator(
             Supplier<String> serviceTokenSupplier,
-            UserDetails userDetails,
+            UserInfo userInfo,
             Supplier<String> userTokenSupplier
     ) {
         this.serviceTokenSupplier = serviceTokenSupplier;
-        this.userDetails = userDetails;
+        this.userInfo = userInfo;
         this.userTokenSupplier = userTokenSupplier;
         this.userTokenCreationDate = LocalDateTime.now();
     }
@@ -32,8 +32,8 @@ public class CcdAuthenticator {
         return this.serviceTokenSupplier.get();
     }
 
-    public UserDetails getUserDetails() {
-        return this.userDetails;
+    public String getUserId() {
+        return this.userInfo.getUid();
     }
 
     public long userTokenAgeInSeconds() {

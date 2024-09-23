@@ -242,7 +242,6 @@ def versions = [
         springBoot          : springBoot.class.package.implementationVersion,
         restAssured         : '5.5.0',
         lombok              : '1.18.34',
-        pitest              : '1.17.0',
         sonarPitest         : '0.5'
 ]
 
@@ -283,8 +282,7 @@ dependencies {
     testImplementation(platform(group: 'org.junit', name: 'junit-bom', version: '5.11.0'))
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-
-    testImplementation group: 'org.pitest', name: 'pitest', version: versions.pitest
+    
     testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0'
     testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 

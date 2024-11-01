@@ -260,7 +260,7 @@ dependencies {
     implementation group: 'org.yaml', name: 'snakeyaml', version: '2.3'
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
-    implementation group: "com.networknt", name: "json-schema-validator", version: "1.5.2"
+    implementation group: "com.networknt", name: "json-schema-validator", version: "1.5.3"
 
     implementation group: 'io.github.openfeign.form', name: 'feign-form', version: '3.8.0'
     implementation group: 'io.github.openfeign.form', name: 'feign-form-spring', version: '3.8.0'

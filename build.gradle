@@ -241,7 +241,7 @@ def versions = [
         reformLogging       : '6.1.8',
         springBoot          : springBoot.class.package.implementationVersion,
         restAssured         : '5.5.1',
-        lombok              : '1.18.36',
+        lombok              : '1.18.38',
         sonarPitest         : '0.5'
 ]
 

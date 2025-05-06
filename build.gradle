@@ -238,7 +238,7 @@ repositories {
 
 def versions = [
         junit               : '5.9.2',
-        reformLogging       : '6.1.8',
+        reformLogging       : '6.1.9',
         springBoot          : springBoot.class.package.implementationVersion,
         restAssured         : '5.5.1',
         lombok              : '1.18.38',

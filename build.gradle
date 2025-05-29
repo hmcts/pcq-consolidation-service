@@ -240,7 +240,7 @@ def versions = [
         junit               : '5.9.2',
         reformLogging       : '6.1.9',
         springBoot          : springBoot.class.package.implementationVersion,
-        restAssured         : '5.5.2',
+        restAssured         : '5.5.5',
         lombok              : '1.18.38',
         sonarPitest         : '0.5'
 ]

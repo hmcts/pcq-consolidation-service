@@ -291,7 +291,7 @@ dependencies {
 
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.18.0'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: '5.2.0'
-    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.17.0'
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.18.0'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.3'
 
     testImplementation group: 'org.wiremock', name: 'wiremock', version: '3.6.0'

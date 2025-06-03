@@ -294,7 +294,7 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: '5.18.0'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.27.3'
 
-    testImplementation group: 'org.wiremock', name: 'wiremock', version: '3.6.0'
+    testImplementation group: 'org.wiremock', name: 'wiremock', version: '3.13.0'
 
     testImplementation 'com.github.hmcts:fortify-client:1.4.9:all'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'

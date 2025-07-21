@@ -221,7 +221,7 @@ dependencyManagement {
             entry 'spring-cloud-openfeign-core'
         }
         // CVE-2021-29425
-        dependency group: 'commons-io', name: 'commons-io', version: '2.19.0'
+        dependency group: 'commons-io', name: 'commons-io', version: '2.20.0'
     }
     imports {
         mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2024.0.1'

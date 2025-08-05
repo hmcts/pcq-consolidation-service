@@ -296,7 +296,7 @@ dependencies {
 
     testImplementation group: 'org.wiremock', name: 'wiremock', version: '3.13.1'
 
-    testImplementation 'com.github.hmcts:fortify-client:1.4.9:all'
+    testImplementation 'com.github.hmcts:fortify-client:1.4.10:all'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
     integrationTestImplementation sourceSets.main.runtimeClasspath

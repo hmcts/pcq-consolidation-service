@@ -213,7 +213,7 @@ dependencyManagement {
             entry 'netty-transport-classes-epoll'
             entry 'netty-transport-classes-kqueue'
         }
-        dependencySet(group: 'com.github.jknack', version: '4.4.0') {
+        dependencySet(group: 'com.github.jknack', version: '4.5.0') {
             entry 'handlebars'
         }
         dependencySet(group: 'org.springframework.cloud', version: '4.3.0') {

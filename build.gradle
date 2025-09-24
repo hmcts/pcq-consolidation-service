@@ -224,7 +224,7 @@ dependencyManagement {
         dependency group: 'commons-io', name: 'commons-io', version: '2.20.0'
     }
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2024.0.2'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2025.0.0'
     }
 }
 

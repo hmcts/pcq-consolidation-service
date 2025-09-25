@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -14,17 +12,17 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 public class SecurityConfiguration {
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(HandlerMappingIntrospector introspector) {
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers(
-            new MvcRequestMatcher(introspector, "/swagger-ui.html"),
-            new MvcRequestMatcher(introspector, "/webjars/springfox-swagger-ui/**"),
-            new MvcRequestMatcher(introspector, "/swagger-resources/**"),
-            new MvcRequestMatcher(introspector, "/health"),
-            new MvcRequestMatcher(introspector, "/health/liveness"),
-            new MvcRequestMatcher(introspector, "/v2/api-docs/**"),
-            new MvcRequestMatcher(introspector, "/info"),
-            new MvcRequestMatcher(introspector, "/favicon.ico"),
-            new MvcRequestMatcher(introspector, "/")
+                "/swagger-ui.html",
+                "/webjars/springfox-swagger-ui/**",
+                "/swagger-resources/**",
+                "/health",
+                "/health/liveness",
+                "/v2/api-docs/**",
+                "/info",
+                "/favicon.ico",
+                "/"
         );
     }
 }

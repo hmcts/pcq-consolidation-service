@@ -4,7 +4,7 @@ plugins {
     id 'pmd'
     id 'jacoco'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '3.4.5'
+    id 'org.springframework.boot' version '3.5.6'
     id 'org.owasp.dependencycheck' version '12.1.6'
     id 'com.github.ben-manes.versions' version '0.53.0'
     id "info.solidsoft.pitest" version '1.15.0'
@@ -224,7 +224,7 @@ dependencyManagement {
         dependency group: 'commons-io', name: 'commons-io', version: '2.20.0'
     }
     imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2024.0.2'
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2025.0.0'
     }
 }
 

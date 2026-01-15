@@ -2,7 +2,13 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Apcq-consolidation-service&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Apcq-consolidation-service) [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Apcq-consolidation-service&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Apcq-consolidation-service) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Apcq-consolidation-service&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Apcq-consolidation-service) [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Apcq-consolidation-service&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Apcq-consolidation-service) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=uk.gov.hmcts.reform%3Apcq-consolidation-service&metric=coverage)](https://sonarcloud.io/summary/new_code?id=uk.gov.hmcts.reform%3Apcq-consolidation-service)
 
-This is the frontend for the protected characteristics questionnaire service. This service will ask a set of questions that will help us check we are treating people fairly and equally. It helps us to meet our commitment to equality (under the Equality Act 2010). 
+This is the consolidation service for the protected characteristics questionnaire (PCQ) platform. It aggregates and consolidates PCQ responses so the service can report on fairness and equality commitments under the Equality Act 2010.
+
+## What this service does
+
+- Consolidates PCQ responses for downstream reporting and analytics.
+- Runs as a Spring Boot API on port `4555` with a standard `/health` endpoint.
+- Builds and runs via Gradle and Docker for local development and deployment.
 
 ## Overview
 
@@ -18,9 +24,9 @@ This is the frontend for the protected characteristics questionnaire service. Th
 
 ## Notes
 
-Since Spring Boot 2.1 bean overriding is disabled. If you want to enable it you will need to set `spring.main.allow-bean-definition-overriding` to `true`.
+Since Spring Boot 2.1, bean overriding is disabled. If you want to enable it, set `spring.main.allow-bean-definition-overriding` to `true`.
 
-JUnit 5 is now enabled by default in the project. Please refrain from using JUnit4 and use the next generation
+JUnit 5 is enabled by default in the project. Please refrain from using JUnit 4 and use JUnit 5.
 
 ## Building and deploying the application
 
@@ -43,13 +49,13 @@ Create the image of the application by executing the following command:
   ./gradlew assemble
 ```
 
-Create docker image:
+Create the Docker image:
 
 ```bash
   docker-compose build
 ```
 
-Run the distribution (created in `build/install/pcq-backend` directory)
+Run the distribution (created in `build/install/pcq-consolidation-service` directory)
 by executing the following command:
 
 ```bash
@@ -85,13 +91,13 @@ For more information:
 ./bin/run-in-docker.sh -h
 ```
 
-Script includes bare minimum environment variables necessary to start api instance. Whenever any variable is changed or any other script regarding docker image/container build, the suggested way to ensure all is cleaned up properly is by this command:
+The script includes the minimum environment variables necessary to start the API instance. Whenever any variable is changed or any other script regarding Docker image/container build is updated, the suggested way to ensure all is cleaned up properly is this command:
 
 ```bash
 docker-compose rm
 ```
 
-It clears stopped containers correctly. Might consider removing clutter of images too, especially the ones fiddled with:
+It clears stopped containers correctly. You might also consider removing cluttered images, especially ones you were experimenting with:
 
 ```bash
 docker images

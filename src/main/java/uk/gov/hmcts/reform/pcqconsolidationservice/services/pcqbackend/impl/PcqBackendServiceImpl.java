@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pcqconsolidationservice.service.impl;
+package uk.gov.hmcts.reform.pcqconsolidationservice.services.pcqbackend.impl;
 
 import feign.FeignException;
 import feign.Response;
@@ -13,7 +13,7 @@ import uk.gov.hmcts.reform.pcq.commons.exception.ExternalApiException;
 import uk.gov.hmcts.reform.pcq.commons.model.PcqRecordWithoutCaseResponse;
 import uk.gov.hmcts.reform.pcq.commons.model.SubmitResponse;
 import uk.gov.hmcts.reform.pcq.commons.utils.JsonFeignResponseUtil;
-import uk.gov.hmcts.reform.pcqconsolidationservice.service.PcqBackendService;
+import uk.gov.hmcts.reform.pcqconsolidationservice.services.pcqbackend.PcqBackendService;
 
 import java.io.IOException;
 

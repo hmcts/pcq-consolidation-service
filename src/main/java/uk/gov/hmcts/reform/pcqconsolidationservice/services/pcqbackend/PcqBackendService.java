@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.pcqconsolidationservice.service;
+package uk.gov.hmcts.reform.pcqconsolidationservice.services.pcqbackend;
 
 import org.springframework.http.ResponseEntity;
 import uk.gov.hmcts.reform.pcq.commons.model.PcqRecordWithoutCaseResponse;

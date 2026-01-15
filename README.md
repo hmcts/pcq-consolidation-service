@@ -28,6 +28,19 @@ Since Spring Boot 2.1, bean overriding is disabled. If you want to enable it, se
 
 JUnit 5 is enabled by default in the project. Please refrain from using JUnit 4 and use JUnit 5.
 
+## Environment variables
+
+Runtime configuration is provided via Helm values under `charts/pcq-consolidation-service/values.yaml`, with environment-specific templates in:
+
+- `charts/pcq-consolidation-service/values.preview.template.yaml`
+- `charts/pcq-consolidation-service/values.aat.template.yaml`
+
+The main environment variables are defined under `job.environment` (for example, `PCQ_BACKEND_URL`, `S2S_URL`, `IDAM_API_URL`, `CORE_CASE_DATA_API_URL`). Secrets are sourced from Azure Key Vault via `job.keyVaults.pcq.secrets` and mapped to env vars such as `JWT_SECRET`, `IDAM_CLIENT_SECRET`, and `S2S_SECRET`.
+
+## Deployment
+
+This service is deployed as a Kubernetes `CronJob` (see `job.kind` in the Helm values). The schedule is configured in `job.schedule`, and the container image is set in `job.image`. In preview/aat templates, the pipeline injects `${IMAGE_NAME}` and `${SERVICE_FQDN}` at deploy time.
+
 ## Building and deploying the application
 
 ### Building the application

@@ -13,11 +13,11 @@ import uk.gov.hmcts.reform.pcq.commons.model.PcqAnswerResponse;
 import uk.gov.hmcts.reform.pcq.commons.model.PcqRecordWithoutCaseResponse;
 import uk.gov.hmcts.reform.pcq.commons.model.SubmitResponse;
 import uk.gov.hmcts.reform.pcqconsolidationservice.controller.advice.ErrorResponse;
-import uk.gov.hmcts.reform.pcqconsolidationservice.services.pcqbackend.impl.PcqBackendServiceImpl;
 
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -70,6 +70,30 @@ class PcqBackendServiceImplTest {
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
 
+    }
+
+    @Test
+    void testSuccess200ResponseWithHeaders() throws JsonProcessingException {
+        PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = generateTestResponse("Success", 200);
+        ObjectMapper mapper = new ObjectMapper();
+        String body = mapper.writeValueAsString(pcqWithoutCaseResponse);
+        Map<String, Collection<String>> headers = new ConcurrentHashMap<>();
+        headers.put("Content-Type", Collections.singleton("application/json"));
+
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenReturn(Response.builder().request(mock(
+                Request.class)).headers(headers).body(body, Charset.defaultCharset()).status(200).build());
+
+        ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
+
+        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse);
+        PcqRecordWithoutCaseResponse responseBody = (PcqRecordWithoutCaseResponse) responseEntity.getBody();
+        assertPcqRecordsEqual(pcqWithoutCaseResponse.getPcqRecord(), responseBody.getPcqRecord());
+        assertEquals(EXPECTED_MSG_2, pcqWithoutCaseResponse.getResponseStatusCode(),
+                responseBody.getResponseStatusCode());
+        assertEquals(EXPECTED_MSG_3, pcqWithoutCaseResponse.getResponseStatus(),
+                responseBody.getResponseStatus());
+
+        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
     }
 
     @Test
@@ -241,7 +265,18 @@ class PcqBackendServiceImplTest {
 
         when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenThrow(feignException);
 
-        assertThrows(ExternalApiException.class, () -> pcqBackendService.getPcqWithoutCase());
+        assertThrows(ExternalApiException.class, pcqBackendService::getPcqWithoutCase);
+
+        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
+    }
+
+    @Test
+    void executeIoErrorResponse() {
+        String invalidBody = "not-json";
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenReturn(Response.builder().request(mock(
+                Request.class)).body(invalidBody, Charset.defaultCharset()).status(200).build());
+
+        assertThrows(ExternalApiException.class, pcqBackendService::getPcqWithoutCase);
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
     }

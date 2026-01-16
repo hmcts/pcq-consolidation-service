@@ -17,8 +17,8 @@ import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigHelper;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigItem;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigProvider;
 import uk.gov.hmcts.reform.pcqconsolidationservice.exception.ServiceNotConfiguredException;
-import uk.gov.hmcts.reform.pcqconsolidationservice.service.PcqBackendService;
 import uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi;
+import uk.gov.hmcts.reform.pcqconsolidationservice.services.pcqbackend.PcqBackendService;
 
 import java.util.Arrays;
 import java.util.HashSet;

@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.pcq.commons.controller.feign.PcqBackendFeignClient;
 import uk.gov.hmcts.reform.pcqconsolidationservice.ConsolidationComponent;
 import uk.gov.hmcts.reform.pcqconsolidationservice.config.TestApplicationConfiguration;
-import uk.gov.hmcts.reform.pcqconsolidationservice.service.impl.PcqBackendServiceImpl;
+import uk.gov.hmcts.reform.pcqconsolidationservice.services.pcqbackend.impl.PcqBackendServiceImpl;
 
 
 @RunWith(SpringRunner.class)

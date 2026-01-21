@@ -82,16 +82,6 @@ service-config:
 
 smoke.test.enabled: false
 
-application-insights:
-  default:
-    modules:
-      WebSyntheticRequestTelemetryInitializer:
-        enabled: false
-
-azure:
-  application-insights:
-    instrumentation-key: ${APPINSIGHTS_INSTRUMENTATIONKEY:"Test"}
-
 pcqBackendUrl: ${PCQ_BACKEND_URL:http://localhost:4550}
 
 feign:

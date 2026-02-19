@@ -92,7 +92,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
 
     private void pcqWithoutCaseWireMockSuccess() {
         pcqBackendService.stubFor(get(urlPathMatching("/pcq/backend/consolidation/pcqRecordWithoutCase"))
-                .withHeader(SERVICE_AUTHORIZATION, matching(".+"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -132,7 +132,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
     private void pcqAddCaseWireMockSuccess() {
         pcqBackendService.stubFor(put(urlPathMatching("/pcq/backend/consolidation/addCaseForPCQ/TEST_PCQ_ID"))
                 .withQueryParam("caseId", equalTo(CASE_ID_TEST))
-                .withHeader(SERVICE_AUTHORIZATION, matching(".+"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -144,7 +144,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
 
     private void pcqWithoutCaseWireMockFailure() {
         pcqBackendService.stubFor(get(urlPathMatching("/pcq/backend/consolidation/pcqRecordWithoutCase"))
-                .withHeader(SERVICE_AUTHORIZATION, matching(".+"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -155,7 +155,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
 
     private void pcqWithoutCaseWireMockInternalError() {
         pcqBackendService.stubFor(get(urlPathMatching("/pcq/backend/consolidation/pcqRecordWithoutCase"))
-                .withHeader(SERVICE_AUTHORIZATION, matching(".+"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -167,7 +167,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
     private void pcqAddCaseWireMockInvalidRequest() {
         pcqBackendService.stubFor(put(urlPathMatching("/pcq/backend/consolidation/addCaseForPCQ/TEST_PCQ_ID"))
                 .withQueryParam("caseId", equalTo(CASE_ID_TEST))
-                .withHeader(SERVICE_AUTHORIZATION, matching(".+"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -180,7 +180,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
     private void pcqAddCaseWireMockInternalError() {
         pcqBackendService.stubFor(put(urlPathMatching("/pcq/backend/consolidation/addCaseForPCQ/TEST_PCQ_ID"))
                 .withQueryParam("caseId", equalTo(CASE_ID_TEST))
-                .withHeader(SERVICE_AUTHORIZATION, matching(".+"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)

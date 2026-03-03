@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import feign.Request;
 import feign.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
+import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.pcq.commons.controller.feign.PcqBackendFeignClient;
 import uk.gov.hmcts.reform.pcq.commons.exception.ExternalApiException;
 import uk.gov.hmcts.reform.pcq.commons.model.PcqAnswerResponse;
@@ -35,10 +37,13 @@ import static org.mockito.Mockito.when;
 class PcqBackendServiceImplTest {
 
     private final PcqBackendFeignClient mockPcqBackendFeignClient = mock(PcqBackendFeignClient.class);
+    private final AuthTokenGenerator mockAuthTokenGenerator = mock(AuthTokenGenerator.class);
 
-    private final PcqBackendServiceImpl pcqBackendService = new PcqBackendServiceImpl(mockPcqBackendFeignClient);
+    private final PcqBackendServiceImpl pcqBackendService = new PcqBackendServiceImpl(
+            mockPcqBackendFeignClient, mockAuthTokenGenerator);
 
     private static final String HEADER_VALUE = null;
+    private static final String SERVICE_AUTHORIZATION_VALUE = "Bearer test-s2s";
     private static final String RESPONSE_INCORRECT = "Not the correct response";
     private static final int STATUS_OK = 200;
     private static final String TEST_PCQ_ID = "UNIT_TEST_PCQ_1";
@@ -48,13 +53,19 @@ class PcqBackendServiceImplTest {
     private static final String EXPECTED_MSG_3 = "Status not correct";
     private static final PcqAnswerResponse[] EXPECT_EMPTY_PCQ_ANSWER_RESPONSE = {};
 
+    @BeforeEach
+    void setUp() {
+        when(mockAuthTokenGenerator.generate()).thenReturn(SERVICE_AUTHORIZATION_VALUE);
+    }
+
     @Test
     void testSuccess200Response() throws JsonProcessingException {
         PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = generateTestResponse("Success", 200);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(pcqWithoutCaseResponse);
 
-        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenReturn(Response.builder().request(mock(
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE))
+                .thenReturn(Response.builder().request(mock(
                 Request.class)).body(body, Charset.defaultCharset()).status(200).build());
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
@@ -68,7 +79,7 @@ class PcqBackendServiceImplTest {
                 responseBody.getResponseStatus());
 
 
-        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
+        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
 
     }
 
@@ -80,7 +91,8 @@ class PcqBackendServiceImplTest {
         Map<String, Collection<String>> headers = new ConcurrentHashMap<>();
         headers.put("Content-Type", Collections.singleton("application/json"));
 
-        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenReturn(Response.builder().request(mock(
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE))
+                .thenReturn(Response.builder().request(mock(
                 Request.class)).headers(headers).body(body, Charset.defaultCharset()).status(200).build());
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
@@ -93,7 +105,7 @@ class PcqBackendServiceImplTest {
         assertEquals(EXPECTED_MSG_3, pcqWithoutCaseResponse.getResponseStatus(),
                 responseBody.getResponseStatus());
 
-        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
+        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
     }
 
     @Test
@@ -102,9 +114,9 @@ class PcqBackendServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(submitResponse);
 
-        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID, TEST_CASE_ID)).thenReturn(
-                Response.builder().request(mock(Request.class)).body(body, Charset.defaultCharset())
-                        .status(200).build());
+        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE,
+                TEST_PCQ_ID, TEST_CASE_ID)).thenReturn(Response.builder().request(mock(Request.class))
+                .body(body, Charset.defaultCharset()).status(200).build());
 
         ResponseEntity responseEntity = pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID);
 
@@ -117,7 +129,8 @@ class PcqBackendServiceImplTest {
                 responseBody.getResponseStatus());
 
 
-        verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
+        verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(
+                HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
 
     }
 
@@ -127,7 +140,8 @@ class PcqBackendServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(pcqWithoutCaseResponse);
 
-        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenReturn(Response.builder().request(mock(
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE))
+                .thenReturn(Response.builder().request(mock(
                 Request.class)).body(body, Charset.defaultCharset()).status(400).build());
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
@@ -141,7 +155,7 @@ class PcqBackendServiceImplTest {
                 responseBody.getResponseStatus());
 
 
-        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
+        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
 
     }
 
@@ -151,9 +165,9 @@ class PcqBackendServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(submitResponse);
 
-        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID, TEST_CASE_ID)).thenReturn(
-                Response.builder().request(mock(Request.class)).body(body, Charset.defaultCharset())
-                        .status(400).build());
+        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE,
+                TEST_PCQ_ID, TEST_CASE_ID)).thenReturn(Response.builder().request(mock(Request.class))
+                .body(body, Charset.defaultCharset()).status(400).build());
 
         ResponseEntity responseEntity = pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID);
 
@@ -166,7 +180,8 @@ class PcqBackendServiceImplTest {
                 responseBody.getResponseStatus());
 
 
-        verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
+        verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(
+                HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
 
     }
 
@@ -176,7 +191,8 @@ class PcqBackendServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(pcqWithoutCaseResponse);
 
-        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenReturn(Response.builder().request(mock(
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE))
+                .thenReturn(Response.builder().request(mock(
                 Request.class)).body(body, Charset.defaultCharset()).status(500).build());
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
@@ -190,7 +206,7 @@ class PcqBackendServiceImplTest {
                 responseBody.getResponseStatus());
 
 
-        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
+        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
 
     }
 
@@ -200,9 +216,9 @@ class PcqBackendServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(submitResponse);
 
-        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID, TEST_CASE_ID)).thenReturn(
-                Response.builder().request(mock(Request.class)).body(body, Charset.defaultCharset()).status(500)
-                        .build());
+        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE,
+                TEST_PCQ_ID, TEST_CASE_ID)).thenReturn(Response.builder().request(mock(Request.class))
+                .body(body, Charset.defaultCharset()).status(500).build());
 
         ResponseEntity responseEntity = pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID);
 
@@ -215,7 +231,8 @@ class PcqBackendServiceImplTest {
                 responseBody.getResponseStatus());
 
 
-        verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
+        verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(
+                HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
 
     }
 
@@ -225,7 +242,8 @@ class PcqBackendServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(errorResponse);
 
-        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenReturn(Response.builder().request(mock(
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE))
+                .thenReturn(Response.builder().request(mock(
                 Request.class)).body(body, Charset.defaultCharset()).status(503).build());
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
@@ -244,8 +262,9 @@ class PcqBackendServiceImplTest {
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(errorResponse);
 
-        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID, TEST_CASE_ID)).thenReturn(Response
-                .builder().request(mock(Request.class)).body(body, Charset.defaultCharset()).status(503).build());
+        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE,
+                TEST_PCQ_ID, TEST_CASE_ID)).thenReturn(Response.builder().request(mock(Request.class))
+                .body(body, Charset.defaultCharset()).status(503).build());
 
         ResponseEntity responseEntity = pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID);
 
@@ -263,22 +282,24 @@ class PcqBackendServiceImplTest {
         FeignException feignException = new FeignException.BadGateway("Bade Gateway Error", mock(Request.class),
                 "Test".getBytes(),maps);
 
-        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenThrow(feignException);
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE))
+                .thenThrow(feignException);
 
         assertThrows(ExternalApiException.class, pcqBackendService::getPcqWithoutCase);
 
-        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
+        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
     }
 
     @Test
     void executeIoErrorResponse() {
         String invalidBody = "not-json";
-        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE)).thenReturn(Response.builder().request(mock(
+        when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE))
+                .thenReturn(Response.builder().request(mock(
                 Request.class)).body(invalidBody, Charset.defaultCharset()).status(200).build());
 
         assertThrows(ExternalApiException.class, pcqBackendService::getPcqWithoutCase);
 
-        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE);
+        verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
     }
 
     @Test
@@ -286,12 +307,13 @@ class PcqBackendServiceImplTest {
         Map<String, Collection<String>> maps = new ConcurrentHashMap<>();
         FeignException feignException = new FeignException.BadGateway("Bade Gateway Error", mock(Request.class),
                 "Test".getBytes(),maps);
-        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID,
-                TEST_CASE_ID)).thenThrow(feignException);
+        when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE,
+                TEST_PCQ_ID, TEST_CASE_ID)).thenThrow(feignException);
 
         assertThrows(ExternalApiException.class, () -> pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID));
 
-        verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(HEADER_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
+        verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(
+                HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
     }
 
 

@@ -2,11 +2,14 @@ package uk.gov.hmcts.reform.pcqconsolidationservice.util;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -14,6 +17,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @TestPropertySource(properties = {"PCQ_BACKEND_URL:http://127.0.0.1:4554"})
 @SuppressWarnings("PMD.TooManyMethods")
@@ -23,9 +27,19 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String MEDIA_TYPE = "application/json";
     private static final String CONNECTION_HEADER_VAL = "close";
+    private static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
+    private static final String TEST_SERVICE_AUTHORIZATION = "Bearer test-s2s";
 
     @Rule
     public WireMockRule pcqBackendService = new WireMockRule(WireMockConfiguration.options().port(4554));
+
+    @MockitoBean
+    private AuthTokenGenerator authTokenGenerator;
+
+    @Before
+    public void setUp() {
+        when(authTokenGenerator.generate()).thenReturn(TEST_SERVICE_AUTHORIZATION);
+    }
 
     @Test
     public void testAddCaseForPcqExecuteSuccess() {
@@ -77,6 +91,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
 
     private void pcqWithoutCaseWireMockSuccess() {
         pcqBackendService.stubFor(get(urlPathMatching("/pcq/backend/consolidation/pcqRecordWithoutCase"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -116,6 +131,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
     private void pcqAddCaseWireMockSuccess() {
         pcqBackendService.stubFor(put(urlPathMatching("/pcq/backend/consolidation/addCaseForPCQ/TEST_PCQ_ID"))
                 .withQueryParam("caseId", equalTo(CASE_ID_TEST))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -127,6 +143,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
 
     private void pcqWithoutCaseWireMockFailure() {
         pcqBackendService.stubFor(get(urlPathMatching("/pcq/backend/consolidation/pcqRecordWithoutCase"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -137,6 +154,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
 
     private void pcqWithoutCaseWireMockInternalError() {
         pcqBackendService.stubFor(get(urlPathMatching("/pcq/backend/consolidation/pcqRecordWithoutCase"))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -148,6 +166,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
     private void pcqAddCaseWireMockInvalidRequest() {
         pcqBackendService.stubFor(put(urlPathMatching("/pcq/backend/consolidation/addCaseForPCQ/TEST_PCQ_ID"))
                 .withQueryParam("caseId", equalTo(CASE_ID_TEST))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)
@@ -160,6 +179,7 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
     private void pcqAddCaseWireMockInternalError() {
         pcqBackendService.stubFor(put(urlPathMatching("/pcq/backend/consolidation/addCaseForPCQ/TEST_PCQ_ID"))
                 .withQueryParam("caseId", equalTo(CASE_ID_TEST))
+                .withHeader(SERVICE_AUTHORIZATION, equalTo(TEST_SERVICE_AUTHORIZATION))
                 .willReturn(aResponse()
                         .withHeader(CONTENT_TYPE, MEDIA_TYPE)
                         .withHeader(HttpHeaders.CONNECTION, CONNECTION_HEADER_VAL)

@@ -1,16 +1,6 @@
 server:
   port: 4555
 
-management:
-  endpoint:
-    health:
-      show-details: "always"
-  endpoints:
-    web:
-      base-path: /
-      exposure:
-        include: health, info, prometheus
-
 #Application specific properties
 api-error-messages:
   bad_request: Invalid Request

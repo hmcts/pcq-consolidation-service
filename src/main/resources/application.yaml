@@ -4,14 +4,30 @@ server:
 management:
   endpoint:
     health:
-      show-details: "always"
+      probes:
+        enabled: true
+      show-details: never
+      show-components: always
+
+  health:
+    ping:
+      enabled: false
+    ssl:
+      enabled: false
+    refresh:
+      enabled: false
   endpoints:
     web:
       base-path: /
       exposure:
-        include: health, info, prometheus
+        include: health
 
 spring:
+  cloud:
+      discovery:
+        client:
+          health-indicator:
+            enabled: false
   application:
     name: PCQ Consolidation Service
   config:

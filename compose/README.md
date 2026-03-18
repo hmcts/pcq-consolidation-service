@@ -13,8 +13,7 @@ Guidance on how to set up pcqtest locally using the updated docker images.
 
 ```bash
   az login
-  az acr login --name hmctspublic --subscription DCD-CNP-Prod
-  az acr login --name hmctsprivate --subscription DCD-CNP-Prod
+  az acr login --name hmctsprod --subscription DCD-CNP-Prod
 ```
 
 ##### 3) Reset your docker images, containers etc. 

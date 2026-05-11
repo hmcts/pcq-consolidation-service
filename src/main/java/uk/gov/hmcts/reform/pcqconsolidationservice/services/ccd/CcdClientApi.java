@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.reform.ccd.client.CoreCaseDataApi;
@@ -10,7 +12,6 @@ import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigProvider;
 
 import java.util.List;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 
 @Slf4j
@@ -22,11 +23,9 @@ public class CcdClientApi {
     private final ServiceConfigProvider serviceConfigProvider;
     private final CcdAuthenticatorFactory authenticatorFactory;
     private CcdAuthenticator authenticator;
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static final long USER_TOKEN_REFRESH_IN_SECONDS = 300;
-
-    public static final String ES_MATCH_PHRASE_QUERY_FORMAT =
-            "{\"query\": { \"match_phrase\" : { \"data.%s\" : \"%s\" }}}";
 
     public static final String SEARCH_BY_PCQ_ID_DEFAULT_FIELD_NAME = "pcqId";
 
@@ -59,18 +58,18 @@ public class CcdClientApi {
             String caseTypeIdsStr = String.join(",", serviceConfig.getCaseTypeIds());
             String caseFieldNamePcqId = serviceConfig.getCaseField(actor) == null
                     ? SEARCH_BY_PCQ_ID_DEFAULT_FIELD_NAME : serviceConfig.getCaseField(actor);
-
+            String searchQuery = buildEsMatchPhraseQuery(caseFieldNamePcqId, pcqId);
             log.debug(
                     "Searching for pcqId {} within the service {} using ES query {}",
                     pcqId,
                     service,
-                    format(ES_MATCH_PHRASE_QUERY_FORMAT, caseFieldNamePcqId, pcqId)
+                    searchQuery
             );
             SearchResult searchResult = feignCcdApi.searchCases(
                     authenticator.getUserToken(),
                     authenticator.getServiceToken(),
                     caseTypeIdsStr,
-                    format(ES_MATCH_PHRASE_QUERY_FORMAT, caseFieldNamePcqId, pcqId)
+                    searchQuery
             );
             return searchResult.getCases().stream().map(CaseDetails::getId).toList();
         }
@@ -95,21 +94,28 @@ public class CcdClientApi {
                     ? dcn : dcn + serviceConfig.getCaseDcnDocumentSuffix();
             String caseDocumentDcn = serviceConfig.getCaseDcnDocumentMapping() == null
                     ? SEARCH_BY_DCN_DEFAULT_FIELD_NAME : serviceConfig.getCaseDcnDocumentMapping();
-
+            String searchQuery = buildEsMatchPhraseQuery(caseDocumentDcn, dcnSearch);
             log.debug(
                     "Searching for DCN {} within the service {} using ES query {}",
                     dcn,
                     service,
-                    format(ES_MATCH_PHRASE_QUERY_FORMAT, caseDocumentDcn, dcnSearch)
+                     searchQuery
             );
             SearchResult searchResult = feignCcdApi.searchCases(
                     authenticator.getUserToken(),
                     authenticator.getServiceToken(),
                     caseTypeIdsStr,
-                    format(ES_MATCH_PHRASE_QUERY_FORMAT, caseDocumentDcn, dcnSearch)
+                    searchQuery
             );
             return searchResult.getCases().stream().map(CaseDetails::getId).toList();
         }
+    }
+
+    static String buildEsMatchPhraseQuery(String fieldName, String value) {
+        ObjectNode root = OBJECT_MAPPER.createObjectNode();
+        ObjectNode matchPhrase = root.putObject("query").putObject("match_phrase");
+        matchPhrase.put("data." + fieldName, value);
+        return root.toString();
     }
 
     private void refreshExpiredIdamToken() {

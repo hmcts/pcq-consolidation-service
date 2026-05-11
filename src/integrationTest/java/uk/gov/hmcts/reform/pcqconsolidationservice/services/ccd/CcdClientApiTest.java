@@ -49,28 +49,26 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     private static final String TEST_PROBATE_SERVICE_NAME = "PROBATE";
     private static final String TEST_PROBATE_CASE_FIELD_MAP_ACTOR_1 = "APPLICANT";
     private static final String TEST_PROBATE_EXPECTED_ES_STRING =
-            "{\"query\": { \"match_phrase\" : { \"data.pcqId\" : \"" + TEST_PCQ_ID + "\" }}}";
+            CcdClientApi.buildEsMatchPhraseQuery("pcqId", TEST_PCQ_ID);
     private static final String TEST_PROBATE_EXPECTED_DCN_ES_STRING =
-            "{\"query\": { \"match_phrase\" : { \"data.scannedDocuments.value.controlNumber\" : \""
-                    + TEST_DCN + "\" }}}";
+            CcdClientApi.buildEsMatchPhraseQuery("scannedDocuments.value.controlNumber", TEST_DCN);
 
     private static final String TEST_DIVORCE_SERVICE_NAME = "DIVORCE";
     private static final String TEST_DIVORCE_CASE_FIELD_MAP_ACTOR_1 = "PETITIONER";
     private static final String TEST_DIVORCE_EXPECTED_ES_STRING =
-            "{\"query\": { \"match_phrase\" : { \"data.PetitionerPcqId\" : \"" + TEST_PCQ_ID + "\" }}}";
+            CcdClientApi.buildEsMatchPhraseQuery("PetitionerPcqId", TEST_PCQ_ID);
 
     private static final String TEST_CMC_SERVICE_NAME = "CMC";
     private static final String TEST_CMC_CASE_FIELD_MAP_ACTOR_1 = "DEFENDANT";
     private static final String TEST_CMC_EXPECTED_ES_STRING =
-            "{\"query\": { \"match_phrase\" : { \"data.respondents.value.pcqId\" : \"" + TEST_PCQ_ID + "\" }}}";
+            CcdClientApi.buildEsMatchPhraseQuery("respondents.value.pcqId", TEST_PCQ_ID);
 
     private static final String TEST_SSCS_SERVICE_NAME = "SSCS";
     private static final String TEST_SSCS_CASE_FIELD_MAP_ACTOR_1 = "APPELLANT";
     private static final String TEST_SSCS_EXPECTED_ES_STRING =
-            "{\"query\": { \"match_phrase\" : { \"data.pcqId\" : \"" + TEST_PCQ_ID + "\" }}}";
+            CcdClientApi.buildEsMatchPhraseQuery("pcqId", TEST_PCQ_ID);
     private static final String TEST_SSCS_EXPECTED_DCN_ES_STRING =
-            "{\"query\": { \"match_phrase\" : { \"data.sscsDocument.value.documentFileName\" : \""
-                    + TEST_DCN + TEST_SUFFIX_DCN + "\" }}}";
+            CcdClientApi.buildEsMatchPhraseQuery("sscsDocument.value.documentFileName", TEST_DCN + TEST_SUFFIX_DCN);
     private static final String EXCEPTION_MSG = "Exception while executing test";
 
     @Autowired

@@ -18,13 +18,11 @@ import uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigProvider;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd.CcdClientApi.ES_MATCH_PHRASE_QUERY_FORMAT;
 
 @ExtendWith(MockitoExtension.class)
 class CcdClientApiTest {
@@ -46,13 +44,13 @@ class CcdClientApiTest {
     public static final String USER_TOKEN = "USER_TOKEN";
     public static final String USER_ID = "USER_ID";
     public static final String SEARCH_CASES_DEFAULT_PCQ_FIELD_SEARCH_STRING
-            = format(ES_MATCH_PHRASE_QUERY_FORMAT, DEFAULT_PCQID_FIELD, PCQ_ID);
+            = CcdClientApi.buildEsMatchPhraseQuery(DEFAULT_PCQID_FIELD, PCQ_ID);
     public static final String SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING
-            = format(ES_MATCH_PHRASE_QUERY_FORMAT, APPLICANT_PCQID_FIELD, PCQ_ID);
+            = CcdClientApi.buildEsMatchPhraseQuery(APPLICANT_PCQID_FIELD, PCQ_ID);
     public static final String SEARCH_CASES_DEFAULT_DCN_FIELD_SEARCH_STRING
-            = format(ES_MATCH_PHRASE_QUERY_FORMAT, DEFAULT_DCN_FIELD, DCN);
+            = CcdClientApi.buildEsMatchPhraseQuery(DEFAULT_DCN_FIELD, DCN);
     public static final String SEARCH_CASES_CUSTOM_DCN_FIELD_SEARCH_STRING
-            = format(ES_MATCH_PHRASE_QUERY_FORMAT, SSCS_DCN_FIELD, DCN + SSCS_DCN_DOCUMENT_SUFFIX);
+            = CcdClientApi.buildEsMatchPhraseQuery(SSCS_DCN_FIELD, DCN + SSCS_DCN_DOCUMENT_SUFFIX);
     public static final UserInfo USER_INFO = UserInfo.builder().uid(USER_ID).build();
 
     public static final CcdAuthenticator AUTH_DETAILS = new CcdAuthenticator(

@@ -242,6 +242,9 @@ def versions = [
 ]
 
 dependencies {
+    implementation("com.github.hmcts:idam-java-client:3.0.5") {
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-actuator"
+    }
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web-services'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'

@@ -1,10 +1,10 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.util;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
@@ -30,13 +30,16 @@ public class ConsolidationServiceIntegrationTest extends SpringBootIntegrationTe
     private static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
     private static final String TEST_SERVICE_AUTHORIZATION = "Bearer test-s2s";
 
-    @Rule
-    public WireMockRule pcqBackendService = new WireMockRule(WireMockConfiguration.options().port(4554));
+    @RegisterExtension
+    static WireMockExtension pcqBackendService =
+            WireMockExtension.newInstance()
+                    .options(WireMockConfiguration.wireMockConfig().port(4554))
+                    .build();
 
     @MockitoBean
     private AuthTokenGenerator authTokenGenerator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         when(authTokenGenerator.generate()).thenReturn(TEST_SERVICE_AUTHORIZATION);
     }

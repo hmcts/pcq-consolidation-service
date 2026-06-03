@@ -2,12 +2,12 @@ package uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.junit.WireMockClassRule;
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.google.common.io.Resources;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
 import uk.gov.hmcts.reform.ccd.client.CoreCaseDataApi;
@@ -80,9 +80,11 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     @Autowired
     private ServiceConfigProvider serviceConfigProvider;
 
-    @ClassRule
-    private static final WireMockClassRule WIRE_MOCK_CLASS_RULE = new WireMockClassRule(
-            WireMockConfiguration.options().port(4554));
+    @RegisterExtension
+    static WireMockExtension WIRE_MOCK_CLASS_RULE =
+            WireMockExtension.newInstance()
+                    .options(WireMockConfiguration.wireMockConfig().port(4554))
+                    .build();
 
 
     @Test

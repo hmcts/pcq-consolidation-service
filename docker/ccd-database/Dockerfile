@@ -1,4 +1,4 @@
-FROM postgres:18.3
+FROM postgres:18.4
 
 USER postgres
 

@@ -1,13 +1,14 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.services.pcqbackend.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import feign.Request;
 import feign.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.ObjectMapper;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.pcq.commons.controller.feign.PcqBackendFeignClient;
 import uk.gov.hmcts.reform.pcq.commons.exception.ExternalApiException;
@@ -297,7 +298,7 @@ class PcqBackendServiceImplTest {
                 .thenReturn(Response.builder().request(mock(
                 Request.class)).body(invalidBody, Charset.defaultCharset()).status(200).build());
 
-        assertThrows(ExternalApiException.class, pcqBackendService::getPcqWithoutCase);
+        assertThrows(StreamReadException.class, pcqBackendService::getPcqWithoutCase);
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
     }

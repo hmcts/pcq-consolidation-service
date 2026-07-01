@@ -1,15 +1,16 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.postdeploy;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.reform.ccd.client.model.CaseDetails;
 import uk.gov.hmcts.reform.pcq.commons.model.PcqAnswerResponse;
 import uk.gov.hmcts.reform.pcqconsolidationservice.ConsolidationComponent;
@@ -26,20 +27,15 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TestApplicationConfiguration.class)
 @ActiveProfiles("functional")
 @Slf4j
 @SuppressWarnings("PMD.TooManyMethods")
-public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTestBase {
+class ConsolidationServiceFunctionalTest extends ConsolidationServiceTestBase {
 
-    public static final String TEST_DIGITAL_CASE_TITLE = "Digital-Case-Functional-Tests-1";
-    public static final String TEST_PAPER_CASE_TITLE = "Paper-Case-Functional-Tests-1";
+    private static final String TEST_DIGITAL_CASE_TITLE = "Digital-Case-Functional-Tests-1";
+    private static final String TEST_PAPER_CASE_TITLE = "Paper-Case-Functional-Tests-1";
 
     protected String testPcqId1 = UUID.randomUUID().toString();
     protected String testPcqId2 = UUID.randomUUID().toString();
@@ -58,8 +54,8 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
     private CaseDetails pcqCase1;
     private CaseDetails pcqCase2;
 
-    @Before
-    public void createPcqData() throws IOException {
+    @BeforeEach
+    void createPcqData() throws IOException {
         // Create the Sample service core case data.
 
         pcqCase1 = createCcdPcqQuestionsDigitalCase(TEST_DIGITAL_CASE_TITLE, testPcqId1);
@@ -70,7 +66,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         createTestAnswerRecordWithoutCase(testPcqId1);
 
         // Collect DCN from second CCD case.
-        LinkedHashMap doc = (LinkedHashMap)((ArrayList)pcqCase2.getData().get("scannedDocuments")).get(0);
+        Map doc = (LinkedHashMap)((ArrayList)pcqCase2.getData().get("scannedDocuments")).get(0);
         testDcn = ((LinkedHashMap)doc.get("value")).get("controlNumber").toString();
 
         // Create PCQ records in database.
@@ -78,8 +74,8 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         createTestAnswerRecordWithCase(testPcqId3);
     }
 
-    @After
-    public void removePcqData() {
+    @AfterEach
+    void removePcqData() {
 
         // Remove the PCQ answer records.
         removeTestAnswerRecord(testPcqId1);
@@ -90,7 +86,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testExecuteMethod() {
+    void testExecuteMethod() {
 
         //Invoke the executor
         consolidationComponent.execute();
@@ -99,7 +95,7 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         //Get the status map accessible from the ConsolidationComponent.
         Map<String, PcqAnswerResponse[]> statusMap = consolidationComponent.getPcqIdsMap();
         //Check that the API - pcqWithoutCase has been called and that the test records are found
-        assertNotNull("Status Map is null", statusMap);
+        Assertions.assertNotNull(statusMap, "Status Map is null");
         PcqAnswerResponse[] pcqAnswerRecords = statusMap.get("PCQ_ID_FOUND");
         assertPcqIdsRetrieved(pcqAnswerRecords, testPcqId1, testPcqId2, testPcqId3);
 
@@ -109,13 +105,15 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
 
         //Make a call to the getAnswer from pcq backend to verify that case Id has been updated search by pcqId.
         PcqAnswerResponse answerResponse = getTestAnswerRecord(testPcqId1, pcqBackendUrl, jwtSecretKey);
-        assertNotNull("The get response is not null", answerResponse);
-        assertEquals("The get response matches ccd case id", pcqCase1.getId().toString(), answerResponse.getCaseId());
+        Assertions.assertNotNull(answerResponse, "The get response is not null");
+        Assertions.assertEquals(
+                pcqCase1.getId().toString(), answerResponse.getCaseId(), "The get response matches ccd case id");
 
         //Make a call to the getAnswer from pcq backend to verify that case Id has been updated search by dcn.
         answerResponse = getTestAnswerRecord(testPcqId2, pcqBackendUrl, jwtSecretKey);
-        assertNotNull("The get response is not null", answerResponse);
-        assertEquals("The get response matches ccd case id", pcqCase2.getId().toString(), answerResponse.getCaseId());
+        Assertions.assertNotNull(answerResponse, "The get response is not null");
+        Assertions.assertEquals(
+                pcqCase2.getId().toString(), answerResponse.getCaseId(), "The get response matches ccd case id");
     }
 
     private void createTestAnswerRecordWithoutCase(String pcqId) throws IOException {
@@ -141,7 +139,6 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
         deleteTestRecordFromBackend(apiUrl, pcqId, jwtSecretKey);
     }
 
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private void assertPcqIdsRetrieved(PcqAnswerResponse[] pcqAnswerRecords,
                                        String pcqRecord1,String pcqRecord2,
                                        String pcqRecord3) {
@@ -150,19 +147,18 @@ public class ConsolidationServiceFunctionalTest extends ConsolidationServiceTest
                 .map(PcqAnswerResponse::getPcqId)
                 .collect(Collectors.toSet());
 
-        assertTrue("The pcqRecord 1 is not found.", pcqIds.contains(pcqRecord1));
-        assertTrue("The pcqRecord 2 is not found.", pcqIds.contains(pcqRecord2));
-        assertFalse("The pcqRecord 3 is found.", pcqIds.contains(pcqRecord3));
+        Assertions.assertTrue(pcqIds.contains(pcqRecord1), "The pcqRecord 1 is not found.");
+        Assertions.assertTrue(pcqIds.contains(pcqRecord2), "The pcqRecord 2 is not found.");
+        Assertions.assertFalse(pcqIds.contains(pcqRecord3), "The pcqRecord 3 is found.");
     }
 
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private void assertPcqIdsProcessed(PcqAnswerResponse[] pcqAnswerRecords, String pcqRecord1, String pcqRecord2) {
         List<String> pcqIds = new ArrayList<>();
         for (PcqAnswerResponse answerResponse : pcqAnswerRecords) {
             pcqIds.add(answerResponse.getPcqId());
         }
-        assertTrue("The pcqRecord 1 is not processed.", pcqIds.contains(pcqRecord1));
-        assertTrue("The pcqRecord 2 is not processed.", pcqIds.contains(pcqRecord2));
+        Assertions.assertTrue(pcqIds.contains(pcqRecord1), "The pcqRecord 1 is not processed.");
+        Assertions.assertTrue(pcqIds.contains(pcqRecord2), "The pcqRecord 2 is not processed.");
     }
 
     protected PcqAnswerResponse getTestAnswerRecord(String pcqId, String apiUrl, String secretKey) {

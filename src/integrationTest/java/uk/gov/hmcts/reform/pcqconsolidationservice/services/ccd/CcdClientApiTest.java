@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.google.common.io.Resources;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 @Slf4j
 @TestPropertySource(locations = "/application.properties")
 @SuppressWarnings("PMD.AvoidDuplicateLiterals")
-public class CcdClientApiTest extends SpringBootIntegrationTest {
+class CcdClientApiTest extends SpringBootIntegrationTest {
 
     private static final String TEST_PCQ_ID = "455e6fe4-537a-4e82-9d1d-9a324465f2b5";
     private static final String TEST_DCN = "1657600014430175";
@@ -81,14 +81,14 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     private ServiceConfigProvider serviceConfigProvider;
 
     @RegisterExtension
-    static WireMockExtension WIRE_MOCK_CLASS_RULE =
+    static final WireMockExtension WIRE_MOCK_CLASS_RULE =
             WireMockExtension.newInstance()
                     .options(WireMockConfiguration.wireMockConfig().port(4554))
                     .build();
 
 
     @Test
-    public void testProbatePcqWithoutCaseExecuteSuccess() {
+    void testProbatePcqWithoutCaseExecuteSuccess() {
         try {
             searchCasesMockSuccess(TEST_PROBATE_EXPECTED_ES_STRING);
 
@@ -98,8 +98,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                     TEST_PROBATE_SERVICE_NAME,
                     TEST_PROBATE_CASE_FIELD_MAP_ACTOR_1);
 
-            Assert.assertEquals("Response size not equals 1", 1, response.size());
-            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assertions.assertEquals(1, response.size(), "Response size not equals 1");
+            Assertions.assertEquals(EXPECTED_CASE_ID, response.get(0), "CaseId Not matching as expected");
 
             WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
             WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -110,7 +110,7 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void testProbateDcnSearchExecuteSuccess() {
+    void testProbateDcnSearchExecuteSuccess() {
         try {
             searchCasesMockSuccess(TEST_PROBATE_EXPECTED_DCN_ES_STRING);
 
@@ -119,8 +119,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                     TEST_DCN,
                     TEST_PROBATE_SERVICE_NAME);
 
-            Assert.assertEquals("Response size not equals 1", 1, response.size());
-            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assertions.assertEquals(1, response.size(), "Response size not equals 1");
+            Assertions.assertEquals(EXPECTED_CASE_ID, response.get(0), "CaseId Not matching as expected");
 
             WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
             WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -131,7 +131,7 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void testDivorcePcqWithoutCaseExecuteSuccess() {
+    void testDivorcePcqWithoutCaseExecuteSuccess() {
         try {
             searchCasesMockSuccess(TEST_DIVORCE_EXPECTED_ES_STRING);
 
@@ -141,8 +141,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                     TEST_DIVORCE_SERVICE_NAME,
                     TEST_DIVORCE_CASE_FIELD_MAP_ACTOR_1);
 
-            Assert.assertEquals("Response size not equals 1", 1, response.size());
-            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assertions.assertEquals(1, response.size(), "Response size not equals 1");
+            Assertions.assertEquals(EXPECTED_CASE_ID, response.get(0), "CaseId Not matching as expected");
 
             WireMock.verify(3, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
             WireMock.verify(3, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -153,7 +153,7 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void testCmcPcqWithoutCaseExecuteSuccess() {
+    void testCmcPcqWithoutCaseExecuteSuccess() {
         try {
             searchCasesMockSuccess(TEST_CMC_EXPECTED_ES_STRING);
 
@@ -163,8 +163,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                     TEST_CMC_SERVICE_NAME,
                     TEST_CMC_CASE_FIELD_MAP_ACTOR_1);
 
-            Assert.assertEquals("Response size not equals 1", 1, response.size());
-            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assertions.assertEquals(1, response.size(), "Response size not equals 1");
+            Assertions.assertEquals(EXPECTED_CASE_ID, response.get(0), "CaseId Not matching as expected");
 
             WireMock.verify(2, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
             WireMock.verify(2, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -175,7 +175,7 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void testSscsPcqWithoutCaseExecuteSuccess() {
+    void testSscsPcqWithoutCaseExecuteSuccess() {
         try {
             searchCasesMockSuccess(TEST_SSCS_EXPECTED_ES_STRING);
 
@@ -185,8 +185,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                     TEST_SSCS_SERVICE_NAME,
                     TEST_SSCS_CASE_FIELD_MAP_ACTOR_1);
 
-            Assert.assertEquals("Response size not equals 1", 1, response.size());
-            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assertions.assertEquals(1, response.size(), "Response size not equals 1");
+            Assertions.assertEquals(EXPECTED_CASE_ID, response.get(0), "CaseId Not matching as expected");
 
             WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
             WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -197,7 +197,7 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
     }
 
     @Test
-    public void testSscsDcnSearchExecuteSuccess() {
+    void testSscsDcnSearchExecuteSuccess() {
         try {
             searchCasesMockSuccess(TEST_SSCS_EXPECTED_DCN_ES_STRING);
 
@@ -206,8 +206,8 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
                     TEST_DCN,
                     TEST_SSCS_SERVICE_NAME);
 
-            Assert.assertEquals("Response size not equals 1", 1, response.size());
-            Assert.assertEquals("CaseId Not matching as expected", EXPECTED_CASE_ID, response.get(0));
+            Assertions.assertEquals(1, response.size(), "Response size not equals 1");
+            Assertions.assertEquals(EXPECTED_CASE_ID, response.get(0), "CaseId Not matching as expected");
 
             WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_TOKEN_ENDPOINT)));
             WireMock.verify(1, postRequestedFor(urlEqualTo(WIREMOCK_LEASE_ENDPOINT)));
@@ -217,12 +217,12 @@ public class CcdClientApiTest extends SpringBootIntegrationTest {
         }
     }
 
-    public static String fileContentAsString(String file) {
+    static String fileContentAsString(String file) {
         return new String(fileContentAsBytes(file), StandardCharsets.UTF_8);
     }
 
     @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
-    public static byte[] fileContentAsBytes(String file) {
+    static byte[] fileContentAsBytes(String file) {
         try {
             return Resources.toByteArray(Resources.getResource(file));
         } catch (IOException e) {

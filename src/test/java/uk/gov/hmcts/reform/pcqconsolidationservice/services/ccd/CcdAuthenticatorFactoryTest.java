@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.services.ccd;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -16,15 +16,15 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CcdAuthenticatorFactoryTest {
 
-    public static final String SERVICE_TOKEN = "SERVICE_TOKEN";
-    public static final String USER_TOKEN = "123456789";
+    private static final String SERVICE_TOKEN = "SERVICE_TOKEN";
+    private static final String USER_TOKEN = "123456789";
 
     private static final String IDAM_USERS_PCQ_USERNAME = "pcq@gmail.com";
     private static final String IDAM_USERS_PCQ_PASSWORD = "password1234";
 
     private static final String USER_ID = "pcq";
 
-    public static final UserInfo USER_INFO = UserInfo.builder().uid(USER_ID).build();
+    private static final UserInfo USER_INFO = UserInfo.builder().uid(USER_ID).build();
 
     @Mock
     private AuthTokenGenerator tokenGenerator;
@@ -41,18 +41,18 @@ class CcdAuthenticatorFactoryTest {
         CcdAuthenticatorFactory service = new CcdAuthenticatorFactory(tokenGenerator, idamClient);
         CcdAuthenticator authenticator = service.createCcdAuthenticator();
 
-        Assert.assertEquals("Service Token Not Matching",SERVICE_TOKEN, authenticator.getServiceToken());
-        Assert.assertEquals("User Token not matching", USER_TOKEN, authenticator.getUserToken());
-        Assert.assertEquals("User Id Not matching", USER_ID, authenticator.getUserId());
-        Assert.assertTrue("User Token not valid",authenticator.userTokenAgeInSeconds() > 0);
+        Assertions.assertEquals(SERVICE_TOKEN, authenticator.getServiceToken(), "Service Token Not Matching");
+        Assertions.assertEquals(USER_TOKEN, authenticator.getUserToken(), "User Token not matching");
+        Assertions.assertEquals(USER_ID, authenticator.getUserId(), "User Id Not matching");
+        Assertions.assertTrue(authenticator.userTokenAgeInSeconds() > 0, "User Token not valid");
     }
 
     @Test
     void returnSuccessfulCredentials() {
         Credential user = new Credential(IDAM_USERS_PCQ_USERNAME, IDAM_USERS_PCQ_PASSWORD);
 
-        Assert.assertEquals("Idam UserName not mattching",IDAM_USERS_PCQ_USERNAME, user.getUsername());
-        Assert.assertEquals("Idam password not matching",IDAM_USERS_PCQ_PASSWORD, user.getPassword());
+        Assertions.assertEquals(IDAM_USERS_PCQ_USERNAME, user.getUsername(), "Idam UserName not matching");
+        Assertions.assertEquals(IDAM_USERS_PCQ_PASSWORD, user.getPassword(), "Idam password not matching");
     }
 
 }

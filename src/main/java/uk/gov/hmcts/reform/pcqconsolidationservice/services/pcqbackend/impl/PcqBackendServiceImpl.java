@@ -36,13 +36,13 @@ public class PcqBackendServiceImpl implements PcqBackendService {
     }
 
     @Override
-    @SuppressWarnings({"PMD.PreserveStackTrace", "PMD.DataflowAnomalyAnalysis", "unchecked"})
+    @SuppressWarnings({"PMD.PreserveStackTrace", "unchecked"})
     public ResponseEntity<PcqRecordWithoutCaseResponse> getPcqWithoutCase() {
         ResponseEntity<PcqRecordWithoutCaseResponse> responseEntity;
 
         String serviceAuthorization = authTokenGenerator.generate();
         try (Response response = pcqBackendFeignClient.getPcqWithoutCase(coRelationHeader, serviceAuthorization)) {
-            if (response.headers() != null && response.headers().size() > 0) {
+            if (response.headers() != null && !response.headers().isEmpty()) {
                 java.util.Collection<String> contentTypes = response.headers().get("Content-Type");
                 for (String contentType : contentTypes) {
                     log.info("Response contentType: " + contentType);
@@ -60,7 +60,7 @@ public class PcqBackendServiceImpl implements PcqBackendService {
     }
 
     @Override
-    @SuppressWarnings({"PMD.PreserveStackTrace", "PMD.DataflowAnomalyAnalysis", "unchecked"})
+    @SuppressWarnings({"PMD.PreserveStackTrace", "unchecked"})
     public ResponseEntity<SubmitResponse> addCaseForPcq(String pcqId, String caseId) {
         ResponseEntity<SubmitResponse> responseEntity;
 

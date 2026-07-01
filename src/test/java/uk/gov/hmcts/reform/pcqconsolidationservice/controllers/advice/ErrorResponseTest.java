@@ -1,10 +1,9 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.controllers.advice;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.pcqconsolidationservice.controller.advice.ErrorResponse;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 class ErrorResponseTest {
 
@@ -20,16 +19,16 @@ class ErrorResponseTest {
 
         final String expectDesc = "desc";
         final String expectTs = "time";
-        assertNotNull("Error Response is null", errorDetails);
-        assertEquals("Error message is not expected", expectMsg, errorDetails.getErrorMessage());
-        assertEquals("Timestamp is not correct", expectTs, errorDetails.getTimeStamp());
-        assertEquals("Error description is not correct", expectDesc, errorDetails.getErrorDescription());
+        Assertions.assertNotNull(errorDetails, "Error Response is null");
+        Assertions.assertEquals(expectMsg, errorDetails.getErrorMessage(), "Error message is not expected");
+        Assertions.assertEquals(expectTs, errorDetails.getTimeStamp(), "Timestamp is not correct");
+        Assertions.assertEquals(expectDesc, errorDetails.getErrorDescription(), "Error description is not correct");
     }
 
     @Test
     void testNoArgsConstructor() {
         ErrorResponse errorResponse = new ErrorResponse();
-        assertNotNull("ErrorResponse is null", errorResponse);
+        Assertions.assertNotNull(errorResponse, "ErrorResponse is null");
     }
 
 }

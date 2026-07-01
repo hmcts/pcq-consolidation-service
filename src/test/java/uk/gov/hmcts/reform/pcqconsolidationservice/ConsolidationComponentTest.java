@@ -196,7 +196,7 @@ class ConsolidationComponentTest {
         ExternalApiException testException = new ExternalApiException(HttpStatus.BAD_GATEWAY, "Gateway Error");
         when(pcqBackendService.getPcqWithoutCase()).thenThrow(testException);
 
-        assertThrows(ExternalApiException.class, () -> testConsolidationComponent.execute());
+        assertThrows(ExternalApiException.class, testConsolidationComponent::execute);
 
         verify(pcqBackendService, times(1)).getPcqWithoutCase();
     }
@@ -213,7 +213,7 @@ class ConsolidationComponentTest {
                     .thenReturn(Arrays.asList(TEST_CASE_ID));
             when(serviceConfigProvider.getServiceNames()).thenReturn(getServiceSet());
 
-            assertThrows(ExternalApiException.class, () -> testConsolidationComponent.execute());
+            assertThrows(ExternalApiException.class, testConsolidationComponent::execute);
 
             verify(pcqBackendService, times(1)).getPcqWithoutCase();
             verify(pcqBackendService, times(1)).addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString());
@@ -376,7 +376,7 @@ class ConsolidationComponentTest {
         PcqAnswerResponse[] answerResponses = {answerResponse1, answerResponse2};
         pcqWithoutCaseResponse.setPcqRecord(answerResponses);
 
-        return new ResponseEntity<PcqRecordWithoutCaseResponse>(pcqWithoutCaseResponse, HttpStatus.valueOf(statusCode));
+        return new ResponseEntity<>(pcqWithoutCaseResponse, HttpStatus.valueOf(statusCode));
     }
 
     private Set<String> getServiceSet() {

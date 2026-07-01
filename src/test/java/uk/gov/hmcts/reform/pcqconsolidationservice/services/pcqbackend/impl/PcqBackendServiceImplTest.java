@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
 import feign.Request;
 import feign.Response;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +25,12 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({"PMD.TooManyMethods", "PMD.RelianceOnDefaultCharset"})
 class PcqBackendServiceImplTest {
 
     private final PcqBackendFeignClient mockPcqBackendFeignClient = mock(PcqBackendFeignClient.class);
@@ -60,7 +56,7 @@ class PcqBackendServiceImplTest {
     }
 
     @Test
-    void testSuccess200Response() throws JsonProcessingException {
+    void testSuccess200Response() {
         PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = generateTestResponse("Success", 200);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(pcqWithoutCaseResponse);
@@ -71,14 +67,13 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse, RESPONSE_INCORRECT);
         PcqRecordWithoutCaseResponse responseBody = (PcqRecordWithoutCaseResponse) responseEntity.getBody();
         assertPcqRecordsEqual(pcqWithoutCaseResponse.getPcqRecord(), responseBody.getPcqRecord());
-        assertEquals(EXPECTED_MSG_2, pcqWithoutCaseResponse.getResponseStatusCode(),
-                responseBody.getResponseStatusCode());
-        assertEquals(EXPECTED_MSG_3, pcqWithoutCaseResponse.getResponseStatus(),
-                responseBody.getResponseStatus());
-
+        Assertions.assertEquals(pcqWithoutCaseResponse.getResponseStatusCode(),
+                responseBody.getResponseStatusCode(), EXPECTED_MSG_2);
+        Assertions.assertEquals(pcqWithoutCaseResponse.getResponseStatus(),
+                responseBody.getResponseStatus(), EXPECTED_MSG_3);
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
 
@@ -98,19 +93,19 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse, RESPONSE_INCORRECT);
         PcqRecordWithoutCaseResponse responseBody = (PcqRecordWithoutCaseResponse) responseEntity.getBody();
         assertPcqRecordsEqual(pcqWithoutCaseResponse.getPcqRecord(), responseBody.getPcqRecord());
-        assertEquals(EXPECTED_MSG_2, pcqWithoutCaseResponse.getResponseStatusCode(),
-                responseBody.getResponseStatusCode());
-        assertEquals(EXPECTED_MSG_3, pcqWithoutCaseResponse.getResponseStatus(),
-                responseBody.getResponseStatus());
+        Assertions.assertEquals(pcqWithoutCaseResponse.getResponseStatusCode(),
+                responseBody.getResponseStatusCode(), EXPECTED_MSG_2);
+        Assertions.assertEquals(pcqWithoutCaseResponse.getResponseStatus(),
+                responseBody.getResponseStatus(), EXPECTED_MSG_3);
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
     }
 
     @Test
-    void testSuccess200Response2() throws JsonProcessingException {
+    void testSuccess200Response2() {
         SubmitResponse submitResponse = generateSubmitTestResponse("Success", 200);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(submitResponse);
@@ -121,14 +116,13 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID);
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof SubmitResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof SubmitResponse, RESPONSE_INCORRECT);
         SubmitResponse responseBody = (SubmitResponse) responseEntity.getBody();
-        assertEquals(EXPECTED_MSG_1, TEST_PCQ_ID, responseBody.getPcqId());
-        assertEquals(EXPECTED_MSG_2, submitResponse.getResponseStatusCode(),
-                responseBody.getResponseStatusCode());
-        assertEquals(EXPECTED_MSG_3, submitResponse.getResponseStatus(),
-                responseBody.getResponseStatus());
-
+        Assertions.assertEquals(TEST_PCQ_ID, responseBody.getPcqId(), EXPECTED_MSG_1);
+        Assertions.assertEquals(submitResponse.getResponseStatusCode(),
+                responseBody.getResponseStatusCode(), EXPECTED_MSG_2);
+        Assertions.assertEquals(submitResponse.getResponseStatus(),
+                responseBody.getResponseStatus(), EXPECTED_MSG_3);
 
         verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(
                 HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
@@ -147,14 +141,13 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse, RESPONSE_INCORRECT);
         PcqRecordWithoutCaseResponse responseBody = (PcqRecordWithoutCaseResponse) responseEntity.getBody();
-        assertEquals("PcqIds size don't match", 0, responseBody.getPcqRecord().length);
-        assertEquals(EXPECTED_MSG_2, pcqWithoutCaseResponse.getResponseStatusCode(),
-                responseBody.getResponseStatusCode());
-        assertEquals(EXPECTED_MSG_3, pcqWithoutCaseResponse.getResponseStatus(),
-                responseBody.getResponseStatus());
-
+        Assertions.assertEquals(0, responseBody.getPcqRecord().length, "PcqIds size don't match");
+        Assertions.assertEquals(pcqWithoutCaseResponse.getResponseStatusCode(),
+                responseBody.getResponseStatusCode(), EXPECTED_MSG_2);
+        Assertions.assertEquals(pcqWithoutCaseResponse.getResponseStatus(),
+                responseBody.getResponseStatus(), EXPECTED_MSG_3);
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
 
@@ -172,18 +165,16 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID);
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof SubmitResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof SubmitResponse, RESPONSE_INCORRECT);
         SubmitResponse responseBody = (SubmitResponse) responseEntity.getBody();
-        assertNull("PCQ_ID not expected here", responseBody.getPcqId());
-        assertEquals(EXPECTED_MSG_2, submitResponse.getResponseStatusCode(),
-                responseBody.getResponseStatusCode());
-        assertEquals(EXPECTED_MSG_3, submitResponse.getResponseStatus(),
-                responseBody.getResponseStatus());
-
+        Assertions.assertNull(responseBody.getPcqId(), "PCQ_ID not expected here");
+        Assertions.assertEquals(submitResponse.getResponseStatusCode(),
+                responseBody.getResponseStatusCode(), EXPECTED_MSG_2);
+        Assertions.assertEquals(submitResponse.getResponseStatus(),
+                responseBody.getResponseStatus(), EXPECTED_MSG_3);
 
         verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(
                 HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
-
     }
 
     @Test
@@ -198,17 +189,15 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse, RESPONSE_INCORRECT);
         PcqRecordWithoutCaseResponse responseBody = (PcqRecordWithoutCaseResponse) responseEntity.getBody();
-        assertEquals("PcqIds size don't match", 0, responseBody.getPcqRecord().length);
-        assertEquals(EXPECTED_MSG_2, pcqWithoutCaseResponse.getResponseStatusCode(),
-                responseBody.getResponseStatusCode());
-        assertEquals(EXPECTED_MSG_3, pcqWithoutCaseResponse.getResponseStatus(),
-                responseBody.getResponseStatus());
-
+        Assertions.assertEquals(0, responseBody.getPcqRecord().length, "PcqIds size don't match");
+        Assertions.assertEquals(pcqWithoutCaseResponse.getResponseStatusCode(),
+                responseBody.getResponseStatusCode(), EXPECTED_MSG_2);
+        Assertions.assertEquals(pcqWithoutCaseResponse.getResponseStatus(),
+                responseBody.getResponseStatus(), EXPECTED_MSG_3);
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
-
     }
 
     @Test
@@ -223,18 +212,16 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID);
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof SubmitResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof SubmitResponse, RESPONSE_INCORRECT);
         SubmitResponse responseBody = (SubmitResponse) responseEntity.getBody();
-        assertNull("PCQ_ID not expected here", responseBody.getPcqId());
-        assertEquals(EXPECTED_MSG_2, submitResponse.getResponseStatusCode(),
-                responseBody.getResponseStatusCode());
-        assertEquals(EXPECTED_MSG_3, submitResponse.getResponseStatus(),
-                responseBody.getResponseStatus());
-
+        Assertions.assertNull(responseBody.getPcqId(), "PCQ_ID not expected here");
+        Assertions.assertEquals(submitResponse.getResponseStatusCode(),
+                responseBody.getResponseStatusCode(), EXPECTED_MSG_2);
+        Assertions.assertEquals(submitResponse.getResponseStatus(),
+                responseBody.getResponseStatus(), EXPECTED_MSG_3);
 
         verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(
                 HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
-
     }
 
     @Test
@@ -249,11 +236,11 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.getPcqWithoutCase();
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof PcqRecordWithoutCaseResponse, RESPONSE_INCORRECT);
         PcqRecordWithoutCaseResponse responseBody = (PcqRecordWithoutCaseResponse) responseEntity.getBody();
-        assertArrayEquals("", EXPECT_EMPTY_PCQ_ANSWER_RESPONSE, responseBody.getPcqRecord());
-        assertNull("", responseBody.getResponseStatus());
-        assertNull("", responseBody.getResponseStatusCode());
+        Assertions.assertArrayEquals(EXPECT_EMPTY_PCQ_ANSWER_RESPONSE, responseBody.getPcqRecord(), "");
+        Assertions.assertNull(responseBody.getResponseStatus(), "");
+        Assertions.assertNull(responseBody.getResponseStatusCode(), "");
 
     }
 
@@ -269,12 +256,11 @@ class PcqBackendServiceImplTest {
 
         ResponseEntity responseEntity = pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID);
 
-        assertTrue(RESPONSE_INCORRECT, responseEntity.getBody() instanceof SubmitResponse);
+        Assertions.assertTrue(responseEntity.getBody() instanceof SubmitResponse, RESPONSE_INCORRECT);
         SubmitResponse responseBody = (SubmitResponse) responseEntity.getBody();
-        assertNull("", responseBody.getPcqId());
-        assertNull("", responseBody.getResponseStatus());
-        assertNull("", responseBody.getResponseStatusCode());
-
+        Assertions.assertNull(responseBody.getPcqId(), "");
+        Assertions.assertNull(responseBody.getResponseStatus(), "");
+        Assertions.assertNull(responseBody.getResponseStatusCode(), "");
     }
 
     @Test
@@ -286,7 +272,7 @@ class PcqBackendServiceImplTest {
         when(mockPcqBackendFeignClient.getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE))
                 .thenThrow(feignException);
 
-        assertThrows(ExternalApiException.class, pcqBackendService::getPcqWithoutCase);
+        Assertions.assertThrows(ExternalApiException.class, pcqBackendService::getPcqWithoutCase);
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
     }
@@ -298,7 +284,7 @@ class PcqBackendServiceImplTest {
                 .thenReturn(Response.builder().request(mock(
                 Request.class)).body(invalidBody, Charset.defaultCharset()).status(200).build());
 
-        assertThrows(StreamReadException.class, pcqBackendService::getPcqWithoutCase);
+        Assertions.assertThrows(StreamReadException.class, pcqBackendService::getPcqWithoutCase);
 
         verify(mockPcqBackendFeignClient, times(1)).getPcqWithoutCase(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE);
     }
@@ -311,7 +297,8 @@ class PcqBackendServiceImplTest {
         when(mockPcqBackendFeignClient.addCaseForPcq(HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE,
                 TEST_PCQ_ID, TEST_CASE_ID)).thenThrow(feignException);
 
-        assertThrows(ExternalApiException.class, () -> pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID));
+        Assertions.assertThrows(
+                ExternalApiException.class, () -> pcqBackendService.addCaseForPcq(TEST_PCQ_ID, TEST_CASE_ID));
 
         verify(mockPcqBackendFeignClient, times(1)).addCaseForPcq(
                 HEADER_VALUE, SERVICE_AUTHORIZATION_VALUE, TEST_PCQ_ID, TEST_CASE_ID);
@@ -364,12 +351,15 @@ class PcqBackendServiceImplTest {
 
     @SuppressWarnings("PMD.UseVarargs")
     private void assertPcqRecordsEqual(PcqAnswerResponse[] originalAnswers, PcqAnswerResponse[] responseAnswers) {
-        assertEquals("Pcq Answers Array Length don't match", originalAnswers.length, responseAnswers.length);
+        Assertions.assertEquals(
+                originalAnswers.length, responseAnswers.length, "Pcq Answers Array Length don't match");
         for (int i = 0; i < originalAnswers.length; i++) {
-            assertEquals("PCQ Ids don't match", originalAnswers[i].getPcqId(), responseAnswers[i].getPcqId());
-            assertEquals("Service Ids don't match", originalAnswers[i].getServiceId(),
-                    responseAnswers[i].getServiceId());
-            assertEquals("Actors don't match", originalAnswers[i].getActor(), responseAnswers[i].getActor());
+            Assertions.assertEquals(
+                    originalAnswers[i].getPcqId(), responseAnswers[i].getPcqId(), "PCQ Ids don't match");
+            Assertions.assertEquals(originalAnswers[i].getServiceId(),
+                    responseAnswers[i].getServiceId(), "Service Ids don't match");
+            Assertions.assertEquals(
+                    originalAnswers[i].getActor(), responseAnswers[i].getActor(), "Actors don't match");
         }
     }
 }

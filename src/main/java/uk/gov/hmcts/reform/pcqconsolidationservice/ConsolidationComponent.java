@@ -42,7 +42,7 @@ public class ConsolidationComponent {
 
     private final ServiceConfigProvider serviceConfigProvider;
 
-    @SuppressWarnings({"unchecked", "PMD.DataflowAnomalyAnalysis"})
+    @SuppressWarnings({"unchecked"})
     public void execute() {
         try {
             // Step 1. Get the list of PCQs without Case Id.
@@ -73,7 +73,6 @@ public class ConsolidationComponent {
         }
     }
 
-    @SuppressWarnings({"PMD.DataflowAnomalyAnalysis","PMD.ConfusingTernary"})
     private void processPcqRecordsWithoutCase(PcqRecordWithoutCaseResponse pcqWithoutCaseResponse) {
         if (pcqWithoutCaseResponse == null || pcqWithoutCaseResponse.getPcqRecord().length == 0) {
             log.info("Pcq Ids, without case information, are not found");
@@ -134,7 +133,6 @@ public class ConsolidationComponent {
         return null;
     }
 
-    @SuppressWarnings({"PMD.DataflowAnomalyAnalysis"})
     private Long findCaseReferenceFromDcn(String dcn, String serviceId) {
         Long caseReferenceForPcq = null;
 

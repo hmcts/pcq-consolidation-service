@@ -18,7 +18,7 @@ public final class ConsolidationComponentUtil {
         submitResponse.setResponseStatusCode(String.valueOf(statusCode));
         submitResponse.setPcqId(pcqId);
 
-        return new ResponseEntity<SubmitResponse>(submitResponse, HttpStatus.valueOf(statusCode));
+        return new ResponseEntity<>(submitResponse, HttpStatus.valueOf(statusCode));
     }
 
     @SuppressWarnings("PMD.UseObjectForClearerAPI")

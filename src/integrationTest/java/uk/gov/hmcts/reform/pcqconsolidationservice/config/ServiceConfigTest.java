@@ -152,8 +152,6 @@ class ServiceConfigTest extends SpringBootIntegrationTest {
                 configItem.getCaseField(TEST_SERVICE1_CASE_FIELD_MAP_ACTOR_1), TEST_ACTOR_COMPARISON_MESSAGE);
     }
 
-
-    @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     @Test
     void serviceConfigItemShouldThrowExeceptionIfMissing() {
         Exception exception = assertThrows(ServiceNotConfiguredException.class, () -> {

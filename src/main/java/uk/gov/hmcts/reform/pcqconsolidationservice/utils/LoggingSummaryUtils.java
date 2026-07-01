@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.pcqconsolidationservice.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +32,9 @@ public final class LoggingSummaryUtils {
     private static final String FORMAT_STR_LENGTH_10 = "%1$-10s";
     private static final String FORMAT_STR_LENGTH_8 = "%1$-8s";
     private static Set<String> serviceKeySet;
+
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy HH mm", Locale.UK);
 
     private LoggingSummaryUtils() {
         //Private No Args Constructor
@@ -76,9 +79,10 @@ public final class LoggingSummaryUtils {
     }
 
     private static String getSummaryString() {
-        StringBuilder stringBuilder = new StringBuilder(SUMMARY_HEADING_STRING);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, dd MMMMM yyyy", Locale.UK);
-        stringBuilder.append(dateFormat.format(new Date()))
+        StringBuilder stringBuilder = new StringBuilder(256);
+        stringBuilder
+                .append(SUMMARY_HEADING_STRING)
+                .append(LocalDateTime.now().format(DATE_FORMATTER))
                 .append(CR_STRING)
                 .append(SERVICE_SUMMARY_STRING)
                 .append("-----------------------------------------------------------")

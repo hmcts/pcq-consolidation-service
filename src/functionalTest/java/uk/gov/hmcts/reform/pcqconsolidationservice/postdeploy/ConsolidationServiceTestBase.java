@@ -32,6 +32,7 @@ import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonObjectFr
 import static uk.gov.hmcts.reform.pcq.commons.tests.utils.TestUtils.jsonStringFromFile;
 
 @Slf4j
+@SuppressWarnings("PMD.ReplaceJavaUtilDate")
 public class ConsolidationServiceTestBase {
 
     private static final String COMPLETED_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
@@ -92,12 +93,11 @@ public class ConsolidationServiceTestBase {
                 .build();
     }
 
-    @SuppressWarnings("unchecked")
     protected CaseDetails createCcdPcqQuestionsPaperCase(String title, String dcn) {
         Optional<CaseDetails> caseDetails = caseCreator.findCase(title);
         if (caseDetails.isEmpty()) {
             CcdCollectionElement<ScannedDocument> scannedDoc =
-                    new CcdCollectionElement(caseCreator.createScannedDocument(dcn));
+                    new CcdCollectionElement<>(caseCreator.createScannedDocument(dcn));
             List<CcdCollectionElement<ScannedDocument>> scannedDocumentList = Collections.singletonList(scannedDoc);
             PcqQuestions pcqQuestions = PcqQuestions.builder()
                     .text(title)
@@ -106,7 +106,7 @@ public class ConsolidationServiceTestBase {
                     .build();
             return caseCreator.createCase(pcqQuestions);
         } else {
-            LinkedHashMap doc = (LinkedHashMap)((ArrayList)caseDetails.get().getData().get("scannedDocuments")).get(0);
+            Map doc = (LinkedHashMap)((ArrayList)caseDetails.get().getData().get("scannedDocuments")).get(0);
             String testDcnNumber = ((LinkedHashMap)doc.get("value")).get("controlNumber").toString();
             log.info("Found Paper Case ID: {} with DCN {}",
                     caseDetails.get().getId(),

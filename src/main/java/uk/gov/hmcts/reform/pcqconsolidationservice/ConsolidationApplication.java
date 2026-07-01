@@ -44,6 +44,7 @@ public class ConsolidationApplication implements ApplicationRunner {
 
     }
 
+    @SuppressWarnings("PMD.DoNotUseThreads")
     private void waitTelemetryGracefulPeriod() throws InterruptedException {
         Thread.sleep(waitPeriod);
     }

@@ -36,14 +36,12 @@ public class ServiceConfigItem {
     }
 
     public String getCaseField(String actor) {
-        String caseField;
         CaseFieldMapping caseFieldMapping = caseFieldMappings == null ? null :
                 this.caseFieldMappings.stream()
                     .filter(a -> actor.equalsIgnoreCase(a.getActor()))
                     .findAny()
                     .orElse(null);
-        caseField = caseFieldMapping == null ? null : caseFieldMapping.getName();
-        return caseField;
+        return caseFieldMapping == null ? null : caseFieldMapping.getName();
     }
 
     public void setCaseTypeIds(List<String> caseTypeIds) {

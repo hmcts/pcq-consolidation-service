@@ -7,7 +7,7 @@ plugins {
     id 'org.springframework.boot' version '4.1.0'
     id 'org.owasp.dependencycheck' version '12.2.2'
     id 'com.github.ben-manes.versions' version '0.54.0'
-    id "info.solidsoft.pitest" version '1.15.0'
+    id "info.solidsoft.pitest" version '1.19.0'
     id 'org.sonarqube' version '7.3.1.8318'
     id 'com.gorylenko.gradle-git-properties' version '2.5.7'
     id "io.freefair.lombok" version "9.5.0"
@@ -95,6 +95,7 @@ task functional(type: Test) {
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
     include "uk/gov/hmcts/reform/pcqconsolidationservice/postdeploy/**"
+    useJUnitPlatform()
 }
 
 task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
@@ -233,7 +234,6 @@ repositories {
 }
 
 def versions = [
-        junit               : '5.9.2',
         reformLogging       : '8.0.0',
         springBoot          : springBoot.class.package.implementationVersion,
         restAssured         : '6.0.0',
@@ -273,11 +273,9 @@ dependencies {
 
     implementation group: 'net.minidev', name: 'json-smart', version: '2.6.0'
 
-    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testImplementation platform('org.junit:junit-bom:6.0.3')
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
 
-    testImplementation 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0'
-    testImplementation 'org.codehaus.sonar-plugins:sonar-pitest-plugin:0.5'
 
     testImplementation group: 'io.rest-assured', name: 'xml-path', version: versions.restAssured
     testImplementation group: 'io.rest-assured', name: 'json-path', version: versions.restAssured
@@ -291,6 +289,9 @@ dependencies {
 
     testImplementation 'com.github.hmcts:fortify-client:1.4.10:all'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
+    testImplementation "com.google.guava:guava:33.6.0-jre"
+
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     integrationTestImplementation sourceSets.main.runtimeClasspath
     integrationTestImplementation sourceSets.test.runtimeClasspath

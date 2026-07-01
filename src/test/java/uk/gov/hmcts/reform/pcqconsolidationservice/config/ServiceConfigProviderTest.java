@@ -16,7 +16,6 @@ import static uk.gov.hmcts.reform.pcqconsolidationservice.config.ServiceConfigHe
 class ServiceConfigProviderTest {
 
     @Test
-    @SuppressWarnings({"PMD.UnnecessaryFullyQualifiedName", "PMD.JUnitAssertionsShouldIncludeMessage"})
     void configShouldReturnTheRightServiceConfigurationWhenPresent() {
         // given
         ServiceConfigItem service1Config =
@@ -46,7 +45,6 @@ class ServiceConfigProviderTest {
     }
 
     @Test
-    @SuppressWarnings({"PMD.UnnecessaryFullyQualifiedName","PMD.DataflowAnomalyAnalysis"})
     void configShouldThrowExceptionWhenServiceIsNotConfigured() {
         ServiceConfigProvider serviceConfigProvider = serviceConfigProvider(
                 Arrays.asList(

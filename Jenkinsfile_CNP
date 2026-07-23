@@ -6,7 +6,7 @@ properties([
   //pipelineTriggers([cron('H 05 * * *')])
 ])
 
-@Library("Infrastructure@cve-dashboard")
+@Library("Infrastructure@2.4.4")
 
 import uk.gov.hmcts.contino.GradleBuilder
 
@@ -41,7 +41,6 @@ def vaultOverrides = [
 ]
 
 withPipeline(type, product, component) {
-  enableCveDashboardIngestion()
 
   overrideVaultEnvironments(vaultOverrides)
   loadVaultSecrets(secrets)

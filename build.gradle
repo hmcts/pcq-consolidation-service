@@ -214,7 +214,7 @@ dependencyManagement {
             entry 'netty-transport-classes-epoll'
             entry 'netty-transport-classes-kqueue'
         }
-        dependencySet(group: 'com.github.jknack', version: '4.5.3') {
+        dependencySet(group: 'com.github.jknack', version: '4.5.4') {
             entry 'handlebars'
         }
         // CVE-2021-29425

@@ -289,7 +289,7 @@ dependencies {
 
     testImplementation 'com.github.hmcts:fortify-client:1.4.10:all'
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
-    testImplementation "com.google.guava:guava:33.6.0-jre"
+    testImplementation "com.google.guava:guava:33.7.1-jre"
 
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 

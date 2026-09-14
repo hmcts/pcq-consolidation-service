@@ -13,7 +13,7 @@ properties([
   ])
 ])
 
-@Library("Infrastructure@2.5.4")
+@Library("Infrastructure@2.8.0")
 
 import uk.gov.hmcts.contino.GradleBuilder
 

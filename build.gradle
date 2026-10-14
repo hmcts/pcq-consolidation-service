@@ -242,8 +242,8 @@ def versions = [
 ]
 
 dependencies {
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web-services'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webservices'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-json'
     implementation group: 'org.springframework.boot', name: 'spring-boot-configuration-processor'

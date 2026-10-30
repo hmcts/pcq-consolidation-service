@@ -1,6 +1,5 @@
 package uk.gov.hmcts.reform.pcqconsolidationservice.services.pcqbackend.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import feign.FeignException;
 import feign.Request;
 import feign.Response;
@@ -80,7 +79,7 @@ class PcqBackendServiceImplTest {
     }
 
     @Test
-    void testSuccess200ResponseWithHeaders() throws JsonProcessingException {
+    void testSuccess200ResponseWithHeaders()  {
         PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = generateTestResponse("Success", 200);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(pcqWithoutCaseResponse);
@@ -130,7 +129,7 @@ class PcqBackendServiceImplTest {
     }
 
     @Test
-    void testInvalidRequestErrorResponse() throws JsonProcessingException {
+    void testInvalidRequestErrorResponse() {
         PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = generateTestResponse("Invalid Request", 400);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(pcqWithoutCaseResponse);
@@ -154,7 +153,7 @@ class PcqBackendServiceImplTest {
     }
 
     @Test
-    void testInvalidRequestErrorResponse2() throws JsonProcessingException {
+    void testInvalidRequestErrorResponse2()  {
         SubmitResponse submitResponse = generateSubmitTestResponse("Invalid Request", 400);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(submitResponse);
@@ -178,7 +177,7 @@ class PcqBackendServiceImplTest {
     }
 
     @Test
-    void testUnknownErrorResponse() throws JsonProcessingException {
+    void testUnknownErrorResponse()  {
         PcqRecordWithoutCaseResponse pcqWithoutCaseResponse = generateTestResponse("Unknown error occurred", 500);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(pcqWithoutCaseResponse);
@@ -201,7 +200,7 @@ class PcqBackendServiceImplTest {
     }
 
     @Test
-    void testUnknownErrorResponse2() throws JsonProcessingException {
+    void testUnknownErrorResponse2()  {
         SubmitResponse submitResponse = generateSubmitTestResponse("Unknown error occurred", 500);
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(submitResponse);
@@ -225,7 +224,7 @@ class PcqBackendServiceImplTest {
     }
 
     @Test
-    void testOtherErrorResponse() throws JsonProcessingException {
+    void testOtherErrorResponse()  {
         ErrorResponse errorResponse = generateErrorResponse();
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(errorResponse);
@@ -245,7 +244,7 @@ class PcqBackendServiceImplTest {
     }
 
     @Test
-    void testOtherErrorResponse2() throws JsonProcessingException {
+    void testOtherErrorResponse2()  {
         ErrorResponse errorResponse = generateErrorResponse();
         ObjectMapper mapper = new ObjectMapper();
         String body = mapper.writeValueAsString(errorResponse);

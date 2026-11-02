@@ -108,7 +108,7 @@ class ConsolidationComponentTest {
 
         when(serviceConfigProvider.getServiceNames()).thenReturn(getServiceSet());
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(pcqBackendService, times(1)).getPcqWithoutCase();
         verify(pcqBackendService, times(1)).addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString());
@@ -127,7 +127,7 @@ class ConsolidationComponentTest {
                 .thenThrow(new ServiceNotConfiguredException("Config not found."));
         when(serviceConfigProvider.getConfig(SERVICE_NAME_2)).thenReturn(SERVICE_CONFIG);
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
         verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
@@ -143,7 +143,7 @@ class ConsolidationComponentTest {
         when(serviceConfigProvider.getConfig(SERVICE_NAME_2))
                 .thenThrow(new ServiceNotConfiguredException("Config not found."));
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
         verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
@@ -163,7 +163,7 @@ class ConsolidationComponentTest {
 
         when(serviceConfigProvider.getServiceNames()).thenReturn(getServiceSet());
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(pcqBackendService, times(1)).getPcqWithoutCase();
         verify(pcqBackendService, times(0)).addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString());
@@ -255,7 +255,7 @@ class ConsolidationComponentTest {
                 .thenReturn(Arrays.asList(TEST_CASE_ID));
         when(serviceConfigProvider.getServiceNames()).thenReturn(getServiceSet());
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(pcqBackendService, times(1)).getPcqWithoutCase();
         verify(pcqBackendService, times(1)).addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString());
@@ -282,7 +282,7 @@ class ConsolidationComponentTest {
         when(submitResponseResponseEntity.getBody()).thenReturn(null);
         when(serviceConfigProvider.getServiceNames()).thenReturn(getServiceSet());
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(submitResponseResponseEntity, times(2)).getBody();
         verify(pcqBackendService, times(1)).getPcqWithoutCase();
@@ -318,7 +318,7 @@ class ConsolidationComponentTest {
 
         when(serviceConfigProvider.getServiceNames()).thenReturn(getServiceSet());
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(pcqBackendService, times(1)).getPcqWithoutCase();
         verify(pcqBackendService, times(1)).addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString());
@@ -369,7 +369,7 @@ class ConsolidationComponentTest {
         when(pcqBackendService.addCaseForPcq(TEST_PCQ_ID_1, TEST_CASE_ID.toString())).thenReturn(
                 ConsolidationComponentUtil.generateSubmitTestSuccessResponse(TEST_PCQ_ID_2, SUCCESS, 200));
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
         verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);
@@ -391,7 +391,7 @@ class ConsolidationComponentTest {
         when(pcqBackendService.addCaseForPcq(TEST_PCQ_ID_2, TEST_CASE_ID.toString())).thenReturn(
                 ConsolidationComponentUtil.generateSubmitTestSuccessResponse(TEST_PCQ_ID_2, SUCCESS, 200));
 
-        assertDoesNotThrow(testConsolidationComponent::execute);
+        testConsolidationComponent.execute();
 
         verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_1);
         verify(serviceConfigProvider, times(1)).getConfig(SERVICE_NAME_2);

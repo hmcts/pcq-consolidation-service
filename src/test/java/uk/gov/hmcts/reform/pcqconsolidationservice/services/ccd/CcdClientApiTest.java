@@ -145,106 +145,89 @@ class CcdClientApiTest {
     }
 
     @Test
-    void useCcdClientWithCachedAuthentication() {
-        try {
-            when(serviceConfigProvider.getConfig(anyString()))
-                    .thenReturn(serviceConfigWithMissingIncorrectActorCcdFieldMapping);
-            when(feignCcdApi.searchCases(
-                    USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
-                    SEARCH_CASES_DEFAULT_PCQ_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
+    void useCcdClientWithCachedAuthentication() throws Exception {
+        when(serviceConfigProvider.getConfig(anyString()))
+                .thenReturn(serviceConfigWithMissingIncorrectActorCcdFieldMapping);
+        when(feignCcdApi.searchCases(
+                USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_DEFAULT_PCQ_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
 
-            CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
-            ReflectionTestUtils.setField(testCcdClientApi, // inject into this object
-                    "authenticator", // assign to this field
-                    AUTH_DETAILS); // object to be injected
+        CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
+        ReflectionTestUtils.setField(testCcdClientApi, // inject into this object
+                "authenticator", // assign to this field
+                AUTH_DETAILS); // object to be injected
 
-            List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
-            Assertions.assertEquals(1, response.size(), "Search find correct number of cases with cached auth");
-            Assertions.assertEquals(CASE_REF, response.get(0), "Search find correct case with cached auth");
-        } catch (Exception e) {
-            fail(ERROR_MSG_PREFIX + e.getMessage());
-        }
+        List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
+        Assertions.assertEquals(1, response.size(), "Search find correct number of cases with cached auth");
+        Assertions.assertEquals(CASE_REF, response.get(0), "Search find correct case with cached auth");
     }
 
     @Test
-    void useCcdClientToFindCasesByPcqIdWithCustomPcqField() {
-        try {
-            when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
-            when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigWithCustomCcdFieldMapping);
-            when(feignCcdApi.searchCases(
-                    USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
-                    SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
+    void useCcdClientToFindCasesByPcqIdWithCustomPcqField() throws Exception {
 
-            CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
-            List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
-            Assertions.assertEquals(1, response.size(), "Search find correct number of cases with custom pcqId field");
-            Assertions.assertEquals(CASE_REF, response.get(0), "Search find correct case with custom pcqId field");
-        } catch (Exception e) {
-            fail(ERROR_MSG_PREFIX + e.getMessage());
-        }
+        when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
+        when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigWithCustomCcdFieldMapping);
+        when(feignCcdApi.searchCases(
+                USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
+
+        CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
+        Assertions.assertEquals(1, response.size(), "Search find correct number of cases with custom pcqId field");
+        Assertions.assertEquals(CASE_REF, response.get(0), "Search find correct case with custom pcqId field");
+
     }
 
     @Test
-    void useCcdClientToFindCasesByDcnWithCustomDcnField() {
-        try {
-            when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
-            when(serviceConfigProvider.getConfig(anyString()))
-                    .thenReturn(serviceConfigWithCustomDcnFieldMapping);
-            when(feignCcdApi.searchCases(
+    void useCcdClientToFindCasesByDcnWithCustomDcnField() throws Exception {
+        when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
+        when(serviceConfigProvider.getConfig(anyString()))
+                .thenReturn(serviceConfigWithCustomDcnFieldMapping);
+        when(feignCcdApi.searchCases(
                     USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
                     SEARCH_CASES_CUSTOM_DCN_FIELD_SEARCH_STRING)).thenReturn(singleSearchResult);
 
-            CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
-            List<Long> response = testCcdClientApi.getCaseRefsByOriginatingFormDcn(DCN, SERVICE);
-            Assertions.assertEquals(1, response.size(), "Search find correct number of cases");
-            Assertions.assertEquals(CASE_REF, response.get(0), "Search find correct case with dcn field");
-        } catch (Exception e) {
-            fail(ERROR_MSG_PREFIX + e.getMessage());
-        }
+        CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = testCcdClientApi.getCaseRefsByOriginatingFormDcn(DCN, SERVICE);
+        Assertions.assertEquals(1, response.size(), "Search find correct number of cases");
+        Assertions.assertEquals(CASE_REF, response.get(0), "Search find correct case with dcn field");
+
     }
 
     @Test
-    void useCcdClientButNoMatchesAreReturned() {
-        try {
-            when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
-            when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigWithCustomCcdFieldMapping);
-            when(feignCcdApi.searchCases(
-                    USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
-                    SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING)).thenReturn(emptySearchResult);
+    void useCcdClientButNoMatchesAreReturned() throws Exception {
+        when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
+        when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigWithCustomCcdFieldMapping);
+        when(feignCcdApi.searchCases(
+                USER_TOKEN, SERVICE_TOKEN, CASE_TYPE_ID,
+                SEARCH_CASES_APPLICANT_PCQ_FIELD_SEARCH_STRING)).thenReturn(emptySearchResult);
 
-            CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
-            List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
-            Assertions.assertEquals(0, response.size(), "Should be no cases if match is not made");
-        } catch (Exception e) {
-            fail(ERROR_MSG_PREFIX + e.getMessage());
-        }
+        CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
+        Assertions.assertEquals(0, response.size(), "Should be no cases if match is not made");
     }
 
     @Test
-    void useCcdClientButNoCaseTypeIdsMatchForPcqIdSearch() {
-        try {
-            when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
-            when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigNoCaseTypesMapping);
+    void useCcdClientButNoCaseTypeIdsMatchForPcqIdSearch() throws Exception {
 
-            CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
-            List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
-            Assertions.assertEquals(0, response.size(), "Should be no cases if case types are not found");
-        } catch (Exception e) {
-            fail(ERROR_MSG_PREFIX + e.getMessage());
-        }
+        when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
+        when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigNoCaseTypesMapping);
+
+        CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = testCcdClientApi.getCaseRefsByPcqId(PCQ_ID, SERVICE, ACTOR);
+        Assertions.assertEquals(0, response.size(), "Should be no cases if case types are not found");
+
     }
 
     @Test
-    void useCcdClientButNoCaseTypeIdsMatchForDcnSearch() {
-        try {
-            when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
-            when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigNoCaseTypesMapping);
+    void useCcdClientButNoCaseTypeIdsMatchForDcnSearch() throws Exception {
 
-            CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
-            List<Long> response = testCcdClientApi.getCaseRefsByOriginatingFormDcn(DCN, SERVICE);
-            Assertions.assertEquals(0, response.size(), "Should be no cases if case types are not found");
-        } catch (Exception e) {
-            fail(ERROR_MSG_PREFIX + e.getMessage());
-        }
+        when(authenticatorFactory.createCcdAuthenticator()).thenReturn(AUTH_DETAILS);
+        when(serviceConfigProvider.getConfig(anyString())).thenReturn(serviceConfigNoCaseTypesMapping);
+
+        CcdClientApi testCcdClientApi = new CcdClientApi(feignCcdApi, authenticatorFactory, serviceConfigProvider);
+        List<Long> response = testCcdClientApi.getCaseRefsByOriginatingFormDcn(DCN, SERVICE);
+        Assertions.assertEquals(0, response.size(), "Should be no cases if case types are not found");
+
     }
 }

@@ -37,7 +37,6 @@ class CcdClientApiTest {
     private static final String APPLICANT_PCQID_FIELD = "applicantPcdId";
     private static final String SSCS_DCN_FIELD = "sscsDocument.value.documentFileName";
     private static final String SSCS_DCN_DOCUMENT_SUFFIX = ".pdf";
-    private static final String ERROR_MSG_PREFIX = "Test failed because of exception during execution. Message is ";
 
     private static final String SERVICE_TOKEN = "SERVICE_TOKEN";
     private static final String USER_TOKEN = "USER_TOKEN";
